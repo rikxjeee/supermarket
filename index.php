@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * procedural version
+ */
 const CRISPS_PRICE = 0.75;
 const DRINK_PRICE = 0.8;
 const SANDWICH_PRICE = 2;
