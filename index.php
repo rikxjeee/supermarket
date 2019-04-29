@@ -1,44 +1,98 @@
 <?php
 
-const CRISPS_PRICE = 0.75;
-const DRINK_PRICE = 0.8;
-const SANDWICH_PRICE = 2;
-const MENU_PRICE = 3;
-const DOUBLE_CRISP_PRICE = 1;
+interface superMarketCart{
+    const CRISPS_PRICE = 0.75;
+    const DRINK_PRICE = 0.8;
+    const SANDWICH_PRICE = 2;
+    const MENU_PRICE = 3;
+    const DOUBLE_CRISP_PRICE = 1;
 
-$ShoppingCart = [
-    "Crisps" => 0,
-    "Drink" => 0,
-    "Sandwich" => 0,
-];
+    public function calculatePrice(array $param);
+}
 
-function calculatePrice($ShopCart){
-    $sum =0.0;
-    $menus= min($ShopCart);
-    foreach ($ShopCart as &$CartItems){
-        $CartItems -=$menus;
-    };
 
-    unset($CartItems);
 
-    if (($ShopCart["Crisps"] % 2) ==1){
-        $sum+=CRISPS_PRICE;
-        $ShopCart["Crisps"] -=1;
-        $sum+= ($ShopCart["Crisps"]/2)*DOUBLE_CRISP_PRICE;
-    }else{
-        $sum+= ($ShopCart["Crisps"]/2)*DOUBLE_CRISP_PRICE;
-    };
 
-    if (date("l")=="Monday"){
-        $sum+=$ShopCart["Drink"]*DRINK_PRICE/2;
-    }else{
-        $sum+=$ShopCart["Drink"]*DRINK_PRICE;
+
+
+
+class cart implements superMarketCart{
+    public function calculatePrice (array $param){
+        echo $this->calculate($param);
     }
-    $sum+=$menus*MENU_PRICE;
-    $sum += $ShopCart["Sandwich"]*SANDWICH_PRICE;
 
-    return $sum;
+    private function calculate($ShopCart){
+        $sum =0.0;
+        $menus = min($ShopCart);
+        foreach ($ShopCart as &$CartItems){
+            $CartItems -= $menus;
+        };
 
+        unset($CartItems);
+
+        if (($ShopCart["Crisps"] % 2) == 1){
+            $sum+=self::CRISPS_PRICE;
+            $ShopCart["Crisps"] -=1;
+            $sum+= ($ShopCart["Crisps"]/2)*self::DOUBLE_CRISP_PRICE;
+        }else{
+            $sum+= ($ShopCart["Crisps"]/2)*self::DOUBLE_CRISP_PRICE;
+        };
+
+        if (date("l")=="Monday"){
+            $sum+=$ShopCart["Drink"]*self::DRINK_PRICE/2;
+        }else{
+            $sum+=$ShopCart["Drink"]*self::DRINK_PRICE;
+        }
+        $sum += $ShopCart["Sandwich"]*self::SANDWICH_PRICE;
+        $sum += $menus*self::MENU_PRICE;
+        return $sum;
+
+    }
+}
+
+
+
+
+
+
+
+class sortItems{
+
+    private $ShoppingCart = [
+        'Crisps' => 0,
+        'Drink' => 0,
+        'Sandwich' => 0,
+    ];
+
+
+
+    public function sort (array $params){
+        foreach ($params as $items) {
+            switch ($items) {
+                case "Crisps":
+                    $this->ShoppingCart["Crisps"]+=1;
+                    break;
+                case "Drink":
+                    $this->ShoppingCart["Drink"]+=1;
+                    break;
+                case "Sandwich":
+                    $this->ShoppingCart["Sandwich"]+=1;
+                    break;
+            };
+        };
+        return $this->ShoppingCart;
+    }
+
+
+
+    public function dump (array $param){
+        var_dump($this->sort($param));
+    }
+
+    public function __toString()
+    {
+        return serialize($this->ShoppingCart);
+    }
 }
 
 if ($argc > 1){
@@ -48,18 +102,11 @@ if ($argc > 1){
     exit (1);
 }
 
-foreach ($items as $cucc) {
-    switch ($cucc) {
-        case "Crisps":
-            $ShoppingCart["Crisps"]+=1;
-            break;
-        case "Drink":
-            $ShoppingCart["Drink"]+=1;
-            break;
-        case "Sandwich":
-            $ShoppingCart["Sandwich"]+=1;
-            break;
-    };
-};
-echo(calculatePrice($ShoppingCart))."\n";
 
+
+$c = new sortItems();
+$a = new cart();
+
+$a->calculatePrice($c->sort($items));
+echo "\n";
+echo $c."\n";
