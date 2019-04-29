@@ -91,7 +91,7 @@ class sortItems{
 
     public function __toString()
     {
-        return serialize($this->ShoppingCart);
+        return json_encode($this->ShoppingCart);
     }
 }
 
