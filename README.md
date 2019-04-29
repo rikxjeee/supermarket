@@ -11,4 +11,3 @@
   <li>Second version, with basic object oriented code:
       https://github.com/rikxjeee/supermarket/tree/object-oriented
  </ul>
-
