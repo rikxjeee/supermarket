@@ -14,6 +14,8 @@ $a = new Load\classes\SortItems();
 $b = $a->sort($items);
 $myCart = new Load\classes\Cart($b);
 
+$a->generateException();
+
 echo "Your cart: \n" . $myCart . "\n";
 
 echo "£" . $myCart->calculatePrice() . "\n";
