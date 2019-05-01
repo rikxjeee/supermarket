@@ -2,17 +2,17 @@
 
 namespace Load\classes;
 
+use Exception;
+
 class SortItems
 {
-
     private $ShoppingCart = [
         'Crisps' => 0,
         'Drink' => 0,
         'Sandwich' => 0,
     ];
 
-
-    public function sort(array $params)
+    public function sort($params)
     {
         foreach ($params as $items) {
             switch ($items) {
@@ -31,13 +31,18 @@ class SortItems
     }
 
 
-    public function dump(array $param)
+    public function generateException()
     {
-        var_dump($this->sort($param));
+        try {
+            throw new Exception('Something bad happened.');
+        } catch (Exception $e) {
+            echo "Test error: \n";
+            echo $e->getMessage() . "\n";
+        }
     }
 
-    public function __toString()
+    public function dump()
     {
-        return json_encode($this->ShoppingCart);
+        var_dump($this->ShoppingCart);
     }
 }

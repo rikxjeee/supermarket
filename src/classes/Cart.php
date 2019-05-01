@@ -10,9 +10,16 @@ class Cart
     const MENU_PRICE = 3;
     const DOUBLE_CRISP_PRICE = 1;
 
-    public function calculatePrice(array $param)
+    private $ShopCart;
+
+    public function __construct($param)
     {
-        echo $this->calculate($param);
+        $this->ShopCart = $param;
+    }
+
+    public function calculatePrice()
+    {
+        echo $this->calculate($this->ShopCart);
     }
 
     private function calculate($ShopCart)
@@ -42,5 +49,15 @@ class Cart
         $sum += $menus * self::MENU_PRICE;
         return $sum;
 
+    }
+
+    public function __toString()
+    {
+        $string = "";
+        foreach ($this->ShopCart as $key => $value) {
+            $string .= $key . ": " . $value . "\n";
+        }
+
+        return $string;
     }
 }
