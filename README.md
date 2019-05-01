@@ -8,6 +8,12 @@
      First version is sent for review during my application to the company
       https://github.com/rikxjeee/supermarket/tree/procedural
   </li>
-  <li>Second version, with basic object oriented code:
+  <li>
+      Second version, with basic object oriented code:
       https://github.com/rikxjeee/supermarket/tree/object-oriented
+  </li>
+  <li>
+       Third version, classes are automaticcaly loaded with Composer
+       https://github.com/rikxjeee/supermarket/tree/autoloading-classes
+  </li>
  </ul>
