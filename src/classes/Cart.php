@@ -4,60 +4,59 @@ namespace Load\classes;
 
 class Cart
 {
-    const CRISPS_PRICE = 0.75;
-    const DRINK_PRICE = 0.8;
-    const SANDWICH_PRICE = 2;
-    const MENU_PRICE = 3;
-    const DOUBLE_CRISP_PRICE = 1;
 
-    private $ShopCart;
+    private $cartItems;
 
-    public function __construct($param)
+    private $allowedItems;
+
+    private $notInStock;
+
+    private $priceCalculator;
+
+    public function __construct()
     {
-        $this->ShopCart = $param;
+        $this->priceCalculator = new PriceCalculator();
+
     }
 
-    public function calculatePrice()
+    public function addItems($userInput)
     {
-        echo $this->calculate($this->ShopCart);
-    }
+        foreach ($userInput as $value) {
 
-    private function calculate($ShopCart)
-    {
-        $sum = 0.0;
-        $menus = min($ShopCart);
-        foreach ($ShopCart as &$CartItems) {
-            $CartItems -= $menus;
-        };
+            if (isset($this->cartItems[$value])) {
+                $this->cartItems[$value]++;
+            } else {
+                $this->cartItems[$value] = 1;
+            }
 
-        unset($CartItems);
 
-        if (($ShopCart["Crisps"] % 2) == 1) {
-            $sum += self::CRISPS_PRICE;
-            $ShopCart["Crisps"] -= 1;
-            $sum += ($ShopCart["Crisps"] / 2) * self::DOUBLE_CRISP_PRICE;
-        } else {
-            $sum += ($ShopCart["Crisps"] / 2) * self::DOUBLE_CRISP_PRICE;
-        };
 
-        if (date("l") == "Monday") {
-            $sum += $ShopCart["Drink"] * self::DRINK_PRICE / 2;
-        } else {
-            $sum += $ShopCart["Drink"] * self::DRINK_PRICE;
+            /*   if (isset($this->allowedItems->itemList[$value])) {
+                   if (isset($this->cartItems[$value])) {
+                       $this->cartItems[$value]++;
+                   } else {
+                       $this->cartItems[$value] = 1;
+                   }
+               } else {
+                   $this->notInStock[$value] = $value;
+               }
+            */
         }
-        $sum += $ShopCart["Sandwich"] * self::SANDWICH_PRICE;
-        $sum += $menus * self::MENU_PRICE;
-        return $sum;
+        return $this->cartItems;
+    }
 
+
+    public function getPrice()
+    {
+        return $this->priceCalculator->calculatePrice($this->cartItems);
     }
 
     public function __toString()
     {
-        $string = "";
-        foreach ($this->ShopCart as $key => $value) {
+        $string = "Your cart: \n";
+        foreach ($this->cartItems as $key => $value) {
             $string .= $key . ": " . $value . "\n";
         }
-
         return $string;
     }
 }

@@ -6,31 +6,6 @@ use Exception;
 
 class SortItems
 {
-    private $ShoppingCart = [
-        'Crisps' => 0,
-        'Drink' => 0,
-        'Sandwich' => 0,
-    ];
-
-    public function sort($params)
-    {
-        foreach ($params as $items) {
-            switch ($items) {
-                case "Crisps":
-                    $this->ShoppingCart["Crisps"] += 1;
-                    break;
-                case "Drink":
-                    $this->ShoppingCart["Drink"] += 1;
-                    break;
-                case "Sandwich":
-                    $this->ShoppingCart["Sandwich"] += 1;
-                    break;
-            };
-        };
-        return $this->ShoppingCart;
-    }
-
-
     public function generateException()
     {
         try {
@@ -43,6 +18,7 @@ class SortItems
                 . "Error code: " . $e->getCode() . "\n";
         }
     }
+
     public function dump()
     {
         var_dump($this->ShoppingCart);
