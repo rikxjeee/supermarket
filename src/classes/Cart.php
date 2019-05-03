@@ -7,10 +7,6 @@ class Cart
 
     private $cartItems;
 
-    private $allowedItems;
-
-    private $notInStock;
-
     private $priceCalculator;
 
     public function __construct()
@@ -28,19 +24,6 @@ class Cart
             } else {
                 $this->cartItems[$value] = 1;
             }
-
-
-
-            /*   if (isset($this->allowedItems->itemList[$value])) {
-                   if (isset($this->cartItems[$value])) {
-                       $this->cartItems[$value]++;
-                   } else {
-                       $this->cartItems[$value] = 1;
-                   }
-               } else {
-                   $this->notInStock[$value] = $value;
-               }
-            */
         }
         return $this->cartItems;
     }

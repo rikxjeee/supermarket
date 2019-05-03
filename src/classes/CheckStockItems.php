@@ -4,7 +4,6 @@
 namespace Load\classes;
 
 
-
 class CheckStockItems
 {
     private $allowedItems;
@@ -19,11 +18,11 @@ class CheckStockItems
 
     }
 
-    public function filterStockItems($userInput) : array
+    public function filterStockItems($userInput): array
     {
         foreach ($userInput as $value) {
             if (isset($this->allowedItems->itemList[$value])) {
-                    $this->inStock[] = $value;
+                $this->inStock[] = $value;
             } else {
                 $this->notInStock[$value] = $value;
             }
