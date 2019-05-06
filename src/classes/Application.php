@@ -5,23 +5,37 @@ namespace Load\classes;
 class Application
 {
     private $userInput;
-    private $checkStockItems;
-
-    public function __construct(array $argv, int $argc)
+    private $cart;
+    private $productStorage;
+    public function __construct(UserInput $userInput)
     {
-        $this->userInput = new UserInput($argv, $argc);
-        $this->checkStockItems = new CheckStockItems();
-
+        $this->userInput = $userInput;
+        $this->cart = new Cart;
+        $this->productStorage = new ProductStorage;
     }
 
     public function runApplication()
     {
-        $myCart = new Cart;
+        $products = $this->getProducts();
+        foreach ($products as $product) {
+            $this->cart->addItem($product);
+        }
 
-        $myCart->addItems($this->checkStockItems->filterStockItems($this->userInput->getUserInput()));
+        $this->renderCart();
 
-        echo $myCart;
+    }
 
-        echo "£" . $myCart->getPrice() . "\n";
+    private function getProducts(): array
+    {
+        $products = [];
+        foreach ($this->userInput->getProductNames() as $productName){
+            $products[] = $this->productStorage->getByName($productName);
+        }
+        return $products;
+    }
+
+    private function renderCart()
+    {
+        echo $this->cart;
     }
 }

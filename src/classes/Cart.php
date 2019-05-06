@@ -4,7 +4,9 @@ namespace Load\classes;
 
 class Cart
 {
-
+    /**
+     * @var CartItem[]
+     */
     private $cartItems;
 
     private $priceCalculator;
@@ -15,31 +17,30 @@ class Cart
 
     }
 
-    public function addItems($userInput)
+    public function addItem(Product $product): void
     {
-        foreach ($userInput as $value) {
+        if (isset($this->cartItems[$product->getName()])){
+            $this->cartItems[$product->getName()]->increaseQuantity();
 
-            if (isset($this->cartItems[$value])) {
-                $this->cartItems[$value]++;
-            } else {
-                $this->cartItems[$value] = 1;
-            }
+        } else {
+            $this->cartItems[$product->getName()] = new CartItem($product, 1);
         }
-        return $this->cartItems;
     }
 
 
     public function getPrice()
     {
-        return $this->priceCalculator->calculatePrice($this->cartItems);
+        return $this->priceCalculator->calculateTotal($this->cartItems);
     }
 
     public function __toString()
     {
-        $string = "Your cart: \n";
-        foreach ($this->cartItems as $key => $value) {
-            $string .= $key . ": " . $value . "\n";
+        $string = "Your cart: ".PHP_EOL;
+        foreach ($this->cartItems as $cartItem) {
+            $string .= sprintf('%s: %s', $cartItem->getProduct()->getName(), $cartItem->getQuantity()).PHP_EOL;
         }
+        $string .= sprintf('You get £%s discount', $this->priceCalculator->calculateDiscount($this->cartItems)) .PHP_EOL;
+        $string .= sprintf('Total: £%s', $this->priceCalculator->calculateTotal($this->cartItems)).PHP_EOL;
         return $string;
     }
 }

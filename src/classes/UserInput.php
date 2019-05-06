@@ -2,38 +2,22 @@
 
 namespace Load\classes;
 
-use Exception;
-
 class UserInput
 {
-    public $userInput, $userInputNum;
+    private $userInput;
 
-    public function __construct(array $userInput, int $userInputNum)
+    public function __construct(string $userInput)
     {
         $this->userInput = $userInput;
-        $this->userInputNum = $userInputNum;
     }
 
-    public function getUserInput(): array
+    public function getProductNames(): array
     {
-        // var_dump($GLOBALS['argc']);
-        if ($this->userInputNum === 2) {
-            $items = explode(",", $this->userInput[1]);
-        } else {
-            throw new Exception("Wrong arguments provided.\n");
-        }
-        return $items;
+        return explode(",", $this->userInput);
     }
-
 
     public function __toString()
     {
-        $string = "";
-        foreach ($this->getUserInput() as $value) {
-            $string .= $value . ", ";
-        }
-        $string .= "\n";
-
-        return $string;
+        return $this->userInput;
     }
 }
