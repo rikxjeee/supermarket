@@ -6,9 +6,8 @@ namespace Load\classes;
 
 class PriceCalculator
 {
-    const MENU_PRICE = 3;
-    const DOUBLE_CRISP_PRICE = 1;
-    const MENU_ITEMS = [ 'Crisps', 'Drink', 'Sandwich'];
+
+    const MENU_ITEMS = [ Product::TYPE_SANDWICH, Product::TYPE_SOFT_DRINK, Product::TYPE_CRISP];
 
     /**
      * @param CartItem[] $cartItems
@@ -16,21 +15,19 @@ class PriceCalculator
      */
     public function calculateTotal(array $cartItems): float
     {
-        $menus = $this->getNumberOfMenus($cartItems);
-        $sum = $menus * self::MENU_PRICE;
+        $sum = 0.0;
 
         foreach ($cartItems as $cartItem) {
             $price = $cartItem->getPrice();
-
             $quantity = $cartItem->getQuantity();
-            if (in_array($cartItem->getProduct()->getName(), self::MENU_ITEMS)){
-                $quantity -=$menus;
-            }
-
             $sum += $price * $quantity;
         }
 
-        $sum -= $this->calculateDiscount($cartItems);
+
+
+        foreach ($this->calculateDiscount($cartItems) as $item){
+            $sum -= $item['amount'];
+        }
         return $sum;
     }
 
@@ -38,28 +35,23 @@ class PriceCalculator
      * @param CartItem[] $cartItems
      * @return float
      */
-    public function calculateDiscount(array $cartItems): float
+    public function calculateDiscount(array $cartItems): array
     {
-        $discount = 0;
-        $menus = $this->getNumberOfMenus($cartItems);
+        $discounts = [];
+        $menuDiscounts = $this->getMenuDiscount($cartItems);
+        $discounts[] = $menuDiscounts;
 
-        foreach ($cartItems as $cartItem) {
-            $price = $cartItem->getPrice();
-
-            $quantity = $cartItem->getQuantity();
-            if (in_array($cartItem->getProduct()->getName(), self::MENU_ITEMS)){
-                $quantity -=$menus;
-            }
-            if (date('l' == 'Monday') && $cartItem->getProduct()->getName() == 'Drink'){
-                $discount += $price/2;
-            }
-
-            if ($cartItem->getProduct()->getName() == 'Crisps'){
-                $discount += ((int)($quantity / 2))* 0.5;
-            }
+        $softDrinkDiscount = $this->getSoftDrinkDiscount($menuDiscounts['remainingItems']);
+        if (!empty($softDrinkDiscount)) {
+            $discounts[] = $softDrinkDiscount;
         }
 
-        return $discount;
+        $crispsDiscount = $this->getCrispsDiscount($menuDiscounts['remainingItems']);
+
+        if (!empty($crispsDiscount)) {
+            $discounts[] = $crispsDiscount;
+        }
+        return $discounts;
     }
 
     /**
@@ -70,7 +62,7 @@ class PriceCalculator
     {
         $minimum = null;
         foreach ($cartItems as $cartItem){
-            if(!in_array($cartItem->getProduct()->getName(), self::MENU_ITEMS)) {
+            if(!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
                 continue;
             }
 
@@ -79,5 +71,83 @@ class PriceCalculator
             }
         }
         return (int)$minimum;
+    }
+
+    /**
+     * @param array $cartItems
+     * @return array
+     */
+    private function getMenuDiscount(array $cartItems): array
+    {
+        $discount = [];
+        $menuItemTotal =0;
+        $menus = $this->getNumberOfMenus($cartItems);
+        $remainingCartItems = [];
+
+        foreach ($cartItems as $cartItem){
+            $remainingQuantity = $cartItem->getQuantity();
+            if(in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
+                $menuItemTotal += $cartItem->getPrice()*$menus;
+                $remainingQuantity -= $menus;
+            }
+            if ($remainingQuantity > 0){
+                $remainingCartItems[] = new CartItem($cartItem->getProduct(), $remainingQuantity);
+            }
+        }
+
+        $amount = $menuItemTotal-$menus*3;
+        if ($amount > 0) {
+            $discount = [
+                'name' => 'Menu',
+                'amount' => $amount,
+                'remainingItems' => $remainingCartItems
+            ];
+        }
+        return $discount;
+    }
+
+    /**
+     * @param $cartItems
+     * @return array
+     */
+    private function getSoftDrinkDiscount($cartItems): array
+    {
+        $discount = [];
+        foreach ($cartItems as $cartItem) {
+            $price = $cartItem->getPrice();
+            $quantity = $cartItem->getQuantity();
+
+
+            if (date('l') == 'Monday' && $cartItem->getProduct()->isSoftDrink()) {
+                $discount = [
+                    'name' => 'Drinks',
+                    'amount' => $quantity * ($price / 2)
+                ];
+            }
+
+        }
+        return $discount;
+    }
+
+
+
+    private function getCrispsDiscount($cartItems): array
+    {
+        $discount = [];
+        foreach ($cartItems as $cartItem) {
+            $quantity = $cartItem->getQuantity();
+
+            if ($cartItem->getProduct()->isCrisp()){
+                $amount = ((int)($quantity / 2))* 0.5;
+                if ($amount > 0) {
+                    $discount = [
+                        'name' => 'Crisps',
+                        'amount' => ((int)($quantity / 2)) * 0.5
+                    ];
+                }
+            }
+
+        }
+        return $discount;
     }
 }

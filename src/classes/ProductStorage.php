@@ -8,17 +8,28 @@ use Exception;
 
 class ProductStorage
 {
-    private $itemList;
-
-    public function __construct()
-    {
-        $this->itemList = [
-            'Drink' => 0.8,
-            'Sandwich' => 2,
-            'Crisps' => 0.75,
-            'Beer' => 1
-        ];
-    }
+    private $itemList = [
+        [
+            'name' => 'Coca Cola',
+            'type' => Product::TYPE_SOFT_DRINK,
+            'price' => 0.8
+        ],
+        [
+            'name' => 'Songoku Sandwich',
+            'type' => Product::TYPE_SANDWICH,
+            'price' => 2
+        ],
+         [
+            'name' => 'French Fries',
+            'type' => Product::TYPE_CRISP,
+            'price' => 0.75
+        ],
+        [
+            'name' => 'Soproni 1895',
+            'type' => Product::TYPE_HARD_DRINK,
+            'price' => 1
+        ]
+    ];
 
     /**
      * @param $productName
@@ -27,9 +38,11 @@ class ProductStorage
      */
     public function getByName($productName): Product
     {
-        if (!isset($this->itemList[$productName])){
-            throw new Exception("Product not found.");
+        foreach ($this->itemList as $item) {
+            if (strtolower($productName) == strtolower($item['name'])){
+                return new Product($item['name'], $item['price'], $item['type']);
+            }
         }
-        return new Product($productName, $this->itemList[$productName]);
+        throw new Exception(sprintf('No such product: %s', $productName));
     }
 }

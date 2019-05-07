@@ -14,7 +14,6 @@ class Cart
     public function __construct()
     {
         $this->priceCalculator = new PriceCalculator();
-
     }
 
     public function addItem(Product $product): void
@@ -25,6 +24,8 @@ class Cart
         } else {
             $this->cartItems[$product->getName()] = new CartItem($product, 1);
         }
+
+
     }
 
 
@@ -39,8 +40,40 @@ class Cart
         foreach ($this->cartItems as $cartItem) {
             $string .= sprintf('%s: %s', $cartItem->getProduct()->getName(), $cartItem->getQuantity()).PHP_EOL;
         }
-        $string .= sprintf('You get £%s discount', $this->priceCalculator->calculateDiscount($this->cartItems)) .PHP_EOL;
+        foreach ($this->priceCalculator->calculateDiscount($this->cartItems) as $item) {
+            $string .= sprintf('You get £%s discount for %s', $item['amount'], $item['name']).PHP_EOL;
+        }
         $string .= sprintf('Total: £%s', $this->priceCalculator->calculateTotal($this->cartItems)).PHP_EOL;
         return $string;
+    }
+
+    private function hasSandwich()
+    {
+        foreach ($this->cartItems as $cartItem){
+            if ($cartItem->getProduct()->isSandwich()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function hasSoftDrink()
+    {
+        foreach ($this->cartItems as $cartItem){
+            if ($cartItem->getProduct()->isSoftDrink()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function hasCrisps()
+    {
+        foreach ($this->cartItems as $cartItem) {
+            if ($cartItem->getProduct()->isCrisp()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
