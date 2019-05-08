@@ -34,14 +34,20 @@ class Cart
         return $this->priceCalculator->calculateTotal($this->cartItems);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $string = "Your cart: ".PHP_EOL;
         foreach ($this->cartItems as $cartItem) {
             $string .= sprintf('%s: %s', $cartItem->getProduct()->getName(), $cartItem->getQuantity()).PHP_EOL;
         }
-        foreach ($this->priceCalculator->calculateDiscount($this->cartItems) as $item) {
-            $string .= sprintf('You get £%s discount for %s', $item['amount'], $item['name']).PHP_EOL;
+        $items = $this->priceCalculator->calculateDiscount($this->cartItems);
+        if (isset($items)) {
+            foreach ($items as $item) {
+                $string .= sprintf('You get £%s discount for %s', $item['amount'], $item['name']) . PHP_EOL;
+            }
         }
         $string .= sprintf('Total: £%s', $this->priceCalculator->calculateTotal($this->cartItems)).PHP_EOL;
         return $string;

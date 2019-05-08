@@ -23,8 +23,6 @@ class PriceCalculator
             $sum += $price * $quantity;
         }
 
-
-
         foreach ($this->calculateDiscount($cartItems) as $item){
             $sum -= $item['amount'];
         }
@@ -33,24 +31,29 @@ class PriceCalculator
 
     /**
      * @param CartItem[] $cartItems
-     * @return float
+     * @return array
      */
     public function calculateDiscount(array $cartItems): array
     {
         $discounts = [];
         $menuDiscounts = $this->getMenuDiscount($cartItems);
-        $discounts[] = $menuDiscounts;
+        $remainingItems = $cartItems;
+        if (!empty($menuDiscounts)) {
+            $discounts[] = $menuDiscounts;
+            $remainingItems = $menuDiscounts['remainingItems'];
+        }
 
-        $softDrinkDiscount = $this->getSoftDrinkDiscount($menuDiscounts['remainingItems']);
+        $softDrinkDiscount = $this->getSoftDrinkDiscount($remainingItems);
         if (!empty($softDrinkDiscount)) {
             $discounts[] = $softDrinkDiscount;
         }
 
-        $crispsDiscount = $this->getCrispsDiscount($menuDiscounts['remainingItems']);
+        $crispsDiscount = $this->getCrispsDiscount($remainingItems);
 
         if (!empty($crispsDiscount)) {
             $discounts[] = $crispsDiscount;
         }
+
         return $discounts;
     }
 
