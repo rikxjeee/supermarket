@@ -1,4 +1,4 @@
-#The supermarket challenge
+# The supermarket challenge
 
 I will collect my code for the job application test:
 ```
@@ -20,7 +20,7 @@ https://github.com/rikxjeee/supermarket/tree/object-oriented
 ```
 #
 
-#####Third version, classes are automatically loaded with Composer
+##### Third version, classes are automatically loaded with Composer
 ```
 https://github.com/rikxjeee/supermarket/tree/autoloading-classes
 ```
