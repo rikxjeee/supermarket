@@ -75,11 +75,10 @@ class DiscountCalculator
 
     /**
      * @param array $cartItems
-     * @return Total
+     * @return Total|null
      */
-    private function getMenuDiscount(array $cartItems): Total
+    private function getMenuDiscount(array $cartItems): ?Total
     {
-        $discount = [];
         $menuItemTotal =0;
         $menus = $this->getNumberOfMenus($cartItems);
         $remainingCartItems = [];
@@ -97,9 +96,10 @@ class DiscountCalculator
 
         $amount = $menuItemTotal-$menus*3;
         if ($amount > 0) {
-            $discount = new Total('Sandwich menu', $amount, $remainingCartItems);
+            return new Total('Sandwich menu', $amount, $remainingCartItems);
+
         }
-        return $discount;
+        return null;
     }
 
     /**
@@ -115,7 +115,7 @@ class DiscountCalculator
 
             if ((date('l') == 'Thursday') && ($cartItem->getProduct()->isSoftDrink())){
                 $discount[] =
-                    new Total(Product::TYPE_SOFT_DRINK, $quantity * ($price / 2));
+                    new Total($cartItem->getProduct()->getName(), $quantity * ($price / 2));
             }
 
             if ($cartItem->getProduct()->isCrisp()){

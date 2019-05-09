@@ -16,7 +16,7 @@ class Application
 
     public function runApplication()
     {
-        $products = $this->getProducts();
+        $products = $this->userInput->getProducts();
         foreach ($products as $product) {
             $this->cart->addItem($product);
         }
@@ -25,14 +25,6 @@ class Application
 
     }
 
-    private function getProducts(): array
-    {
-        $products = [];
-        foreach ($this->userInput->getProductNames() as $productName){
-            $products[] = $this->productStorage->getByName($productName);
-        }
-        return $products;
-    }
 
     private function renderCart()
     {

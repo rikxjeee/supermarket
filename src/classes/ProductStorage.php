@@ -20,7 +20,7 @@ class ProductStorage
             'price' => 0.8
         ],
         [
-            'name' => 'Songoku Sandwich',
+            'name' => 'Goku Sandwich',
             'type' => Product::TYPE_SANDWICH,
             'price' => 2
         ],
@@ -54,5 +54,17 @@ class ProductStorage
             }
         }
         throw new Exception(sprintf('No such product: %s', $productName));
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function getAll(): array
+    {
+        $productList = [];
+        foreach ($this->itemList as $item) {
+            $productList[] = new Product($item['name'], $item['price'], $item['type']);
+        }
+        return $productList;
     }
 }
