@@ -11,7 +11,6 @@ class Product
     public const TYPE_HARD_DRINK = 'Hard Drink';
     public const TYPE_SANDWICH = 'Sandwich';
 
-
     /**
      * @var string
      */
@@ -38,7 +37,6 @@ class Product
         $this->price = $price;
         $this->type = $type;
     }
-
 
     /**
      * @return string

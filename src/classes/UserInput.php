@@ -6,7 +6,6 @@ use Exception;
 
 class UserInput
 {
-    private $userInput;
     /**
      * @var ProductStorage
      */
@@ -14,11 +13,9 @@ class UserInput
 
     /**
      * UserInput constructor.
-     * @param string $userInput
      */
-    public function __construct(string $userInput)
+    public function __construct()
     {
-        $this->userInput = $userInput;
         $this->productStorage = new ProductStorage();
     }
 

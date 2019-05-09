@@ -17,10 +17,6 @@ class Cart
     /**
      * @var DiscountCalculator
      */
-
-    /**
-     * @var DiscountCalculator
-     */
     private $discounts;
 
     /**
