@@ -11,9 +11,12 @@ class Cart
 
     private $priceCalculator;
 
+    private $discounts;
+
     public function __construct()
     {
         $this->priceCalculator = new PriceCalculator();
+        $this->discounts = new DiscountCalculator();
     }
 
     public function addItem(Product $product): void
@@ -39,47 +42,34 @@ class Cart
      */
     public function __toString()
     {
-        $string = "Your cart: ".PHP_EOL;
+        $totals = $this->priceCalculator->getTotals($this->cartItems);
+        $string = file_get_contents('./template.txt');
+        $items = '';
+        $replace ='';
         foreach ($this->cartItems as $cartItem) {
-            $string .= sprintf('%s: %s', $cartItem->getProduct()->getName(), $cartItem->getQuantity()).PHP_EOL;
+            $items .= sprintf('| %15s | %13s | %10s |', $cartItem->getProduct()->getName(), $cartItem->getQuantity(), $cartItem->getPrice()).PHP_EOL;
         }
-        $items = $this->priceCalculator->calculateDiscount($this->cartItems);
+        $string = str_replace('%items%', $items, $string);
+
+        $items = $this->discounts->getDiscountedItems($this->cartItems);
+        $totalDiscount = 0;
+
+        foreach ($totals as $total){
+            $replace .= $total->getName() . ' : £' . $total->getPrice().PHP_EOL;
+        }
+
         if (isset($items)) {
             foreach ($items as $item) {
-                $string .= sprintf('You get £%s discount for %s', $item['amount'], $item['name']) . PHP_EOL;
+               $totalDiscount += $item->getPrice();
+               $replace .= sprintf(' -You get £%s discount for %s', $item->getPrice(), $item->getName()) . PHP_EOL;
             }
+
+            $replace .= sprintf('Grand total: £%s', $this->priceCalculator->calculateTotal($this->cartItems)).PHP_EOL;
+
+            $string = str_replace('%summary%', $replace, $string);
+
         }
-        $string .= sprintf('Total: £%s', $this->priceCalculator->calculateTotal($this->cartItems)).PHP_EOL;
+
         return $string;
-    }
-
-    private function hasSandwich()
-    {
-        foreach ($this->cartItems as $cartItem){
-            if ($cartItem->getProduct()->isSandwich()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function hasSoftDrink()
-    {
-        foreach ($this->cartItems as $cartItem){
-            if ($cartItem->getProduct()->isSoftDrink()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function hasCrisps()
-    {
-        foreach ($this->cartItems as $cartItem) {
-            if ($cartItem->getProduct()->isCrisp()) {
-                return true;
-            }
-        }
-        return false;
     }
 }

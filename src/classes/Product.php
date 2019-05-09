@@ -64,17 +64,25 @@ class Product
         return $this->price;
     }
 
+    /**
+     * @return bool
+     */
     public function isSoftDrink(): bool
     {
         return ($this->type == self::TYPE_SOFT_DRINK);
     }
 
-
+    /**
+     * @return bool
+     */
     public function isCrisp(): bool
     {
         return ($this->type == self::TYPE_CRISP);
     }
 
+    /**
+     * @return bool
+     */
     public function isSandwich(): bool
     {
         return ($this->type == self::isSandwich());

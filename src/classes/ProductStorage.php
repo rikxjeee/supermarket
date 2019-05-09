@@ -15,12 +15,22 @@ class ProductStorage
             'price' => 0.8
         ],
         [
+            'name' => 'Pepsi',
+            'type' => Product::TYPE_SOFT_DRINK,
+            'price' => 0.8
+        ],
+        [
             'name' => 'Songoku Sandwich',
             'type' => Product::TYPE_SANDWICH,
             'price' => 2
         ],
+        [
+            'name' => 'Cubana',
+            'type' => Product::TYPE_SANDWICH,
+            'price' => 2
+        ],
          [
-            'name' => 'French Fries',
+            'name' => 'Fries',
             'type' => Product::TYPE_CRISP,
             'price' => 0.75
         ],
