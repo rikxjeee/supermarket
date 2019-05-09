@@ -6,8 +6,14 @@ namespace Load\classes;
 
 class PriceCalculator
 {
+    /**
+     * @var array
+     */
     private $calculators;
 
+    /**
+     * PriceCalculator constructor.
+     */
     public function __construct()
     {
         $this->calculators = [
@@ -23,7 +29,6 @@ class PriceCalculator
     public function calculateTotal(array $cartItems): float
     {
         $total = 0;
-
         foreach ($this->calculators as $calculator) {
             $total += $calculator->getTotal($cartItems)->getPrice();
         }

@@ -48,11 +48,9 @@ class CartItem
         $this->quantity++;
     }
 
-    public function decreaseQuantityBy(int $value): void
-    {
-        $this->quantity -= $value;
-    }
-
+    /**
+     * @return float
+     */
     public function getPrice(): float
     {
         return $this->product->getPrice();

@@ -26,7 +26,7 @@ class Total
      * @param float $price
      * @param $remainingItems
      */
-    public function __construct(string $name, float $price, array $remainingItems=[])
+    public function __construct(string $name, float $price, array $remainingItems = [])
     {
         $this->name = $name;
         $this->price = $price;

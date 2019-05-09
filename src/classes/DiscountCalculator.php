@@ -6,10 +6,11 @@ namespace Load\classes;
 
 class DiscountCalculator
 {
-    const MENU_ITEMS = [ Product::TYPE_SANDWICH, Product::TYPE_SOFT_DRINK, Product::TYPE_CRISP ];
+
+    const MENU_ITEMS = [Product::TYPE_SANDWICH, Product::TYPE_SOFT_DRINK, Product::TYPE_CRISP];
 
     /**
-     * @param $cartItems[]
+     * @param $cartItems []
      * @return Total
      */
     public function getTotal($cartItems): Total
@@ -19,7 +20,6 @@ class DiscountCalculator
         foreach ($items as $item) {
             $sum -= $item->getPrice();
         }
-
         return new Total('Total discounts:', $sum);
     }
 
@@ -29,9 +29,8 @@ class DiscountCalculator
      */
     public function getDiscountedItems($cartItems)
     {
-            return $this->calculateDiscount($cartItems);
+        return $this->calculateDiscount($cartItems);
     }
-
 
     /**
      * @param CartItem[] $cartItems
@@ -42,11 +41,10 @@ class DiscountCalculator
         $discounts = [];
         $menuDiscounts = $this->getMenuDiscount($cartItems);
         $remainingItems = $cartItems;
-        if (!empty($menuDiscounts)){
+        if (!empty($menuDiscounts)) {
             $discounts[] = $menuDiscounts;
             $remainingItems = $menuDiscounts->getRemainingItems();
         }
-
         $generalDiscount = $this->getGeneralDiscount($remainingItems);
         if (!empty($generalDiscount)) {
             $discounts = array_merge($discounts, $generalDiscount);
@@ -61,11 +59,10 @@ class DiscountCalculator
     private function getNumberOfMenus(array $cartItems): int
     {
         $minimum = null;
-        foreach ($cartItems as $cartItem){
-            if(!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
+        foreach ($cartItems as $cartItem) {
+            if (!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
                 continue;
             }
-
             if ($minimum === null || $cartItem->getQuantity() <= $minimum) {
                 $minimum = $cartItem->getQuantity();
             }
@@ -79,25 +76,22 @@ class DiscountCalculator
      */
     private function getMenuDiscount(array $cartItems): ?Total
     {
-        $menuItemTotal =0;
+        $menuItemTotal = 0;
         $menus = $this->getNumberOfMenus($cartItems);
         $remainingCartItems = [];
-
-        foreach ($cartItems as $cartItem){
+        foreach ($cartItems as $cartItem) {
             $remainingQuantity = $cartItem->getQuantity();
-            if(in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
-                $menuItemTotal += $cartItem->getPrice()*$menus;
+            if (in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
+                $menuItemTotal += $cartItem->getPrice() * $menus;
                 $remainingQuantity -= $menus;
             }
-            if ($remainingQuantity > 0){
+            if ($remainingQuantity > 0) {
                 $remainingCartItems[] = new CartItem($cartItem->getProduct(), $remainingQuantity);
             }
         }
-
-        $amount = $menuItemTotal-$menus*3;
+        $amount = $menuItemTotal - $menus * 3;
         if ($amount > 0) {
             return new Total('Sandwich menu', $amount, $remainingCartItems);
-
         }
         return null;
     }
@@ -113,13 +107,12 @@ class DiscountCalculator
             $price = $cartItem->getPrice();
             $quantity = $cartItem->getQuantity();
 
-            if ((date('l') == 'Thursday') && ($cartItem->getProduct()->isSoftDrink())){
+            if ((date('l') == 'Thursday') && ($cartItem->getProduct()->isSoftDrink())) {
                 $discount[] =
                     new Total($cartItem->getProduct()->getName(), $quantity * ($price / 2));
             }
-
-            if ($cartItem->getProduct()->isCrisp()){
-                $amount = ((int)($quantity / 2))* 0.5;
+            if ($cartItem->getProduct()->isCrisp()) {
+                $amount = ((int)($quantity / 2)) * 0.5;
                 if ($amount > 0) {
                     $discount[] =
                         new Total(Product::TYPE_CRISP, ((int)($quantity / 2)) * 0.5);

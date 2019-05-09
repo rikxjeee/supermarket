@@ -12,7 +12,6 @@ class Product
     public const TYPE_SANDWICH = 'Sandwich';
 
 
-
     /**
      * @var string
      */
@@ -56,6 +55,7 @@ class Product
     {
         return $this->type;
     }
+
     /**
      * @return float
      */
@@ -87,5 +87,4 @@ class Product
     {
         return ($this->type == self::isSandwich());
     }
-
 }

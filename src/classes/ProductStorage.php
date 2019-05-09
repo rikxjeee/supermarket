@@ -8,6 +8,9 @@ use Exception;
 
 class ProductStorage
 {
+    /**
+     * @var array
+     */
     private $itemList = [
         [
             'name' => 'Coca Cola',
@@ -29,7 +32,7 @@ class ProductStorage
             'type' => Product::TYPE_SANDWICH,
             'price' => 2
         ],
-         [
+        [
             'name' => 'Fries',
             'type' => Product::TYPE_CRISP,
             'price' => 0.75
@@ -49,7 +52,7 @@ class ProductStorage
     public function getByName($productName): Product
     {
         foreach ($this->itemList as $item) {
-            if (strtolower($productName) == strtolower($item['name'])){
+            if (strtolower($productName) == strtolower($item['name'])) {
                 return new Product($item['name'], $item['price'], $item['type']);
             }
         }

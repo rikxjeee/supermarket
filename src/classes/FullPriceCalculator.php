@@ -7,13 +7,12 @@ namespace Load\classes;
 class FullPriceCalculator
 {
     /**
-     * @param $cartItems[]
+     * @param $cartItems []
      * @return Total
      */
     public function getTotal($cartItems): Total
     {
         $sum = 0.0;
-
         foreach ($cartItems as $cartItem) {
             $price = $cartItem->getPrice();
             $quantity = $cartItem->getQuantity();
