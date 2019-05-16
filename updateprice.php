@@ -32,5 +32,4 @@ do {
     $conn->updatePrice((float)$productPrice, $productList[$id - 1]->getId());
 
     $continue = strtolower(readline('Do you want to update more products?(Y/n) ')) != 'n';
-}while($continue);
-
+} while ($continue);

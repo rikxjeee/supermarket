@@ -29,6 +29,7 @@ class Product
      * @var int
      */
     private $id;
+
     /**
      * Product constructor.
      * @param string $name

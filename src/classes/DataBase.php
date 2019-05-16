@@ -2,6 +2,7 @@
 
 
 namespace Load\classes;
+
 use PDO;
 
 class DataBase
@@ -40,5 +41,12 @@ class DataBase
         $query = 'update products set price=? where id=?';
         $updatedPrice = $this->mySqlConnection->prepare($query);
         $updatedPrice->execute([$price, $id]);
+    }
+
+    public function deleteProduct($id)
+    {
+        $query = 'delete from products where id=?';
+        $delete = $this->mySqlConnection->prepare($query);
+        $delete->execute($id);
     }
 }
