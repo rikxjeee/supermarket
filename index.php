@@ -4,7 +4,6 @@ use Load\classes\Application;
 use Load\classes\UserInput;
 
 require 'vendor/autoload.php';
-
 try {
     $myApp = new Application(new UserInput());
     $myApp->runApplication();

@@ -5,6 +5,7 @@
     }
   },
   "require": {
-    "ext-readline": "*"
+    "ext-readline": "*",
+    "ext-pdo": "*"
   }
 }
