@@ -31,7 +31,7 @@ class ProductStorage
     {
         foreach ($this->itemList as $item) {
             if (strtolower($productName) == strtolower($item['name'])) {
-                return new Product($item['name'], $item['price'], $item['type']);
+                return new Product($item['name'], $item['price'], $item['type'], $item['id']);
             }
         }
         throw new Exception(sprintf('No such product: %s', $productName));
@@ -44,7 +44,7 @@ class ProductStorage
     {
         $productList = [];
         foreach ($this->itemList as $item) {
-            $productList[] = new Product($item['name'], $item['price'], $item['type']);
+            $productList[] = new Product($item['name'], $item['price'], $item['type'], $item['id']);
         }
         return $productList;
     }

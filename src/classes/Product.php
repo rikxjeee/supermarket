@@ -26,16 +26,22 @@ class Product
     private $type;
 
     /**
+     * @var int
+     */
+    private $id;
+    /**
      * Product constructor.
      * @param string $name
      * @param float $price
      * @param string $type
+     * @param int $id
      */
-    public function __construct(string $name, float $price, string $type)
+    public function __construct(string $name, float $price, string $type, int $id)
     {
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
+        $this->id = $id;
     }
 
     /**
@@ -60,6 +66,11 @@ class Product
     public function getPrice(): float
     {
         return $this->price;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
