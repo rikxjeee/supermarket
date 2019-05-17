@@ -10,7 +10,7 @@ $conn = new ProductStorage(new Credentials());
 
 $app = new Application($conn);
 try {
-    $app->runDeleteProduct();
+    $app->runUpdateProduct();
 }catch(Exception $e){
     echo $e->getMessage() . PHP_EOL;
 }

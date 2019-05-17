@@ -41,30 +41,41 @@ class ProductStorage
         return $productList;
     }
 
-    public function addProduct(string $name, float $price, string $type)
+    /**
+     * @return string
+     */
+    public function getProductList(): string
     {
-        $mySqlConnection = new PDO(...$this->credentials->getCredentials());
+        $string ='';
+        $productList = $this->getAll();
 
-        $query = 'insert into products (name, price, type) values (?, ?, ?)';
-        $product = $mySqlConnection->prepare($query);
-        $product->execute([$name, $price, $type]);
+        foreach ($productList as $key => $product) {
+            $string .= ($key + 1) . ': ' . $product->getName() . ' £' . $product->getPrice() . PHP_EOL;
+        }
+        return $string;
     }
 
-    public function updatePrice(float $price, int $id)
+    public function addProduct(Product $product)
     {
         $mySqlConnection = new PDO(...$this->credentials->getCredentials());
-
-        $query = 'update products set price=? where id=?';
-        $updatedPrice = $mySqlConnection->prepare($query);
-        $updatedPrice->execute([$price, $id]);
+        $query = 'insert into products (name, price, type) values (?, ?, ?)';
+        $addProduct = $mySqlConnection->prepare($query);
+        $addProduct->execute([$product->getName(), $product->getPrice(), $product->getType()]);
     }
 
     public function deleteProduct($id)
     {
         $mySqlConnection = new PDO(...$this->credentials->getCredentials());
-
         $query = 'delete from products where id=?';
         $delete = $mySqlConnection->prepare($query);
         $delete->execute([$id]);
+    }
+
+    public function modifyProduct(Product $product, int $id)
+    {
+        $mySqlConnection = new PDO(...$this->credentials->getCredentials());
+        $query = 'update products set name=?, price=?, type=? where id=?';
+        $updateProduct = $mySqlConnection->prepare($query);
+        $updateProduct->execute([$product->getName(), $product->getPrice(), $product->getType(), $id]);
     }
 }

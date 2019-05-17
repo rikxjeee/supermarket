@@ -4,6 +4,7 @@ namespace Supermarket\Input;
 
 use Exception;
 use Supermarket\Datastore\ProductStorage;
+use Supermarket\Product;
 
 class UserInput
 {
@@ -44,5 +45,25 @@ class UserInput
             throw new Exception('Your cart is empty.');
         }
         return $selectedProducts;
+    }
+
+    public function readProduct(): Product
+    {
+        $productName = readline('Product name: ');
+        if (strlen($productName) == 0) {
+            throw new Exception("Product name can't be empty.");
+        }
+
+        $productPrice = readline('Product price: ');
+        if (strlen($productName) == 0) {
+            throw new Exception("Please provide a price for your product.");
+        }
+
+        $productType = readline('Product type: ');
+        if (strlen($productName) == 0) {
+            throw new Exception( "Please provide a type for your product.");
+        }
+
+        return new Product(null, $productName, $productPrice, $productType);
     }
 }

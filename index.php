@@ -3,12 +3,14 @@
 use Supermarket\Application;
 use Supermarket\Datastore\Credentials;
 use Supermarket\Datastore\ProductStorage;
-use Supermarket\Input\UserInput;
 
 require 'vendor/autoload.php';
+
+$productStorage = new ProductStorage(new Credentials());
+
 try {
-    $myApp = new Application(new UserInput(new ProductStorage(new Credentials())));
-    $myApp->runApplication();
+    $myApp = new Application($productStorage);
+    $myApp->runShopping();
 } catch (Exception $e) {
     echo $e->getMessage() . PHP_EOL;
 }

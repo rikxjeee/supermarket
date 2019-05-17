@@ -20,21 +20,23 @@ class Application
     /**
      * @var ProductStorage
      */
+    private $productStorage;
 
     /**
      * Application constructor.
-     * @param UserInput $userInput
+     * @param ProductStorage $productStorage
      */
-    public function __construct(UserInput $userInput)
+    public function __construct(ProductStorage $productStorage)
     {
-        $this->userInput = $userInput;
+        $this->userInput = new UserInput($productStorage);
         $this->cart = new Cart;
+        $this->productStorage = $productStorage;
     }
 
     /**
      * @throws Exception
      */
-    public function runApplication()
+    public function runShopping()
     {
         $products = $this->userInput->getProducts();
         foreach ($products as $product) {
@@ -43,6 +45,56 @@ class Application
         $this->renderCart();
     }
 
+    public function runProductCreate()
+    {
+        do {
+            $product = $this->userInput->readProduct();
+            $this->productStorage->addProduct($product);
+            $continue = strtolower(readline('Do you want to add more products?(Y/n) ')) != 'n';
+        } while ($continue);
+    }
+
+    public function runUpdateProduct()
+    {
+        echo $this->productStorage->getProductList();
+        $productList = $this->productStorage->getAll();
+
+
+        do {
+            $id = readline('Choose a product: ');
+            if (!array_key_exists(($id - 1), $productList)) {
+                throw new Exception('No such product.');
+            }
+
+            $product = $this->userInput->readProduct();
+            $this->productStorage->modifyProduct($product, $productList[$id-1]->getId());
+            $continue = strtolower(readline('Do you want to modify more products?(Y/n) ')) != 'n';
+        } while ($continue);
+    }
+
+    public function runDeleteProduct()
+    {
+        echo $this->productStorage->getProductList();
+
+        $productList = $this->productStorage->getAll();
+
+        do {
+            $id = readline('Choose a product: ');
+            if (!array_key_exists(($id - 1), $productList)) {
+                throw new Exception('No such product.');
+            }
+
+            $confirm = strtolower(readline("Are you sure to remove " . $productList[$id - 1]->getName() . "?(Y/n)") != 'n');
+            if (!$confirm) {
+                echo "Aborted.".PHP_EOL;
+                exit(0);
+            }
+
+            $this->productStorage->deleteProduct($productList[$id-1]->getId());
+            $continue = strtolower(readline('Do you want to modify more products?(Y/n) ')) != 'n';
+        } while ($continue);
+
+    }
 
     private function renderCart()
     {
