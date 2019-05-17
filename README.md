@@ -24,14 +24,11 @@ https://github.com/rikxjeee/supermarket/tree/object-oriented
 ```
 https://github.com/rikxjeee/supermarket/tree/autoloading-classes
 ```
+#
 
-
-
-
-
-
-
-
-
-
+##### Fourth version, classes are automatically loaded with Composer
+```
+https://github.com/rikxjeee/supermarket/tree/Database
+```
+#
 
