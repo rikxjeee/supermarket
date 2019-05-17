@@ -3,7 +3,6 @@
 namespace Supermarket\Input;
 
 use Exception;
-use Supermarket\Datastore\Credentials;
 use Supermarket\Datastore\ProductStorage;
 
 class UserInput
@@ -15,11 +14,11 @@ class UserInput
 
     /**
      * UserInput constructor.
-     * @param Credentials $credentials
+     * @param ProductStorage $productStorage
      */
-    public function __construct($credentials)
+    public function __construct(ProductStorage $productStorage)
     {
-        $this->productStorage = new ProductStorage($credentials);
+        $this->productStorage = $productStorage;
     }
 
     /**

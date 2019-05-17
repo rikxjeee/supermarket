@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Supermarket\Calculators;
-
+namespace Supermarket\Calculator;
 
 use Supermarket\Cart\CartItem;
 use Supermarket\Product;
@@ -10,7 +8,6 @@ use Supermarket\Total;
 
 class DiscountCalculator
 {
-
     const MENU_ITEMS = [Product::TYPE_SANDWICH, Product::TYPE_SOFT_DRINK, Product::TYPE_CRISP];
 
     /**
@@ -65,21 +62,20 @@ class DiscountCalculator
         $minimum = null;
         $menu = [];
         foreach ($cartItems as $cartItem) {
-            if (!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)){
+            if (!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
                 continue;
             }
-                $menu[$cartItem->getProduct()->getType()] = true;
-                if ($minimum === null || $cartItem->getQuantity() <= $minimum) {
+            $menu[$cartItem->getProduct()->getType()] = true;
+            if ($minimum === null || $cartItem->getQuantity() <= $minimum) {
                 $minimum = $cartItem->getQuantity();
             }
-
         }
         foreach (self::MENU_ITEMS as $MENU_ITEM) {
-                if (!isset($menu[$MENU_ITEM])){
-                    return 0;
-                }
+            if (!isset($menu[$MENU_ITEM])) {
+                return 0;
+            }
         }
-            return (int)$minimum;
+        return (int)$minimum;
     }
 
     /**

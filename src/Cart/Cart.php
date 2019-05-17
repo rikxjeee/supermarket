@@ -2,8 +2,8 @@
 
 namespace Supermarket\Cart;
 
-use Supermarket\Calculators\DiscountCalculator;
-use Supermarket\Calculators\PriceCalculator;
+use Supermarket\Calculator\DiscountCalculator;
+use Supermarket\Calculator\PriceCalculator;
 use Supermarket\Product;
 
 class Cart
@@ -39,14 +39,6 @@ class Cart
         } else {
             $this->cartItems[$product->getName()] = new CartItem($product, 1);
         }
-    }
-
-    /**
-     * @return float
-     */
-    public function getPrice(): float
-    {
-        return $this->priceCalculator->calculateTotal($this->cartItems);
     }
 
     /**

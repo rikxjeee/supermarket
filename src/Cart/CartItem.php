@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Supermarket\Cart;
-
 
 use Supermarket\Product;
 

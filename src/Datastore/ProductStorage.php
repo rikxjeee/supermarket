@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Supermarket\Datastore;
 
 use PDO;
@@ -14,6 +13,7 @@ class ProductStorage
     private $itemList;
 
     private $credentials;
+
     /**
      * ProductStorage constructor.
      * @param Credentials $credentials
@@ -22,7 +22,6 @@ class ProductStorage
     {
         $this->credentials = $credentials;
     }
-
 
     /**
      * @return Product[]
@@ -41,7 +40,6 @@ class ProductStorage
         }
         return $productList;
     }
-
 
     public function addProduct(string $name, float $price, string $type)
     {

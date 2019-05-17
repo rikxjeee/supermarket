@@ -5,7 +5,6 @@ use Supermarket\Datastore\ProductStorage;
 
 require 'vendor/autoload.php';
 
-
 $conn = new ProductStorage(new Credentials());
 
 do {

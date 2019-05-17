@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Supermarket\Calculators;
-
+namespace Supermarket\Calculator;
 
 use Supermarket\Total;
 

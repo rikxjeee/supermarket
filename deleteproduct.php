@@ -21,7 +21,7 @@ do {
     }
 
 
-    $confirm = strtolower(readline("Are you sure to remove ". $productList[$id - 1]->getName()."?(Y/n)") != 'n' );
+    $confirm = strtolower(readline("Are you sure to remove " . $productList[$id - 1]->getName() . "?(Y/n)") != 'n');
     if (!$confirm) {
         echo "Aborted.";
         exit(0);

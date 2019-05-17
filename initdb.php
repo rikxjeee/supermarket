@@ -26,6 +26,5 @@ INSERT INTO `products` VALUES (1,'Coca Cola',0.8,'Soft Drink'),(2,'Pepsi',0.8,'S
 UNLOCK TABLES;
 EOT;
 
-
 $execute = $connection->prepare($query);
 $execute->execute();
