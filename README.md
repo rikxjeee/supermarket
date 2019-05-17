@@ -19,7 +19,7 @@ index.php
 
 To add products use:
 ````
-additem.php
+addproduct.php
 ````
 
 To remove products, use:
@@ -29,6 +29,6 @@ deleteproduct.php
 
 To modify the price of each product:
 ```
-updateprice.php
+updateproduct.php
 ```
 
