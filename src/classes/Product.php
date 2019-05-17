@@ -37,7 +37,7 @@ class Product
      * @param string $type
      * @param int $id
      */
-    public function __construct(string $name, float $price, string $type, int $id)
+    public function __construct(int $id, string $name, float $price, string $type)
     {
         $this->name = $name;
         $this->price = $price;
@@ -88,13 +88,5 @@ class Product
     public function isCrisp(): bool
     {
         return ($this->type == self::TYPE_CRISP);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSandwich(): bool
-    {
-        return ($this->type == self::isSandwich());
     }
 }

@@ -59,15 +59,23 @@ class DiscountCalculator
     private function getNumberOfMenus(array $cartItems): int
     {
         $minimum = null;
+        $menu = [];
         foreach ($cartItems as $cartItem) {
-            if (!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
+            if (!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)){
                 continue;
             }
-            if ($minimum === null || $cartItem->getQuantity() <= $minimum) {
+                $menu[$cartItem->getProduct()->getType()] = true;
+                if ($minimum === null || $cartItem->getQuantity() <= $minimum) {
                 $minimum = $cartItem->getQuantity();
             }
+
         }
-        return (int)$minimum;
+        foreach (self::MENU_ITEMS as $MENU_ITEM) {
+                if (!isset($menu[$MENU_ITEM])){
+                    return 0;
+                }
+        }
+            return (int)$minimum;
     }
 
     /**
@@ -103,6 +111,7 @@ class DiscountCalculator
     private function getGeneralDiscount($cartItems): array
     {
         $discount = [];
+        var_dump($cartItems);
         foreach ($cartItems as $cartItem) {
             $price = $cartItem->getPrice();
             $quantity = $cartItem->getQuantity();

@@ -3,7 +3,7 @@
 
 namespace Load\classes;
 
-use Exception;
+use PDO;
 
 class ProductStorage
 {
@@ -13,39 +13,52 @@ class ProductStorage
     private $itemList;
 
     /**
-     * ProductStorage constructor.
-     */
-    public function __construct()
-    {
-        $connection = new DataBase();
-        $this->itemList = $connection->fetchAllProducts();
-    }
-
-
-    /**
-     * @param $productName
-     * @return Product
-     * @throws Exception
-     */
-    public function getByName($productName): Product
-    {
-        foreach ($this->itemList as $item) {
-            if (strtolower($productName) == strtolower($item['name'])) {
-                return new Product($item['name'], $item['price'], $item['type'], $item['id']);
-            }
-        }
-        throw new Exception(sprintf('No such product: %s', $productName));
-    }
-
-    /**
      * @return Product[]
      */
     public function getAll(): array
     {
+        $credentials = new Credentials();
+        $mySqlConnection = new PDO(...$credentials->getCredentials());
+
+        $fetchProducts = $mySqlConnection->prepare('select * from products');
+        $fetchProducts->execute();
+        $productsArray = $fetchProducts->fetchAll(PDO::FETCH_ASSOC);
+        $this->itemList = $productsArray;
         $productList = [];
         foreach ($this->itemList as $item) {
-            $productList[] = new Product($item['name'], $item['price'], $item['type'], $item['id']);
+            $productList[] = new Product($item['id'], $item['name'], $item['price'], $item['type']);
         }
         return $productList;
+    }
+
+
+    public function addProduct(string $name, float $price, string $type)
+    {
+        $credentials = new Credentials();
+        $mySqlConnection = new PDO(...$credentials->getCredentials());
+
+        $query = 'insert into products (name, price, type) values (?, ?, ?)';
+        $product = $mySqlConnection->prepare($query);
+        $product->execute([$name, $price, $type]);
+    }
+
+    public function updatePrice(float $price, int $id)
+    {
+        $credentials = new Credentials();
+        $mySqlConnection = new PDO(...$credentials->getCredentials());
+
+        $query = 'update products set price=? where id=?';
+        $updatedPrice = $mySqlConnection->prepare($query);
+        $updatedPrice->execute([$price, $id]);
+    }
+
+    public function deleteProduct($id)
+    {
+        $credentials = new Credentials();
+        $mySqlConnection = new PDO(...$credentials->getCredentials());
+
+        $query = 'delete from products where id=?';
+        $delete = $mySqlConnection->prepare($query);
+        $delete->execute($id);
     }
 }
