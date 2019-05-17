@@ -1,7 +1,8 @@
 <?php
 
-use Load\classes\ProductStorage;
-use Load\classes\Credentials;
+use Supermarket\Datastore\Credentials;
+use Supermarket\Datastore\ProductStorage;
+
 require 'vendor/autoload.php';
 
 
