@@ -55,7 +55,7 @@ class Cart
         $items = '';
         $replace = '';
         foreach ($this->cartItems as $cartItem) {
-            $items .= sprintf('| %15s | %13s | %10s |', $cartItem->getProduct()->getName(), $cartItem->getQuantity(),
+            $items .= sprintf('| %24s | %13s | %10s |', $cartItem->getProduct()->getName(), $cartItem->getQuantity(),
                     $cartItem->getPrice()) . PHP_EOL;
         }
         $string = str_replace('%items%', $items, $string);

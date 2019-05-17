@@ -1,13 +1,34 @@
-<h1>The supermarket challenge</h1>
-<h3>I will collect my code for th job application test: https://drive.google.com/file/d/13P60ZGMaPOkv9fxiqloo1XEH5lpZEJrC/view and continuously update it with each step I learn something new.
-</h3>
+#The supermarket challenge
 
+Starting the project:
 
-<ul>
-  <li>
-     First version is sent for review during my application to the company
-      https://github.com/rikxjeee/supermarket/tree/procedural
-  </li>
-  <li>Second version, with basic object oriented code:
-      https://github.com/rikxjeee/supermarket/tree/object-oriented
- </ul>
+Set up a mysql server in docker:
+```
+docker run -d --name mysql-test -e MYSQL_ROOT_PASSWORD=simple -e MYSQL_DATABASE=firstdb -p 9999:3306 mysql:5.7
+```
+
+Run:
+```
+initdb.php
+```
+
+To "buy" items run:
+```
+index.php
+```
+
+To add products use:
+````
+additem.php
+````
+
+To remove products, use:
+```
+deleteproduct.php
+```
+
+To modify the price of each product:
+```
+updateprice.php
+```
+

@@ -1,11 +1,11 @@
 <?php
 
-use Load\classes\DataBase;
-
+use Load\classes\ProductStorage;
+use Load\classes\Credentials;
 require 'vendor/autoload.php';
 
 
-$conn = new DataBase();
+$conn = new ProductStorage(new Credentials());
 
 do {
     $continue = true;

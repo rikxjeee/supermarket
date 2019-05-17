@@ -111,12 +111,11 @@ class DiscountCalculator
     private function getGeneralDiscount($cartItems): array
     {
         $discount = [];
-        var_dump($cartItems);
         foreach ($cartItems as $cartItem) {
             $price = $cartItem->getPrice();
             $quantity = $cartItem->getQuantity();
 
-            if ((date('l') == 'Thursday') && ($cartItem->getProduct()->isSoftDrink())) {
+            if ((date('l') == 'Monday') && ($cartItem->getProduct()->isSoftDrink())) {
                 $discount[] =
                     new Total($cartItem->getProduct()->getName(), $quantity * ($price / 2));
             }

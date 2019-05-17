@@ -13,10 +13,11 @@ class UserInput
 
     /**
      * UserInput constructor.
+     * @param Credentials $credentials
      */
-    public function __construct()
+    public function __construct($credentials)
     {
-        $this->productStorage = new ProductStorage();
+        $this->productStorage = new ProductStorage($credentials);
     }
 
     /**

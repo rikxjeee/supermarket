@@ -6,7 +6,7 @@ namespace Load\classes;
 
 class Credentials
 {
-    private const DB_SERVER = 'mysql:host=localhost:9999;dbname=testing';
+    private const DB_SERVER = 'mysql:host=localhost:9999;dbname=supermarket';
     private const DB_USER = 'root';
     private const DB_PASSWORD ='simple';
 

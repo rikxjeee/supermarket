@@ -17,7 +17,6 @@ class Application
     /**
      * @var ProductStorage
      */
-    private $productStorage;
 
     /**
      * Application constructor.
@@ -27,7 +26,6 @@ class Application
     {
         $this->userInput = $userInput;
         $this->cart = new Cart;
-        $this->productStorage = new ProductStorage;
     }
 
     /**

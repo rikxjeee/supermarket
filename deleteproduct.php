@@ -1,5 +1,4 @@
 <?php
-
 use Load\classes\ProductStorage;
 use Load\classes\Credentials;
 
@@ -14,21 +13,21 @@ do {
         echo ($key + 1) . ': ' . $product->getName() . ' £' . $product->getPrice() . PHP_EOL;
     }
 
-    $id = readline('Choose a product: ');
+    $id = readline('Choose a product for deletion: ');
     if (!array_key_exists(($id - 1), $productList)) {
         echo 'No such product.';
         exit(0);
     }
 
 
-    $productPrice = readline('Product price: ');
-    if (strlen($productPrice) == 0) {
-        echo "Please provide a price for your product.";
+    $confirm = strtolower(readline("Are you sure to remove ". $productList[$id - 1]->getName()."?(Y/n)") != 'n' );
+    if (!$confirm) {
+        echo "Aborted.";
         exit(0);
     }
 
 
-    $productStorage->updatePrice((float)$productPrice, $productList[$id - 1]->getId());
+    $productStorage->deleteProduct($productList[$id - 1]->getId());
 
-    $continue = strtolower(readline('Do you want to update more products?(Y/n) ')) != 'n';
+    $continue = strtolower(readline('Do you want to delete more products?(Y/n) ')) != 'n';
 } while ($continue);
