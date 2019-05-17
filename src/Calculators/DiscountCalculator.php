@@ -1,8 +1,12 @@
 <?php
 
 
-namespace Load\classes;
+namespace Supermarket\Calculators;
 
+
+use Supermarket\Cart\CartItem;
+use Supermarket\Product;
+use Supermarket\Total;
 
 class DiscountCalculator
 {

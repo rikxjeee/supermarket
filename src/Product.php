@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Load\classes;
+namespace Supermarket;
 
 
 class Product

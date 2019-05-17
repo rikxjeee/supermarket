@@ -1,8 +1,10 @@
 <?php
 
 
-namespace Load\classes;
+namespace Supermarket\Cart;
 
+
+use Supermarket\Product;
 
 class CartItem
 {

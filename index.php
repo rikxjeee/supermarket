@@ -1,8 +1,9 @@
 <?php
 
-use Load\classes\Application;
-use Load\classes\UserInput;
-use Load\classes\Credentials;
+
+use Supermarket\Application;
+use Supermarket\Datastore\Credentials;
+use Supermarket\Input\UserInput;
 
 require 'vendor/autoload.php';
 try {

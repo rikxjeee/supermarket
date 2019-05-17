@@ -1,6 +1,10 @@
 <?php
 
-namespace Load\classes;
+namespace Supermarket\Cart;
+
+use Supermarket\Calculators\DiscountCalculator;
+use Supermarket\Calculators\PriceCalculator;
+use Supermarket\Product;
 
 class Cart
 {

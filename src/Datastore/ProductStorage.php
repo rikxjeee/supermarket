@@ -1,9 +1,10 @@
 <?php
 
 
-namespace Load\classes;
+namespace Supermarket\Datastore;
 
 use PDO;
+use Supermarket\Product;
 
 class ProductStorage
 {

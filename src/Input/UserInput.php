@@ -1,8 +1,10 @@
 <?php
 
-namespace Load\classes;
+namespace Supermarket\Input;
 
 use Exception;
+use Supermarket\Datastore\Credentials;
+use Supermarket\Datastore\ProductStorage;
 
 class UserInput
 {
@@ -43,13 +45,5 @@ class UserInput
             throw new Exception('Your cart is empty.');
         }
         return $selectedProducts;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->userInput;
     }
 }

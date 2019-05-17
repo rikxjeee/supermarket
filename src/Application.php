@@ -1,8 +1,11 @@
 <?php
 
-namespace Load\classes;
+namespace Supermarket;
 
 use Exception;
+use Supermarket\Cart\Cart;
+use Supermarket\Datastore\ProductStorage;
+use Supermarket\Input\UserInput;
 
 class Application
 {
