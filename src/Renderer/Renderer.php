@@ -10,5 +10,5 @@ interface Renderer
      * @param Product[] $products
      * @return string
      */
-    public function renderProductList($products): string;
+    public function renderProductList(array $products): string;
 }

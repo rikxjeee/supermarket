@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Supermarket\Datastore;
 
 class Product
@@ -10,9 +9,24 @@ class Product
     public const TYPE_HARD_DRINK = 'Hard Drink';
     public const TYPE_SANDWICH = 'Sandwich';
 
+    /**
+     * @var string
+     */
     private $name;
+
+    /**
+     * @var float
+     */
     private $price;
+
+    /**
+     * @var string
+     */
     private $type;
+
+    /**
+     * @var int|null
+     */
     private $id;
 
     public function __construct(?int $id, string $name, float $price, string $type)

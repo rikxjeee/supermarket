@@ -10,7 +10,7 @@ class HTMLrenderer implements Renderer
      * @param Product[] $products
      * @return string
      */
-    public function renderProductList($products): string
+    public function renderProductList(array $products): string
     {
         $product = '';
         foreach ($products as $item) {

@@ -9,8 +9,19 @@ use Supermarket\Renderer\Renderer;
 
 class Supermarket
 {
+    /**
+     * @var ProductRepository
+     */
     public $productStorage;
+
+    /**
+     * @var PDO
+     */
     private $database;
+
+    /**
+     * @var Renderer
+     */
     private $renderer;
 
     public function __construct(Credentials $credentials, ProductRepository $productStorage, Renderer $renderer)
@@ -31,7 +42,7 @@ class Supermarket
     public function getSingleProduct(int $id): string
     {
         $product = $this->productStorage->getProductById($id, $this->database);
-        return '<table>'.$this->render($this->renderer, $product).'</table><br><a href="index.php">Back</a>';
+        return '<table>'.$this->render($this->renderer, [$product]).'</table><br><a href="index.php">Back</a>';
     }
 
     private function render(Renderer $render, array $product)
