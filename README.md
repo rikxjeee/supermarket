@@ -26,7 +26,7 @@ https://github.com/rikxjeee/supermarket/tree/autoloading-classes
 ```
 #
 
-##### Fourth version, classes are automatically loaded with Composer
+##### Fourth version, products stored in database
 ```
 https://github.com/rikxjeee/supermarket/tree/Database
 ```
