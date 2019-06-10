@@ -4,6 +4,6 @@ namespace Supermarket\Datastore;
 
 interface ProductRepository
 {
-    public function getAllProducts();
-    public function getProductById(int $id);
+    public function getAllProducts(): array;
+    public function getProductById(int $id): Product;
 }

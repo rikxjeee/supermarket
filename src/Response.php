@@ -4,6 +4,9 @@ namespace Supermarket;
 
 class Response
 {
+    const STATUS_OK = 200;
+    const STATUS_NOT_FOUND = 404;
+
     /**
      * @var string
      */
@@ -14,9 +17,8 @@ class Response
      */
     private $statusCode;
 
-    public function __construct(string $content, int $statusCode)
+    public function __construct(string $content, int $statusCode = self::STATUS_OK)
     {
-
         $this->content = $content;
         $this->statusCode = $statusCode;
     }

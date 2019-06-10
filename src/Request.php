@@ -11,12 +11,11 @@ class Request
 
     public function __construct(array $get)
     {
-
         $this->get = $get;
     }
 
-    public function getGET()
+    public function get(string $key)
     {
-        return $this->get;
+        return $this->get[$key];
     }
 }

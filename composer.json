@@ -8,8 +8,6 @@
         }
     },
     "require": {
-        "ext-pdo": "*",
-        "ext-http": "*",
-        "php-http/curl-client": "^2.0"
+        "ext-pdo": "*"
     }
 }

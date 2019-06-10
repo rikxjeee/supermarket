@@ -2,50 +2,36 @@
 
 namespace Supermarket\Controller;
 
-use Supermarket\Datastore\Credentials;
 use Supermarket\Datastore\ProductRepository;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Request;
 use Supermarket\Response;
 
-class ProductListPageController implements ProductPageController
+class ProductListPageController
 {
-
     /**
      * @var ProductRepository
      */
     private $productRepository;
-    /**
-     * @var Credentials
-     */
-    private $credentials;
+
     /**
      * @var Renderer
      */
     private $renderer;
-    /**
-     * @var Request
-     */
-    private $request;
 
-    public function __construct(ProductRepository $productRepository, Credentials $credentials, Renderer $renderer, Request $request)
+    public function __construct(ProductRepository $productRepository, Renderer $renderer)
     {
         $this->productRepository = $productRepository;
-        $this->credentials = $credentials;
         $this->renderer = $renderer;
-        $this->request = $request;
     }
 
-    public function viewAction(): Response
+    public function viewAction(Request $request): Response
     {
-        $productListTemplate = file_get_contents('./src/Template/ProductList.html');
+        $productListTemplate = './src/Template/Product.html';
         $products = $this->productRepository->getAllProducts();
-        $productList = $this->renderer->renderProductList($products);
-        if(!in_array($this->request->getGET()['page'], ['products', 'details', ''])){
-            $response = new Response('404 - Page not found.', 404);
-            return $response;
-        }
-        $response = new Response(str_replace('%PRODUCTS%', $productList, $productListTemplate), 200);
+        $productList = $this->renderer->renderProductListTable($products, $productListTemplate);
+        $response = new Response($productList);
+
         return $response;
     }
 }

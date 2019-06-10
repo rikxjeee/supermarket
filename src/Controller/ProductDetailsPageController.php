@@ -2,51 +2,46 @@
 
 namespace Supermarket\Controller;
 
-use Supermarket\Datastore\Credentials;
+use Exception;
 use Supermarket\Datastore\ProductRepository;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Request;
 use Supermarket\Response;
 
-class ProductDetailsPageController implements ProductPageController
+class ProductDetailsPageController
 {
     /**
      * @var ProductRepository
      */
     private $productRepository;
-    /**
-     * @var Credentials
-     */
-    private $credentials;
+
     /**
      * @var Renderer
      */
     private $renderer;
-    /**
-     * @var Request
-     */
-    private $request;
 
-    public function __construct(ProductRepository $productRepository, Credentials $credentials, Renderer $renderer, Request $request)
+    public function __construct(ProductRepository $productRepository, Renderer $renderer)
     {
-
         $this->productRepository = $productRepository;
-        $this->credentials = $credentials;
         $this->renderer = $renderer;
-        $this->request = $request;
     }
 
-    public function viewAction(): Response
+    public function viewAction(Request $request): Response
     {
-        $productListTemplate = file_get_contents('./src/Template/ProductList.html');
-        $product = $this->productRepository->getProductById($this->request->getGET()['id']);
-        $productList = $this->renderer->renderProductList([$product]);
-        if(!in_array($this->request->getGET()['page'], ['products', 'details', ''])){
-            $response = new Response('404 - Page not found.', 404);
-            return $response;
+        try {
+            $id = $request->get('id');
+            if ($id == null){
+                throw new Exception('Invalid request.');
+            }
+
+            $productDetailsTemplate = './src/Template/ProductDetails.html';
+            $product = $this->productRepository->getProductById($id);
+            $product = $this->renderer->renderProductListTable([$product], $productDetailsTemplate);
+            $response = new Response($product);
+        }catch (Exception $e){
+            return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
         }
-        $content = str_replace('%PRODUCTS%', $productList, $productListTemplate);
-        $response = new Response('<table>'.$content.'</table><br><a href="index.php">Back</a>', 200);
+
         return $response;
     }
 }

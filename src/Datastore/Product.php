@@ -10,6 +10,11 @@ class Product
     public const TYPE_SANDWICH = 'Sandwich';
 
     /**
+     * @var int|null
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $name;
@@ -24,17 +29,12 @@ class Product
      */
     private $type;
 
-    /**
-     * @var int|null
-     */
-    private $id;
-
     public function __construct(?int $id, string $name, float $price, string $type)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
-        $this->id = $id;
     }
 
     public function getId(): ?int
@@ -55,5 +55,10 @@ class Product
     public function getPrice(): float
     {
         return $this->price;
+    }
+
+    public static function createFromArray(array $productData): Product
+    {
+        return new Product($productData['id'], $productData['name'], $productData['price'], $productData['type']);
     }
 }
