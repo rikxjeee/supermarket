@@ -2,12 +2,16 @@
 
 namespace Supermarket\Datastore;
 
+use Supermarket\Exception\InvalidArgumentException;
+
 class Product
 {
-    public const TYPE_CRISP = 'Crisps';
-    public const TYPE_SOFT_DRINK = 'Soft Drink';
-    public const TYPE_HARD_DRINK = 'Hard Drink';
-    public const TYPE_SANDWICH = 'Sandwich';
+    private const KEY_ID = 'id';
+    private const KEY_NAME = 'name';
+    private const KEY_PRICE = 'price';
+    private const KEY_TYPE = 'type';
+    private const DEFAULT_TYPE = '';
+    private const DEFAULT_ID = null;
 
     /**
      * @var int|null
@@ -37,6 +41,33 @@ class Product
         $this->type = $type;
     }
 
+    /**
+     * @param array $productData
+     * @return Product
+     * @throws InvalidArgumentException
+     */
+    public static function createFromArray(array $productData): Product
+    {
+        if (empty($productData[self::KEY_NAME])) {
+            throw new InvalidArgumentException('Product cannot be created without a name.');
+        }
+
+        if (empty($productData[self::KEY_PRICE])) {
+            throw new InvalidArgumentException('Product cannot be created without price.');
+        }
+
+        if (empty($productData[self::KEY_TYPE])) {
+            $productData[self::KEY_TYPE] = self::DEFAULT_TYPE;
+        }
+
+        if (empty($productData[self::KEY_ID])) {
+            $productData[self::KEY_ID] = self::DEFAULT_ID;
+        }
+
+        return new Product($productData[self::KEY_ID], $productData[self::KEY_NAME], $productData[self::KEY_PRICE],
+            $productData[self::KEY_TYPE]);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,10 +86,5 @@ class Product
     public function getPrice(): float
     {
         return $this->price;
-    }
-
-    public static function createFromArray(array $productData): Product
-    {
-        return new Product($productData['id'], $productData['name'], $productData['price'], $productData['type']);
     }
 }

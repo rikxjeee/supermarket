@@ -16,23 +16,20 @@ $productRepository = new DatabaseBasedProductRepository($database);
 $renderer = new HTMLrenderer();
 $request = new Request($_GET);
 
-if(!in_array($request->get('page'), ['products', 'details', null])){
-    $response = new Response('404 - Requested page not found.', Response::STATUS_NOT_FOUND);
-    echo $response->getContent();
-}else{
-    switch ($request->get('page')){
-        default;
-        case 'products';
-            $productListPageController = new ProductListPageController($productRepository, $renderer);
-            $response = $productListPageController->viewAction($request);
-            http_response_code($response->getStatusCode());
-            echo $response->getContent();
-            break;
-        case 'details';
-            $productDetailsPageController = new ProductDetailsPageController($productRepository, $renderer);
-            $response = $productDetailsPageController->viewAction($request);
-            http_response_code($response->getStatusCode());
-            echo $response->getContent();
-            break;
-    }
+switch ($request->get('page')) {
+    case null;
+    case 'products';
+        $productListPageController = new ProductListPageController($productRepository, $renderer);
+        $response = $productListPageController->execute($request);
+        $response->sendResponse($response);
+        break;
+    case 'details';
+        $productDetailsPageController = new ProductDetailsPageController($productRepository, $renderer);
+        $response = $productDetailsPageController->execute($request);
+        $response->sendResponse($response);
+        break;
+    default;
+        $response = new Response('404 - Requested page not found.', Response::STATUS_NOT_FOUND);
+        echo $response->getContent();
+        break;
 }

@@ -7,7 +7,7 @@ use Supermarket\Renderer\Renderer;
 use Supermarket\Request;
 use Supermarket\Response;
 
-class ProductListPageController
+class ProductListPageController implements PageController
 {
     /**
      * @var ProductRepository
@@ -25,11 +25,12 @@ class ProductListPageController
         $this->renderer = $renderer;
     }
 
-    public function viewAction(Request $request): Response
+    public function execute(Request $request): Response
     {
         $productListTemplate = './src/Template/Product.html';
+        $tableTemplate = './src/Template/ProductListTable.html';
         $products = $this->productRepository->getAllProducts();
-        $productList = $this->renderer->renderProductListTable($products, $productListTemplate);
+        $productList = $this->renderer->renderProductListTable($products, $productListTemplate, $tableTemplate);
         $response = new Response($productList);
 
         return $response;

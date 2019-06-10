@@ -6,29 +6,30 @@ use Supermarket\Datastore\Product;
 
 class HTMLrenderer implements Renderer
 {
-    /**
-     * @param Product[] $products
-     * @param string $template
-     * @return string
-     */
-    private function renderProductList(array $products, string $template): string
+    private function renderProductList(Product $product, string $template): string
     {
-        $product = '';
-        foreach ($products as $item) {
-            $product .= file_get_contents($template);
-            $product = str_replace('%ID%', $item->getId(), $product);
-            $product = str_replace('%NAME%', $item->getName(), $product);
-            $product = str_replace('%PRICE%', $item->getPrice(), $product);
-            $product = str_replace('%TYPE%', $item->getType(), $product);
-        }
+        $list = file_get_contents($template);
+        $list = str_replace('%ID%', $product->getId(), $list);
+        $list = str_replace('%NAME%', $product->getName(), $list);
+        $list = str_replace('%PRICE%', $product->getPrice(), $list);
+        $list = str_replace('%TYPE%', $product->getType(), $list);
 
-        return $product;
+        return $list;
     }
 
-    public function renderProductListTable(array $products, string $template): string
+    public function renderProductListTable(array $products, string $template, string $tableTemplate): string
     {
-        $table = file_get_contents('./src/Template/ProductListTable.html');
+        $table = file_get_contents($tableTemplate);
+        $list = '';
+        foreach ($products as $product) {
+            $list .= $this->renderProductList($product, $template);
+        }
 
-        return str_replace('%PRODUCTS%', $this->renderProductList($products, $template), $table);
+        return str_replace('%PRODUCTS%', $list, $table);
+    }
+
+    public function renderProductDetails(Product $product, string $productDetailsTemplate): string
+    {
+        return $this->renderProductList($product, $productDetailsTemplate);
     }
 }

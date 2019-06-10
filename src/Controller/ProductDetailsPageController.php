@@ -8,7 +8,7 @@ use Supermarket\Renderer\Renderer;
 use Supermarket\Request;
 use Supermarket\Response;
 
-class ProductDetailsPageController
+class ProductDetailsPageController implements PageController
 {
     /**
      * @var ProductRepository
@@ -26,19 +26,19 @@ class ProductDetailsPageController
         $this->renderer = $renderer;
     }
 
-    public function viewAction(Request $request): Response
+    public function execute(Request $request): Response
     {
         try {
             $id = $request->get('id');
-            if ($id == null){
+            if ($id === null) {
                 throw new Exception('Invalid request.');
             }
 
             $productDetailsTemplate = './src/Template/ProductDetails.html';
             $product = $this->productRepository->getProductById($id);
-            $product = $this->renderer->renderProductListTable([$product], $productDetailsTemplate);
-            $response = new Response($product);
-        }catch (Exception $e){
+            $content = $this->renderer->renderProductDetails($product, $productDetailsTemplate);
+            $response = new Response($content);
+        } catch (Exception $e) {
             return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
         }
 
