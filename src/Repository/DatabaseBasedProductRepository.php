@@ -22,7 +22,7 @@ class DatabaseBasedProductRepository implements ProductRepository
 
     /**
      * @return Product[]
-     *@throws InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PDOException
      */
     public function getAllProducts(): array
