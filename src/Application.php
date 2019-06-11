@@ -11,10 +11,6 @@ use Supermarket\Model\Response;
 class Application
 {
     /**
-     * @var Router
-     */
-    private $router;
-    /**
      * @var ServiceContainer
      */
     private $serviceContainer;

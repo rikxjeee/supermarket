@@ -2,17 +2,12 @@
 
 namespace Supermarket\Renderer;
 
-use Supermarket\Model\Product;
+use Supermarket\Model\View\ProductDetailsView;
+use Supermarket\Model\View\ProductListView;
 
 interface Renderer
 {
-    /**
-     * @param Product[] $products
-     * @param string $template
-     * @param string $tableTemplate
-     * @return string
-     */
-    public function renderProductListTable(array $products, string $template, string $tableTemplate): string;
+    public function renderProductListTable(ProductListView $products, string $template, string $tableTemplate): string;
 
-    public function renderProductDetails(Product $product, string $productDetailsTemplate): string;
+    public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string;
 }

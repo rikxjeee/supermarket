@@ -6,6 +6,7 @@ use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\ProductRepository;
+use Supermarket\Transformer\ProductsToProductListViewTransformer;
 
 class ProductListPageController implements Controller
 {
@@ -19,18 +20,28 @@ class ProductListPageController implements Controller
      */
     private $renderer;
 
-    public function __construct(ProductRepository $productRepository, Renderer $renderer)
-    {
+    /**
+     * @var ProductsToProductListViewTransformer
+     */
+    private $productsToProductListViewTransformer;
+
+    public function __construct(
+        ProductRepository $productRepository,
+        Renderer $renderer,
+        ProductsToProductListViewTransformer $productsToProductListViewTransformer
+    ) {
         $this->productRepository = $productRepository;
         $this->renderer = $renderer;
+        $this->productsToProductListViewTransformer = $productsToProductListViewTransformer;
     }
 
     public function execute(Request $request): Response
     {
-        $productListTemplate = 'Product.html';
-        $tableTemplate = 'ProductListTable.html';
+        $productListTemplate = '/product_list/item.html';
+        $tableTemplate = 'product_list.html';
         $products = $this->productRepository->getAllProducts();
-        $productList = $this->renderer->renderProductListTable($products, $productListTemplate, $tableTemplate);
+        $productListView = $this->productsToProductListViewTransformer->transform($products);
+        $productList = $this->renderer->renderProductListTable($productListView, $productListTemplate, $tableTemplate);
         $response = new Response($productList);
 
         return $response;

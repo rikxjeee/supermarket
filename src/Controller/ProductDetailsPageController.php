@@ -9,6 +9,7 @@ use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\ProductRepository;
+use Supermarket\Transformer\ProductToProductDetailsViewTransformer;
 
 class ProductDetailsPageController implements Controller
 {
@@ -21,11 +22,20 @@ class ProductDetailsPageController implements Controller
      * @var Renderer
      */
     private $renderer;
+    /**
+     * @var ProductToProductDetailsViewTransformer
+     */
+    private $productToProductDetailsViewTransformer;
 
-    public function __construct(ProductRepository $productRepository, Renderer $renderer)
+    public function __construct(
+        ProductRepository $productRepository,
+        Renderer $renderer,
+        ProductToProductDetailsViewTransformer $productToProductDetailsViewTransformer
+    )
     {
         $this->productRepository = $productRepository;
         $this->renderer = $renderer;
+        $this->productToProductDetailsViewTransformer = $productToProductDetailsViewTransformer;
     }
 
     public function execute(Request $request): Response
@@ -36,9 +46,10 @@ class ProductDetailsPageController implements Controller
                 throw new Exception('Invalid request.');
             }
 
-            $productDetailsTemplate = 'ProductDetails.html';
+            $productDetailsTemplate = 'product_details.html';
             $product = $this->productRepository->getProductById($id);
-            $content = $this->renderer->renderProductDetails($product, $productDetailsTemplate);
+            $productDetails = $this->productToProductDetailsViewTransformer->transform($product);
+            $content = $this->renderer->renderProductDetails($productDetails, $productDetailsTemplate);
             $response = new Response($content);
         } catch (ProductNotFoundException $e) {
             return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
