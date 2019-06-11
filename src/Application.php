@@ -3,16 +3,10 @@
 namespace Supermarket;
 
 use Exception;
-use PDO;
 use Supermarket\Application\Router;
-use Supermarket\Controller\PageNotFoundController;
-use Supermarket\Controller\ProductDetailsPageController;
-use Supermarket\Controller\ProductListPageController;
-use Supermarket\Model\DatabaseCredentials;
+use Supermarket\Application\ServiceContainer;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
-use Supermarket\Renderer\HTMLrenderer;
-use Supermarket\Repository\DatabaseBasedProductRepository;
 
 class Application
 {
@@ -20,38 +14,39 @@ class Application
      * @var Router
      */
     private $router;
+    /**
+     * @var ServiceContainer
+     */
+    private $serviceContainer;
 
-    public function init()
+    /**
+     * Application constructor.
+     * @param ServiceContainer $serviceContainer
+     */
+    public function __construct(ServiceContainer $serviceContainer)
     {
-        try {
-            if (!file_exists('./config.php')) {
-                throw new Exception('configuration missing');
-            }
+        $this->serviceContainer = $serviceContainer;
+    }
 
-            $config = require './config.php';
-            $dataBaseCredentials = DatabaseCredentials::createFromArray($config['db']['connection'] ?? []);
-            $database = new PDO(...$dataBaseCredentials->toPDOConfig());
-            $productRepository = new DatabaseBasedProductRepository($database);
+    private function initRouter(): Router
+    {
+        $router = $this->serviceContainer->getRouter();
+        $router->register('products', $this->serviceContainer->getProductListPageController());
+        $router->register('details', $this->serviceContainer->getProductDetailsController());
+        $router->register('default', $this->serviceContainer->getPageNotFoundController());
+        $router->register('', $this->serviceContainer->getProductListPageController());
 
-            $renderer = new HTMLrenderer($config['templates']['basepath']);
-
-            $this->router = new Router();
-            $this->router->register('products', new ProductListPageController($productRepository, $renderer));
-            $this->router->register('details', new ProductDetailsPageController($productRepository, $renderer));
-            $this->router->register('default', new PageNotFoundController());
-            $this->router->register('', new ProductListPageController($productRepository, $renderer));
-        } catch (Exception $e) {
-            $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
-            http_response_code($response->getStatusCode());
-            echo $response->getContent();
-        }
+        return $router;
     }
 
     public function run(): void
     {
         try {
             $request = new Request($_GET);
-            $response = $this->router->match($request)->execute($request);
+            $response =  $this
+                ->initRouter()
+                ->match($request)
+                ->execute($request);
         } catch (Exception $e) {
             $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         }

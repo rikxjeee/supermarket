@@ -2,8 +2,10 @@
 
 require 'vendor/autoload.php';
 
-use Supermarket\Application;
+use Supermarket\Application\ServiceContainer;
 
-$application = new Application();
-$application->init();
-$application->run();
+if (!file_exists('./config.php')) {
+    throw new Exception('configuration missing');
+}
+
+(new ServiceContainer(require './config.php'))->getApplication()->run();
