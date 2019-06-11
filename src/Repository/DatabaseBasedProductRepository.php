@@ -1,11 +1,12 @@
 <?php
 
-namespace Supermarket\Datastore;
+namespace Supermarket\Repository;
 
 use InvalidArgumentException;
 use PDO;
 use PDOException;
 use Supermarket\Exception\ProductNotFoundException;
+use Supermarket\Model\Product;
 
 class DatabaseBasedProductRepository implements ProductRepository
 {

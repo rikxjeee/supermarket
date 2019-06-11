@@ -2,8 +2,8 @@
 
 namespace Supermarket\Controller;
 
-use Supermarket\Request;
-use Supermarket\Response;
+use Supermarket\Model\Request;
+use Supermarket\Model\Response;
 
 class PageNotFoundController implements Controller
 {

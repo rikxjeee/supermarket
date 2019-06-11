@@ -3,7 +3,7 @@
 namespace Supermarket\Application;
 
 use Supermarket\Controller\Controller;
-use Supermarket\Request;
+use Supermarket\Model\Request;
 
 class Router
 {

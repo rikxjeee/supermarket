@@ -1,6 +1,6 @@
 <?php
 
-namespace Supermarket\Datastore;
+namespace Supermarket\Model;
 
 use InvalidArgumentException;
 

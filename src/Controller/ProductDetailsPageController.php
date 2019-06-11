@@ -4,11 +4,11 @@ namespace Supermarket\Controller;
 
 use Exception;
 use PDOException;
-use Supermarket\Datastore\ProductRepository;
 use Supermarket\Exception\ProductNotFoundException;
 use Supermarket\Renderer\Renderer;
-use Supermarket\Request;
-use Supermarket\Response;
+use Supermarket\Repository\ProductRepository;
+use Supermarket\Model\Request;
+use Supermarket\Model\Response;
 
 class ProductDetailsPageController implements Controller
 {

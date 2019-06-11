@@ -1,10 +1,11 @@
 <?php
 
-namespace Supermarket\Datastore;
+namespace Supermarket\Repository;
 
 use Exception;
 use PDOException;
 use Supermarket\Exception\ProductNotFoundException;
+use Supermarket\Model\Product;
 
 interface ProductRepository
 {

@@ -8,9 +8,11 @@ use Supermarket\Application\Router;
 use Supermarket\Controller\PageNotFoundController;
 use Supermarket\Controller\ProductDetailsPageController;
 use Supermarket\Controller\ProductListPageController;
-use Supermarket\Datastore\DatabaseBasedProductRepository;
-use Supermarket\Datastore\DatabaseCredentials;
+use Supermarket\Model\DatabaseCredentials;
+use Supermarket\Model\Request;
+use Supermarket\Model\Response;
 use Supermarket\Renderer\HTMLrenderer;
+use Supermarket\Repository\DatabaseBasedProductRepository;
 
 class Application
 {

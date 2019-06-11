@@ -2,7 +2,7 @@
 
 namespace Supermarket\Renderer;
 
-use Supermarket\Datastore\Product;
+use Supermarket\Model\Product;
 
 interface Renderer
 {
