@@ -11,6 +11,10 @@ class ProductListView
      */
     private $items;
 
+    /**
+     * ProductListView constructor.
+     * @param Item[] $items
+     */
     public function __construct(array $items)
     {
         $this->items = $items;

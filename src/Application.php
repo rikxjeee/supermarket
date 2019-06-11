@@ -15,10 +15,6 @@ class Application
      */
     private $serviceContainer;
 
-    /**
-     * Application constructor.
-     * @param ServiceContainer $serviceContainer
-     */
     public function __construct(ServiceContainer $serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;

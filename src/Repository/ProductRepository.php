@@ -10,6 +10,7 @@ use Supermarket\Model\Product;
 interface ProductRepository
 {
     /**
+     * @return Product[]
      * @throws PDOException
      */
     public function getAllProducts(): array;

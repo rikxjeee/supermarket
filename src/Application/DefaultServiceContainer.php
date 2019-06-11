@@ -77,7 +77,7 @@ class DefaultServiceContainer implements ServiceContainer
         return new ProductsToProductListViewTransformer();
     }
 
-    private function getProductToProductDetailsTransformer()
+    private function getProductToProductDetailsTransformer(): ProductToProductDetailsViewTransformer
     {
         return new ProductToProductDetailsViewTransformer();
     }

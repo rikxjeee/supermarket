@@ -31,8 +31,7 @@ class ProductDetailsPageController implements Controller
         ProductRepository $productRepository,
         Renderer $renderer,
         ProductToProductDetailsViewTransformer $productToProductDetailsViewTransformer
-    )
-    {
+    ) {
         $this->productRepository = $productRepository;
         $this->renderer = $renderer;
         $this->productToProductDetailsViewTransformer = $productToProductDetailsViewTransformer;

@@ -9,9 +9,9 @@ class Request
      */
     private $queryParams;
 
-    public function __construct(array $get)
+    public function __construct(array $queryParams)
     {
-        $this->queryParams = $get;
+        $this->queryParams = $queryParams;
     }
 
     public function get(string $key): ?string

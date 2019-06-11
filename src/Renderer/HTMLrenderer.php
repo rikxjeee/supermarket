@@ -2,10 +2,10 @@
 
 namespace Supermarket\Renderer;
 
-use Supermarket\Model\View\ProductDetailsView;
-use Supermarket\Model\View\ProductListView\Item;
 use Supermarket\Model\TemplateConfig;
+use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
+use Supermarket\Model\View\ProductListView\Item;
 
 class HTMLrenderer implements Renderer
 {
@@ -28,6 +28,17 @@ class HTMLrenderer implements Renderer
         return $this->renderWebPage($list, 'index.html');
     }
 
+    public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
+    {
+        $content = file_get_contents($this->templateConfig->getBasePath() . $productDetailsTemplate);
+        $content = str_replace('%NAME%', $product->getName(), $content);
+        $content = str_replace('%PRICE%', $product->getPrice(), $content);
+        $content = str_replace('%TYPE%', $product->getType(), $content);
+        $content = str_replace('%DESCRIPTION%', $product->getDescription(), $content);
+
+        return $this->renderWebPage($content, 'index.html');
+    }
+
     private function renderProductList(Item $product, string $template): string
     {
         $list = file_get_contents($template);
@@ -44,16 +55,5 @@ class HTMLrenderer implements Renderer
         $index = file_get_contents($this->templateConfig->getBasePath() . $template);
 
         return str_replace('%CONTENT%', $content, $index);
-    }
-
-    public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
-    {
-        $content = file_get_contents($this->templateConfig->getBasePath() . $productDetailsTemplate);
-        $content = str_replace('%NAME%', $product->getName(), $content);
-        $content = str_replace('%PRICE%', $product->getPrice(), $content);
-        $content = str_replace('%TYPE%', $product->getType(), $content);
-        $content = str_replace('%DESCRIPTION%', $product->getDescription(), $content);
-
-        return $this->renderWebPage($content, 'index.html');
     }
 }
