@@ -40,9 +40,9 @@ class ProductDetailsPageController implements Controller
             $product = $this->productRepository->getProductById($id);
             $content = $this->renderer->renderProductDetails($product, $productDetailsTemplate);
             $response = new Response($content);
-        } catch (ProductNotFoundException $e){
+        } catch (ProductNotFoundException $e) {
             return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
-        }catch (PDOException $e){
+        } catch (PDOException $e) {
             return new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         } catch (Exception $e) {
             return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);

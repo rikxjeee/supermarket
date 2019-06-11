@@ -2,38 +2,63 @@
 
 namespace Supermarket\Datastore;
 
-use Exception;
+use InvalidArgumentException;
 
 class DatabaseCredentials
 {
+    private const PDO_DSN_TEMPLATE = 'mysql:host=%s:%d;dbname=%s';
+
     /**
-     * @return array
-     * @throws Exception
+     * @var string
      */
-    public function getCredentials(): array
+    private $host;
+
+    /**
+     * @var int
+     */
+    private $port;
+
+    /**
+     * @var string
+     */
+    private $dbname;
+
+    /**
+     * @var string
+     */
+    private $username;
+
+    /**
+     * @var string
+     */
+    private $password;
+
+    public static function createFromArray(array $data): DatabaseCredentials
     {
-        if (!file_exists('./src/Datastore/Config.php')){
-            throw new Exception('configuration missing');
+        foreach (['host', 'port', 'dbname', 'username', 'password'] as $key) {
+            if (empty($data[$key])) {
+                throw new InvalidArgumentException(sprintf('Invalid configuration for %s', $key));
+            }
         }
 
-        $config = require 'Config.php';
-
-        if (!isset($config['db']['connection'])){
-            throw new Exception('db connection configuration missing');
-        }
-
-        $credentials = $config['db']['connection'];
-        $credentials = DatabaseCredentials::createFromArray($credentials);
-
-        return $credentials;
+        return new self($data['host'], $data['port'], $data['dbname'], $data['username'], $data['password']);
     }
 
-    public static function createFromArray(array $array): array
+    public function toPDOConfig(): array
     {
-        $credentials[] = 'mysql:host='.$array['host'].':'.$array['port'].';dbname='.$array['dbname'];
-        $credentials[] = $array['username'];
-        $credentials[] = $array['password'];
+        return [
+            sprintf(self::PDO_DSN_TEMPLATE, $this->host, $this->port, $this->dbname),
+            $this->username,
+            $this->password,
+        ];
+    }
 
-        return $credentials;
+    private function __construct(string $host, int $port, string $dbname, string $username, string $password)
+    {
+        $this->host = $host;
+        $this->port = $port;
+        $this->dbname = $dbname;
+        $this->username = $username;
+        $this->password = $password;
     }
 }

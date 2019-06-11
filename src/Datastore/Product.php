@@ -40,8 +40,13 @@ class Product
      */
     private $description;
 
-    public function __construct(?int $id, string $name, float $price, string $type, string $description=self::DEFAULT_DESC)
-    {
+    public function __construct(
+        ?int $id,
+        string $name,
+        float $price,
+        string $type,
+        string $description = self::DEFAULT_DESC
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
@@ -72,7 +77,7 @@ class Product
             $productData[self::KEY_ID] = self::DEFAULT_ID;
         }
 
-        if (empty($productData[self::KEY_DESCRIPTION])){
+        if (empty($productData[self::KEY_DESCRIPTION])) {
             $productData[self::KEY_DESCRIPTION] = self::DEFAULT_DESC;
         }
 

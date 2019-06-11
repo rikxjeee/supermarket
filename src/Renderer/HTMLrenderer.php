@@ -8,9 +8,20 @@ class HTMLrenderer implements Renderer
 {
     private $templateBasePath;
 
-    public function __construct()
+    public function __construct(string $templateBasePath)
     {
-        $this->templateBasePath = './src/template/';
+        $this->templateBasePath = $templateBasePath;
+    }
+
+    public function renderProductListTable(array $products, string $template, string $tableTemplate): string
+    {
+        $table = file_get_contents($this->templateBasePath . $tableTemplate);
+        $list = '';
+        foreach ($products as $product) {
+            $list .= $this->renderProductList($product, $this->templateBasePath . $template);
+        }
+
+        return str_replace('%PRODUCTS%', $list, $table);
     }
 
     private function renderProductList(Product $product, string $template): string
@@ -24,27 +35,16 @@ class HTMLrenderer implements Renderer
         return $list;
     }
 
-    public function renderProductListTable(array $products, string $template, string $tableTemplate): string
-    {
-        $table = file_get_contents($this->templateBasePath.$tableTemplate);
-        $list = '';
-        foreach ($products as $product) {
-            $list .= $this->renderProductList($product, $this->templateBasePath.$template);
-        }
-
-        return str_replace('%PRODUCTS%', $list, $table);
-    }
-
     public function renderProductDetails(Product $product, string $productDetailsTemplate): string
     {
-        $details = $this->renderProductList($product, $this->templateBasePath.$productDetailsTemplate);
+        $details = $this->renderProductList($product, $this->templateBasePath . $productDetailsTemplate);
         $details = str_replace('%DESCRIPTION%', $product->getDescription(), $details);
         return $details;
     }
 
     public function renderWebPage(string $content, string $template): string
     {
-        $index=file_get_contents($this->templateBasePath.$template);
+        $index = file_get_contents($this->templateBasePath . $template);
         return str_replace('%CONTENT%', $content, $index);
     }
 }

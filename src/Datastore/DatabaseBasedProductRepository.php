@@ -2,10 +2,10 @@
 
 namespace Supermarket\Datastore;
 
+use InvalidArgumentException;
 use PDO;
 use PDOException;
 use Supermarket\Exception\ProductNotFoundException;
-use InvalidArgumentException;
 
 class DatabaseBasedProductRepository implements ProductRepository
 {
@@ -47,7 +47,7 @@ class DatabaseBasedProductRepository implements ProductRepository
         $fetchProduct = $this->mySqlConnection->prepare('select * from products where id=?');
         $fetchProduct->execute([$id]);
         $fetchedProduct = $fetchProduct->fetch();
-        if (!$fetchedProduct){
+        if (!$fetchedProduct) {
             throw new ProductNotFoundException('No such product.');
         }
         $product = Product::createFromArray($fetchedProduct);
