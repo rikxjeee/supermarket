@@ -4,6 +4,7 @@ namespace Supermarket\Datastore;
 
 use Exception;
 use PDOException;
+use Supermarket\Exception\ProductNotFoundException;
 
 interface ProductRepository
 {
@@ -17,6 +18,7 @@ interface ProductRepository
      * @return Product
      * @throws Exception
      * @throws PDOException
+     * @throws ProductNotFoundException
      */
     public function getProductById(int $id): Product;
 }

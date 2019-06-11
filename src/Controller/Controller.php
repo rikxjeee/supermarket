@@ -5,7 +5,7 @@ namespace Supermarket\Controller;
 use Supermarket\Request;
 use Supermarket\Response;
 
-interface PageController
+interface Controller
 {
     public function execute(Request $request): Response;
 }

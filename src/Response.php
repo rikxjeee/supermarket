@@ -4,8 +4,9 @@ namespace Supermarket;
 
 class Response
 {
-    private const STATUS_OK = 200;
+    public const STATUS_OK = 200;
     public const STATUS_NOT_FOUND = 404;
+    public const STATUS_SERVER_ERROR = 500;
 
     /**
      * @var string
@@ -31,11 +32,5 @@ class Response
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    public function sendResponse(Response $response)
-    {
-        http_response_code($response->getStatusCode());
-        echo $response->getContent();
     }
 }

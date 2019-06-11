@@ -3,12 +3,14 @@
 namespace Supermarket\Controller;
 
 use Exception;
+use PDOException;
 use Supermarket\Datastore\ProductRepository;
+use Supermarket\Exception\ProductNotFoundException;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Request;
 use Supermarket\Response;
 
-class ProductDetailsPageController implements PageController
+class ProductDetailsPageController implements Controller
 {
     /**
      * @var ProductRepository
@@ -34,14 +36,17 @@ class ProductDetailsPageController implements PageController
                 throw new Exception('Invalid request.');
             }
 
-            $productDetailsTemplate = './src/Template/ProductDetails.html';
+            $productDetailsTemplate = 'ProductDetails.html';
             $product = $this->productRepository->getProductById($id);
             $content = $this->renderer->renderProductDetails($product, $productDetailsTemplate);
             $response = new Response($content);
+        } catch (ProductNotFoundException $e){
+            return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
+        }catch (PDOException $e){
+            return new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         } catch (Exception $e) {
             return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
         }
-
         return $response;
     }
 }

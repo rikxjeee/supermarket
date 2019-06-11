@@ -6,6 +6,13 @@ use Supermarket\Datastore\Product;
 
 class HTMLrenderer implements Renderer
 {
+    private $templateBasePath;
+
+    public function __construct()
+    {
+        $this->templateBasePath = './src/template/';
+    }
+
     private function renderProductList(Product $product, string $template): string
     {
         $list = file_get_contents($template);
@@ -19,10 +26,10 @@ class HTMLrenderer implements Renderer
 
     public function renderProductListTable(array $products, string $template, string $tableTemplate): string
     {
-        $table = file_get_contents($tableTemplate);
+        $table = file_get_contents($this->templateBasePath.$tableTemplate);
         $list = '';
         foreach ($products as $product) {
-            $list .= $this->renderProductList($product, $template);
+            $list .= $this->renderProductList($product, $this->templateBasePath.$template);
         }
 
         return str_replace('%PRODUCTS%', $list, $table);
@@ -30,6 +37,14 @@ class HTMLrenderer implements Renderer
 
     public function renderProductDetails(Product $product, string $productDetailsTemplate): string
     {
-        return $this->renderProductList($product, $productDetailsTemplate);
+        $details = $this->renderProductList($product, $this->templateBasePath.$productDetailsTemplate);
+        $details = str_replace('%DESCRIPTION%', $product->getDescription(), $details);
+        return $details;
+    }
+
+    public function renderWebPage(string $content, string $template): string
+    {
+        $index=file_get_contents($this->templateBasePath.$template);
+        return str_replace('%CONTENT%', $content, $index);
     }
 }

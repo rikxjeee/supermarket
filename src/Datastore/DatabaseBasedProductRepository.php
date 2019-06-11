@@ -2,11 +2,10 @@
 
 namespace Supermarket\Datastore;
 
-use Exception;
 use PDO;
 use PDOException;
-use Supermarket\Exception\InvalidArgumentException;
 use Supermarket\Exception\ProductNotFoundException;
+use InvalidArgumentException;
 
 class DatabaseBasedProductRepository implements ProductRepository
 {
@@ -40,7 +39,7 @@ class DatabaseBasedProductRepository implements ProductRepository
     /**
      * @param int $id
      * @return Product
-     * @throws Exception
+     * @throws ProductNotFoundException
      * @throws PDOException
      */
     public function getProductById(int $id): Product

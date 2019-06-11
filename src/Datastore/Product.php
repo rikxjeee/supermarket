@@ -2,7 +2,7 @@
 
 namespace Supermarket\Datastore;
 
-use Supermarket\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 class Product
 {
@@ -10,8 +10,10 @@ class Product
     private const KEY_NAME = 'name';
     private const KEY_PRICE = 'price';
     private const KEY_TYPE = 'type';
+    private const KEY_DESCRIPTION = 'description';
     private const DEFAULT_TYPE = '';
     private const DEFAULT_ID = null;
+    private const DEFAULT_DESC = '';
 
     /**
      * @var int|null
@@ -33,12 +35,18 @@ class Product
      */
     private $type;
 
-    public function __construct(?int $id, string $name, float $price, string $type)
+    /**
+     * @var string
+     */
+    private $description;
+
+    public function __construct(?int $id, string $name, float $price, string $type, string $description=self::DEFAULT_DESC)
     {
         $this->id = $id;
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
+        $this->description = $description;
     }
 
     /**
@@ -64,8 +72,17 @@ class Product
             $productData[self::KEY_ID] = self::DEFAULT_ID;
         }
 
-        return new Product($productData[self::KEY_ID], $productData[self::KEY_NAME], $productData[self::KEY_PRICE],
-            $productData[self::KEY_TYPE]);
+        if (empty($productData[self::KEY_DESCRIPTION])){
+            $productData[self::KEY_DESCRIPTION] = self::DEFAULT_DESC;
+        }
+
+        return new self(
+            $productData[self::KEY_ID],
+            $productData[self::KEY_NAME],
+            $productData[self::KEY_PRICE],
+            $productData[self::KEY_TYPE],
+            $productData[self::KEY_DESCRIPTION]
+        );
     }
 
     public function getId(): ?int
@@ -78,13 +95,18 @@ class Product
         return $this->name;
     }
 
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
     public function getType(): string
     {
         return $this->type;
     }
 
-    public function getPrice(): float
+    public function getDescription(): string
     {
-        return $this->price;
+        return $this->description;
     }
 }

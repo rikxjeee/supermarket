@@ -7,7 +7,7 @@ use Supermarket\Renderer\Renderer;
 use Supermarket\Request;
 use Supermarket\Response;
 
-class ProductListPageController implements PageController
+class ProductListPageController implements Controller
 {
     /**
      * @var ProductRepository
@@ -27,8 +27,8 @@ class ProductListPageController implements PageController
 
     public function execute(Request $request): Response
     {
-        $productListTemplate = './src/Template/Product.html';
-        $tableTemplate = './src/Template/ProductListTable.html';
+        $productListTemplate = 'Product.html';
+        $tableTemplate = 'ProductListTable.html';
         $products = $this->productRepository->getAllProducts();
         $productList = $this->renderer->renderProductListTable($products, $productListTemplate, $tableTemplate);
         $response = new Response($productList);
