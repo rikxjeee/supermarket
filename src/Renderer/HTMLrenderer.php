@@ -25,13 +25,6 @@ class HTMLrenderer implements Renderer
         return $this->renderWebPage($list, 'index.html');
     }
 
-    public function renderProductDetails(Product $product, string $productDetailsTemplate): string
-    {
-        $details = $this->renderProductList($product, $this->templateBasePath . $productDetailsTemplate);
-        $details = str_replace('%DESCRIPTION%', $product->getDescription(), $details);
-        return $this->renderWebPage($details, 'index.html');
-    }
-
     private function renderProductList(Product $product, string $template): string
     {
         $list = file_get_contents($template);
@@ -47,5 +40,12 @@ class HTMLrenderer implements Renderer
     {
         $index = file_get_contents($this->templateBasePath . $template);
         return str_replace('%CONTENT%', $content, $index);
+    }
+
+    public function renderProductDetails(Product $product, string $productDetailsTemplate): string
+    {
+        $details = $this->renderProductList($product, $this->templateBasePath . $productDetailsTemplate);
+        $details = str_replace('%DESCRIPTION%', $product->getDescription(), $details);
+        return $this->renderWebPage($details, 'index.html');
     }
 }

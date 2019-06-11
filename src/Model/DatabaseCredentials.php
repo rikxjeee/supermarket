@@ -33,6 +33,15 @@ class DatabaseCredentials
      */
     private $password;
 
+    private function __construct(string $host, int $port, string $dbname, string $username, string $password)
+    {
+        $this->host = $host;
+        $this->port = $port;
+        $this->dbname = $dbname;
+        $this->username = $username;
+        $this->password = $password;
+    }
+
     public static function createFromArray(array $data): DatabaseCredentials
     {
         foreach (['host', 'port', 'dbname', 'username', 'password'] as $key) {
@@ -51,14 +60,5 @@ class DatabaseCredentials
             $this->username,
             $this->password,
         ];
-    }
-
-    private function __construct(string $host, int $port, string $dbname, string $username, string $password)
-    {
-        $this->host = $host;
-        $this->port = $port;
-        $this->dbname = $dbname;
-        $this->username = $username;
-        $this->password = $password;
     }
 }

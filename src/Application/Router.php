@@ -19,6 +19,6 @@ class Router
 
     public function match(Request $request): Controller
     {
-        return $this->controllers[$request->get('page')??''] ?? $this->controllers['default'];
+        return $this->controllers[$request->get('page') ?? ''] ?? $this->controllers['default'];
     }
 }

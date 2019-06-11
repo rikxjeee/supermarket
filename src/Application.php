@@ -28,6 +28,21 @@ class Application
         $this->serviceContainer = $serviceContainer;
     }
 
+    public function run(): void
+    {
+        try {
+            $request = new Request($_GET);
+            $response = $this
+                ->initRouter()
+                ->match($request)
+                ->execute($request);
+        } catch (Exception $e) {
+            $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
+        }
+        http_response_code($response->getStatusCode());
+        echo $response->getContent();
+    }
+
     private function initRouter(): Router
     {
         $router = $this->serviceContainer->getRouter();
@@ -37,20 +52,5 @@ class Application
         $router->register('', $this->serviceContainer->getProductListPageController());
 
         return $router;
-    }
-
-    public function run(): void
-    {
-        try {
-            $request = new Request($_GET);
-            $response =  $this
-                ->initRouter()
-                ->match($request)
-                ->execute($request);
-        } catch (Exception $e) {
-            $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
-        }
-        http_response_code($response->getStatusCode());
-        echo $response->getContent();
     }
 }

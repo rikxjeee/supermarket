@@ -41,6 +41,31 @@ class ServiceContainer
         return new ProductListPageController($this->getProductRepository(), $this->getRenderer());
     }
 
+    private function getProductRepository(): ProductRepository
+    {
+        return new DatabaseBasedProductRepository($this->getMySqlConnection());
+    }
+
+    private function getMySqlConnection(): PDO
+    {
+        return new PDO(...$this->getDataBaseCredentials()->toPDOConfig());
+    }
+
+    private function getDataBaseCredentials(): DatabaseCredentials
+    {
+        return DatabaseCredentials::createFromArray($this->config['db']['connection'] ?? []);
+    }
+
+    private function getRenderer(): Renderer
+    {
+        return new HTMLrenderer($this->getTemplateBasePath());
+    }
+
+    private function getTemplateBasePath(): string
+    {
+        return $this->config['templates']['basepath'] ?? '';
+    }
+
     public function getProductDetailsController(): Controller
     {
         return new ProductDetailsPageController($this->getProductRepository(), $this->getRenderer());
@@ -49,30 +74,5 @@ class ServiceContainer
     public function getPageNotFoundController(): Controller
     {
         return new PageNotFoundController();
-    }
-
-    private function getProductRepository(): ProductRepository
-    {
-        return new DatabaseBasedProductRepository($this->getMySqlConnection());
-    }
-
-    private function getRenderer(): Renderer
-    {
-        return new HTMLrenderer($this->getTemplateBasePath());
-    }
-
-    private function getMySqlConnection(): PDO
-    {
-        return new PDO(...$this->getDataBaseCredentials()->toPDOConfig());
-    }
-
-    private function getTemplateBasePath(): string
-    {
-        return $this->config['templates']['basepath'] ?? '';
-    }
-
-    private function getDataBaseCredentials(): DatabaseCredentials
-    {
-        return DatabaseCredentials::createFromArray($this->config['db']['connection'] ?? []);
     }
 }

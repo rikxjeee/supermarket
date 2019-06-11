@@ -2,10 +2,10 @@
 
 namespace Supermarket\Controller;
 
-use Supermarket\Renderer\Renderer;
-use Supermarket\Repository\ProductRepository;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
+use Supermarket\Renderer\Renderer;
+use Supermarket\Repository\ProductRepository;
 
 class ProductListPageController implements Controller
 {
