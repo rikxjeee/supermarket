@@ -4,24 +4,23 @@ namespace Supermarket;
 
 use Exception;
 use PDO;
+use Supermarket\Application\Router;
+use Supermarket\Controller\PageNotFoundController;
 use Supermarket\Controller\ProductDetailsPageController;
 use Supermarket\Controller\ProductListPageController;
 use Supermarket\Datastore\DatabaseBasedProductRepository;
 use Supermarket\Datastore\DatabaseCredentials;
 use Supermarket\Renderer\HTMLrenderer;
-use Supermarket\Renderer\Renderer;
 
 class Application
 {
     /**
-     * @var Renderer
+     * @var Router
      */
-    private $renderer;
+    private $router;
 
-    public function run(): void
+    public function init()
     {
-        $request = new Request($_GET);
-
         try {
             if (!file_exists('./config.php')) {
                 throw new Exception('configuration missing');
@@ -32,26 +31,13 @@ class Application
             $database = new PDO(...$dataBaseCredentials->toPDOConfig());
             $productRepository = new DatabaseBasedProductRepository($database);
 
-            $this->renderer = new HTMLrenderer($config['templates']['basepath']);
+            $renderer = new HTMLrenderer($config['templates']['basepath']);
 
-            switch ($request->get('page')) {
-                case null;
-                case 'products';
-                    $productListPageController = new ProductListPageController($productRepository, $this->renderer);
-                    $response = $productListPageController->execute($request);
-                    $this->sendResponse($response);
-                    break;
-                case 'details';
-                    $productDetailsPageController = new ProductDetailsPageController($productRepository,
-                        $this->renderer);
-                    $response = $productDetailsPageController->execute($request);
-                    $this->sendResponse($response);
-                    break;
-                default;
-                    $response = new Response('404 - Requested page not found.', Response::STATUS_NOT_FOUND);
-                    $this->sendResponse($response);
-                    break;
-            }
+            $this->router = new Router();
+            $this->router->register('products', new ProductListPageController($productRepository, $renderer));
+            $this->router->register('details', new ProductDetailsPageController($productRepository, $renderer));
+            $this->router->register('default', new PageNotFoundController());
+            $this->router->register('', new ProductListPageController($productRepository, $renderer));
         } catch (Exception $e) {
             $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
             http_response_code($response->getStatusCode());
@@ -59,9 +45,15 @@ class Application
         }
     }
 
-    private function sendResponse(Response $response)
+    public function run(): void
     {
+        try {
+            $request = new Request($_GET);
+            $response = $this->router->match($request)->execute($request);
+        } catch (Exception $e) {
+            $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
+        }
         http_response_code($response->getStatusCode());
-        echo $this->renderer->renderWebPage($response->getContent(), 'index.html');
+        echo $response->getContent();
     }
 }

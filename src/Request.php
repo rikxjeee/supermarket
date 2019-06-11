@@ -2,12 +2,10 @@
 
 namespace Supermarket;
 
-use InvalidArgumentException;
-
 class Request
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $queryParams;
 
@@ -16,16 +14,8 @@ class Request
         $this->queryParams = $get;
     }
 
-    /**
-     * @param string $key
-     * @return string
-     * @throws InvalidArgumentException
-     */
-    public function get(string $key): string
+    public function get(string $key): ?string
     {
-        if (!array_key_exists($key, $this->queryParams)) {
-            throw new InvalidArgumentException('Invalid request.');
-        }
-        return $this->queryParams[$key];
+        return $this->queryParams[$key] ?? null;
     }
 }
