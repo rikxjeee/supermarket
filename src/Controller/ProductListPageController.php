@@ -49,8 +49,8 @@ class ProductListPageController implements Controller
         return $response;
     }
 
-    public function supports(?string $request)
+    public function supports(Request $request): bool
     {
-        return in_array($request, self::SUPPORTED_REQUESTS);
+        return in_array($request->getQueryParam('page'), self::SUPPORTED_REQUESTS);
     }
 }

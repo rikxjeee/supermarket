@@ -9,5 +9,5 @@ interface Controller
 {
     public function execute(Request $request): Response;
 
-    public function supports(string $request);
+    public function supports(Request $request): bool;
 }

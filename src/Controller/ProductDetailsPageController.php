@@ -59,8 +59,8 @@ class ProductDetailsPageController implements Controller
         return $response;
     }
 
-    public function supports(string $request)
+    public function supports(Request $request): bool
     {
-        return $request === self::SUPPORTED_REQUEST;
+        return $request->getQueryParam('page') === self::SUPPORTED_REQUEST;
     }
 }

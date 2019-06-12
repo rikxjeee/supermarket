@@ -36,7 +36,7 @@ class Router
     public function match(Request $request): Controller
     {
         foreach ($this->controllers as $controller) {
-            if ($controller->supports($request->getQueryParam('page'))) {
+            if ($controller->supports($request)){
                 return $controller;
             }
         }

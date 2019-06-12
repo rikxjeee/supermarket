@@ -27,15 +27,15 @@ class ProductDetailsView
     /**
      * @var string
      */
-    private $url;
+    private $productListPageUrl;
 
-    public function __construct(string $name, string $price, string $type, string $description, string $url)
+    public function __construct(string $name, string $price, string $type, string $description, string $productListPageUrl)
     {
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
         $this->description = $description;
-        $this->url = $url;
+        $this->productListPageUrl = $productListPageUrl;
     }
 
     public function getName(): string
@@ -58,6 +58,11 @@ class ProductDetailsView
         return $this->description;
     }
 
+    public function getProductListPageUrl()
+    {
+        return $this->productListPageUrl;
+    }
+
     public function toArray()
     {
         return [
@@ -65,7 +70,7 @@ class ProductDetailsView
             'price' => $this->getPrice(),
             'type' => $this->getType(),
             'description' => $this->getDescription(),
-            'url' => $this->url,
+            'url' => $this->getProductListPageUrl(),
         ];
     }
 }
