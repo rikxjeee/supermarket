@@ -58,7 +58,7 @@ class ProductDetailsView
         return $this->description;
     }
 
-    public function getProductListPageUrl()
+    public function getProductListPageUrl(): string
     {
         return $this->productListPageUrl;
     }

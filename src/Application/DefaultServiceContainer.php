@@ -89,7 +89,7 @@ class DefaultServiceContainer implements ServiceContainer
         return new ProductToProductDetailsViewTransformer($this->getUrlProvider());
     }
 
-    private function getUrlProvider()
+    private function getUrlProvider(): UrlProvider
     {
         return new UrlProvider();
     }
