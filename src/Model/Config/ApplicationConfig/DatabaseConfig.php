@@ -42,8 +42,9 @@ class DatabaseConfig
         $this->password = $password;
     }
 
-    public static function createFromArray(array $data): DatabaseConfig
+    public static function createFromArray(array $connection): DatabaseConfig
     {
+        $data = $connection['connection'];
         foreach (['host', 'port', 'dbname', 'username', 'password'] as $key) {
             if (empty($data[$key])) {
                 throw new InvalidArgumentException(sprintf('Invalid configuration for %s', $key));

@@ -39,7 +39,7 @@ class ProductListPageController implements Controller
 
     public function execute(Request $request): Response
     {
-        $productListTemplate = '/product_list/item.html';
+        $productListTemplate = 'product_list/item.html';
         $tableTemplate = 'product_list.html';
         $products = $this->productRepository->getAllProducts();
         $productListView = $this->productsToProductListViewTransformer->transform($products);
@@ -51,12 +51,6 @@ class ProductListPageController implements Controller
 
     public function supports(?string $request)
     {
-        foreach (self::SUPPORTED_REQUESTS as $supportedRequest) {
-            if ($request === $supportedRequest) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($request, self::SUPPORTED_REQUESTS);
     }
 }

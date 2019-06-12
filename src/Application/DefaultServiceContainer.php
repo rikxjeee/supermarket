@@ -36,13 +36,13 @@ class DefaultServiceContainer implements ServiceContainer
 
     public function getRouter(): Router
     {
-        $router = new Router();
-        $router->register('products', $this->getProductListPageController());
-        $router->register('details', $this->getProductDetailsController());
-        $router->register('default', $this->getPageNotFoundController());
-        $router->register('', $this->getProductListPageController());
-
-        return $router;
+        return new Router(
+            [
+                $this->getProductListPageController(),
+                $this->getProductDetailsController(),
+            ],
+            $this->getPageNotFoundController()
+        );
     }
 
     public function getProductListPageController(): Controller
@@ -86,7 +86,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getProductToProductDetailsTransformer(): ProductToProductDetailsViewTransformer
     {
-        return new ProductToProductDetailsViewTransformer();
+        return new ProductToProductDetailsViewTransformer($this->getUrlProvider());
     }
 
     private function getUrlProvider()

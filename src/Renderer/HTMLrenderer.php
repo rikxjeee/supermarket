@@ -22,12 +22,11 @@ class HTMLrenderer implements Renderer
         string $listContainerTemplate
     ): string
     {
-        $table = file_get_contents($this->templateConfig->getBasePath() . $listContainerTemplate);
         $list = '';
         foreach ($productList->getItems() as $product) {
-            $list .= $this->renderProductList($product, $this->templateConfig->getBasePath() . $listItemTemplate);
+            $list .= $this->renderProductList($product, $this->loadTemplate($listItemTemplate));
         }
-        $list = str_replace('%PRODUCTS%', $list, $table);
+        $list = str_replace('{{products}}', $list, $this->loadTemplate($listContainerTemplate));
 
         return $this->renderWebPage($list, 'index.html');
     }
@@ -35,7 +34,7 @@ class HTMLrenderer implements Renderer
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $productData = $product->toArray();
-        $content = file_get_contents($this->templateConfig->getBasePath() . $productDetailsTemplate);
+        $content = $this->loadTemplate($productDetailsTemplate);
         foreach ($productData as $key => $value) {
             $content = str_replace(sprintf('{{%s}}', $key), $value, $content);
         }
@@ -46,7 +45,7 @@ class HTMLrenderer implements Renderer
     private function renderProductList(Item $product, string $template): string
     {
         $productData = $product->toArray();
-        $list = file_get_contents($template);
+        $list = $template;
         foreach ($productData as $key => $value) {
             $list = str_replace(sprintf('{{%s}}', $key), $value, $list);
         }
@@ -56,8 +55,13 @@ class HTMLrenderer implements Renderer
 
     private function renderWebPage(string $content, string $template): string
     {
-        $index = file_get_contents($this->templateConfig->getBasePath() . $template);
+        $index = $this->loadTemplate($template);
 
-        return str_replace('%CONTENT%', $content, $index);
+        return str_replace('{{content}}', $content, $index);
+    }
+
+    private function loadTemplate(string $template): string
+    {
+        return file_get_contents($this->templateConfig->getBasePath() . $template);
     }
 }

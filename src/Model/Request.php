@@ -14,7 +14,7 @@ class Request
         $this->queryParams = $queryParams;
     }
 
-    public function get(string $key): ?string
+    public function getQueryParam(string $key): ?string
     {
         return $this->queryParams[$key] ?? null;
     }

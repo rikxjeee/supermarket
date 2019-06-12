@@ -42,7 +42,7 @@ class ProductDetailsPageController implements Controller
     public function execute(Request $request): Response
     {
         try {
-            $id = $request->get('id');
+            $id = $request->getQueryParam('id');
             if ($id === null) {
                 throw new InvalidArgumentException('Invalid request.');
             }
@@ -55,6 +55,7 @@ class ProductDetailsPageController implements Controller
         } catch (ProductNotFoundException | InvalidArgumentException $e) {
             return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
         }
+
         return $response;
     }
 

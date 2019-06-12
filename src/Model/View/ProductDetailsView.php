@@ -24,12 +24,18 @@ class ProductDetailsView
      */
     private $description;
 
-    public function __construct(string $name, string $price, string $type, string $description)
+    /**
+     * @var string
+     */
+    private $url;
+
+    public function __construct(string $name, string $price, string $type, string $description, string $url)
     {
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
         $this->description = $description;
+        $this->url = $url;
     }
 
     public function getName(): string
@@ -59,6 +65,7 @@ class ProductDetailsView
             'price' => $this->getPrice(),
             'type' => $this->getType(),
             'description' => $this->getDescription(),
+            'url' => $this->url,
         ];
     }
 }

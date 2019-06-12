@@ -14,6 +14,6 @@ class PageNotFoundController implements Controller
 
     public function supports(string $request)
     {
-        return false;
+        return true;
     }
 }

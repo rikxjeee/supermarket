@@ -3,7 +3,6 @@
 namespace Supermarket;
 
 use Exception;
-use PDOException;
 use Supermarket\Application\ServiceContainer;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
@@ -28,14 +27,10 @@ class Application
                 ->getRouter()
                 ->match($request)
                 ->execute($request);
-        } catch (PDOException $e) {
-            $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         } catch (Exception $e) {
             $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         }
         http_response_code($response->getStatusCode());
         echo $response->getContent();
     }
-
-
 }

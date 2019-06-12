@@ -12,6 +12,22 @@ class Router
      */
     private $controllers;
 
+    /**
+     * @var Controller
+     */
+    private $noRouteController;
+
+    /**
+     * Router constructor.
+     * @param Controller[] $controllers
+     * @param Controller $noRouteController
+     */
+    public function __construct(array $controllers, Controller $noRouteController)
+    {
+        $this->controllers = $controllers;
+        $this->noRouteController = $noRouteController;
+    }
+
     public function register(string $page, Controller $controller): void
     {
         $this->controllers[$page] = $controller;
@@ -20,11 +36,11 @@ class Router
     public function match(Request $request): Controller
     {
         foreach ($this->controllers as $controller) {
-            if ($controller->supports($request->get('page'))) {
+            if ($controller->supports($request->getQueryParam('page'))) {
                 return $controller;
             }
         }
 
-        return $this->controllers['default'];
+        return $this->noRouteController;
     }
 }
