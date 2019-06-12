@@ -1,0 +1,60 @@
+<?php
+
+namespace Supermarket\Repository;
+
+use InvalidArgumentException;
+use PDO;
+use PDOException;
+use Supermarket\Exception\ProductNotFoundException;
+use Supermarket\Model\Product;
+
+class DatabaseBasedProductRepository implements ProductRepository
+{
+    /**
+     * @var PDO
+     */
+    private $mySqlConnection;
+
+    public function __construct(PDO $mySqlConnection)
+    {
+        $this->mySqlConnection = $mySqlConnection;
+    }
+
+    /**
+     * @return Product[]
+     * @throws InvalidArgumentException
+     * @throws PDOException
+     */
+    public function getAllProducts(): array
+    {
+        $productList = [];
+        $fetchProducts = $this->mySqlConnection->prepare('select * from products');
+        $fetchProducts->execute();
+        $products = $fetchProducts->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($products as $product) {
+            $productList[] = Product::createFromArray($product);
+        }
+
+        return $productList;
+    }
+
+    /**
+     * @param int $id
+     * @return Product
+     * @throws ProductNotFoundException
+     * @throws InvalidArgumentException
+     * @throws PDOException
+     */
+    public function getProductById(int $id): Product
+    {
+        $fetchProduct = $this->mySqlConnection->prepare('select * from products where id=?');
+        $fetchProduct->execute([$id]);
+        $productData = $fetchProduct->fetch();
+        if (!$productData) {
+            throw ProductNotFoundException::createFromId($id);
+        }
+
+        return Product::createFromArray($productData);
+    }
+}
+

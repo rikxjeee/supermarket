@@ -1,0 +1,12 @@
+{
+  "name": "gyuka/supermarket",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Supermarket\\": "src/"
+    }
+  },
+  "require": {
+    "ext-pdo": "*"
+  }
+}
