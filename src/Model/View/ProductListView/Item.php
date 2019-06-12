@@ -51,4 +51,14 @@ class Item
     {
         return $this->type;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'url' => $this->getUrl(),
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'type' => $this->getType(),
+        ];
+    }
 }

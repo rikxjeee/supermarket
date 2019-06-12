@@ -3,7 +3,7 @@
 namespace Supermarket;
 
 use Exception;
-use Supermarket\Application\Router;
+use PDOException;
 use Supermarket\Application\ServiceContainer;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
@@ -24,10 +24,12 @@ class Application
     {
         try {
             $request = new Request($_GET);
-            $response = $this
-                ->initRouter()
+            $response = $this->serviceContainer
+                ->getRouter()
                 ->match($request)
                 ->execute($request);
+        } catch (PDOException $e) {
+            $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         } catch (Exception $e) {
             $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         }
@@ -35,14 +37,5 @@ class Application
         echo $response->getContent();
     }
 
-    private function initRouter(): Router
-    {
-        $router = $this->serviceContainer->getRouter();
-        $router->register('products', $this->serviceContainer->getProductListPageController());
-        $router->register('details', $this->serviceContainer->getProductDetailsController());
-        $router->register('default', $this->serviceContainer->getPageNotFoundController());
-        $router->register('', $this->serviceContainer->getProductListPageController());
 
-        return $router;
-    }
 }

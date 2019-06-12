@@ -2,7 +2,7 @@
 
 namespace Supermarket\Renderer;
 
-use Supermarket\Model\TemplateConfig;
+use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
 use Supermarket\Model\View\ProductListView\Item;
@@ -16,12 +16,16 @@ class HTMLrenderer implements Renderer
         $this->templateConfig = $templateConfig;
     }
 
-    public function renderProductListTable(ProductListView $productList, string $template, string $tableTemplate): string
+    public function renderProductListTable(
+        ProductListView $productList,
+        string $listItemTemplate,
+        string $listContainerTemplate
+    ): string
     {
-        $table = file_get_contents($this->templateConfig->getBasePath() . $tableTemplate);
+        $table = file_get_contents($this->templateConfig->getBasePath() . $listContainerTemplate);
         $list = '';
         foreach ($productList->getItems() as $product) {
-            $list .= $this->renderProductList($product, $this->templateConfig->getBasePath() . $template);
+            $list .= $this->renderProductList($product, $this->templateConfig->getBasePath() . $listItemTemplate);
         }
         $list = str_replace('%PRODUCTS%', $list, $table);
 
@@ -30,22 +34,22 @@ class HTMLrenderer implements Renderer
 
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
+        $productData = $product->toArray();
         $content = file_get_contents($this->templateConfig->getBasePath() . $productDetailsTemplate);
-        $content = str_replace('%NAME%', $product->getName(), $content);
-        $content = str_replace('%PRICE%', $product->getPrice(), $content);
-        $content = str_replace('%TYPE%', $product->getType(), $content);
-        $content = str_replace('%DESCRIPTION%', $product->getDescription(), $content);
+        foreach ($productData as $key => $value) {
+            $content = str_replace(sprintf('{{%s}}', $key), $value, $content);
+        }
 
         return $this->renderWebPage($content, 'index.html');
     }
 
     private function renderProductList(Item $product, string $template): string
     {
+        $productData = $product->toArray();
         $list = file_get_contents($template);
-        $list = str_replace('%URL%', $product->getUrl(), $list);
-        $list = str_replace('%NAME%', $product->getName(), $list);
-        $list = str_replace('%PRICE%', $product->getPrice(), $list);
-        $list = str_replace('%TYPE%', $product->getType(), $list);
+        foreach ($productData as $key => $value) {
+            $list = str_replace(sprintf('{{%s}}', $key), $value, $list);
+        }
 
         return $list;
     }

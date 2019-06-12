@@ -1,11 +1,14 @@
 <?php
 
-namespace Supermarket\Model;
+namespace Supermarket\Model\Config;
+
+use Supermarket\Model\Config\ApplicationConfig\DatabaseConfig;
+use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 
 class ApplicationConfig
 {
     /**
-     * @var DatabaseCredentials
+     * @var DatabaseConfig
      */
     private $databaseCredentials;
 
@@ -17,7 +20,7 @@ class ApplicationConfig
     public static function createFromArray(array $data): ApplicationConfig
     {
         return new self(
-            DatabaseCredentials::createFromArray($data['db']['connection']),
+            DatabaseConfig::createFromArray($data['db']['connection']),
             TemplateConfig::createFromArray($data['templates'])
         );
     }
@@ -27,12 +30,12 @@ class ApplicationConfig
         return $this->templateConfig;
     }
 
-    public function getDataBaseCredentials(): DatabaseCredentials
+    public function getDataBaseCredentials(): DatabaseConfig
     {
         return $this->databaseCredentials;
     }
 
-    private function __construct(DatabaseCredentials $databaseCredentials, TemplateConfig $templateConfig)
+    private function __construct(DatabaseConfig $databaseCredentials, TemplateConfig $templateConfig)
     {
         $this->databaseCredentials = $databaseCredentials;
         $this->templateConfig = $templateConfig;

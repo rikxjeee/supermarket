@@ -8,7 +8,8 @@ use Supermarket\Controller\Controller;
 use Supermarket\Controller\PageNotFoundController;
 use Supermarket\Controller\ProductDetailsPageController;
 use Supermarket\Controller\ProductListPageController;
-use Supermarket\Model\ApplicationConfig;
+use Supermarket\Model\Config\ApplicationConfig;
+use Supermarket\Provider\UrlProvider;
 use Supermarket\Renderer\HTMLrenderer;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\DatabaseBasedProductRepository;
@@ -35,7 +36,13 @@ class DefaultServiceContainer implements ServiceContainer
 
     public function getRouter(): Router
     {
-        return new Router();
+        $router = new Router();
+        $router->register('products', $this->getProductListPageController());
+        $router->register('details', $this->getProductDetailsController());
+        $router->register('default', $this->getPageNotFoundController());
+        $router->register('', $this->getProductListPageController());
+
+        return $router;
     }
 
     public function getProductListPageController(): Controller
@@ -74,11 +81,16 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getProductsToProductListViewTransformer(): ProductsToProductListViewTransformer
     {
-        return new ProductsToProductListViewTransformer();
+        return new ProductsToProductListViewTransformer($this->getUrlProvider());
     }
 
     private function getProductToProductDetailsTransformer(): ProductToProductDetailsViewTransformer
     {
         return new ProductToProductDetailsViewTransformer();
+    }
+
+    private function getUrlProvider()
+    {
+        return new UrlProvider();
     }
 }

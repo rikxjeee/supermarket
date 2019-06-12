@@ -51,4 +51,14 @@ class ProductDetailsView
     {
         return $this->description;
     }
+
+    public function toArray()
+    {
+        return [
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'type' => $this->getType(),
+            'description' => $this->getDescription(),
+        ];
+    }
 }

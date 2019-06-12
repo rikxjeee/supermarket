@@ -1,6 +1,6 @@
 <?php
 
-namespace Supermarket\Model;
+namespace Supermarket\Model\Config\ApplicationConfig;
 
 class TemplateConfig
 {

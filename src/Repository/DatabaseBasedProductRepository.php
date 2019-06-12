@@ -42,19 +42,19 @@ class DatabaseBasedProductRepository implements ProductRepository
      * @param int $id
      * @return Product
      * @throws ProductNotFoundException
+     * @throws InvalidArgumentException
      * @throws PDOException
      */
     public function getProductById(int $id): Product
     {
         $fetchProduct = $this->mySqlConnection->prepare('select * from products where id=?');
         $fetchProduct->execute([$id]);
-        $fetchedProduct = $fetchProduct->fetch();
-        if (!$fetchedProduct) {
-            throw new ProductNotFoundException('No such product.');
+        $productData = $fetchProduct->fetch();
+        if (!$productData) {
+            throw ProductNotFoundException::createFromId($id);
         }
-        $product = Product::createFromArray($fetchedProduct);
 
-        return $product;
+        return Product::createFromArray($productData);
     }
 }
 

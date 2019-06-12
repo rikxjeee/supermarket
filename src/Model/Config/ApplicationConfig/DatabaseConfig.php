@@ -1,10 +1,10 @@
 <?php
 
-namespace Supermarket\Model;
+namespace Supermarket\Model\Config\ApplicationConfig;
 
 use InvalidArgumentException;
 
-class DatabaseCredentials
+class DatabaseConfig
 {
     private const PDO_DSN_TEMPLATE = 'mysql:host=%s:%d;dbname=%s';
 
@@ -42,7 +42,7 @@ class DatabaseCredentials
         $this->password = $password;
     }
 
-    public static function createFromArray(array $data): DatabaseCredentials
+    public static function createFromArray(array $data): DatabaseConfig
     {
         foreach (['host', 'port', 'dbname', 'username', 'password'] as $key) {
             if (empty($data[$key])) {

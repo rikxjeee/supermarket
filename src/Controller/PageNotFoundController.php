@@ -11,4 +11,9 @@ class PageNotFoundController implements Controller
     {
         return new Response('404 - Requested page not found.', Response::STATUS_NOT_FOUND);
     }
+
+    public function supports(string $request)
+    {
+        return false;
+    }
 }

@@ -3,7 +3,7 @@
 require 'vendor/autoload.php';
 
 use Supermarket\Application\DefaultServiceContainer;
-use Supermarket\Model\ApplicationConfig;
+use Supermarket\Model\Config\ApplicationConfig;
 
 if (!file_exists('./config.php')) {
     throw new Exception('configuration missing');

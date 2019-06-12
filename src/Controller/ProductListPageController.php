@@ -10,6 +10,8 @@ use Supermarket\Transformer\ProductsToProductListViewTransformer;
 
 class ProductListPageController implements Controller
 {
+    private const SUPPORTED_REQUESTS = ['products', '', null];
+
     /**
      * @var ProductRepository
      */
@@ -45,5 +47,16 @@ class ProductListPageController implements Controller
         $response = new Response($productList);
 
         return $response;
+    }
+
+    public function supports(?string $request)
+    {
+        foreach (self::SUPPORTED_REQUESTS as $supportedRequest) {
+            if ($request === $supportedRequest) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

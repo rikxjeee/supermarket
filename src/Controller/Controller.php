@@ -8,4 +8,6 @@ use Supermarket\Model\Response;
 interface Controller
 {
     public function execute(Request $request): Response;
+
+    public function supports(string $request);
 }

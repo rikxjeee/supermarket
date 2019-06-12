@@ -19,6 +19,12 @@ class Router
 
     public function match(Request $request): Controller
     {
-        return $this->controllers[$request->get('page') ?? ''] ?? $this->controllers['default'];
+        foreach ($this->controllers as $controller) {
+            if ($controller->supports($request->get('page'))) {
+                return $controller;
+            }
+        }
+
+        return $this->controllers['default'];
     }
 }
