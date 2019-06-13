@@ -4,10 +4,12 @@ namespace Supermarket\Application;
 
 use PDO;
 use Supermarket\Application;
+use Supermarket\Controller\CartPageController;
 use Supermarket\Controller\Controller;
 use Supermarket\Controller\PageNotFoundController;
 use Supermarket\Controller\ProductDetailsPageController;
 use Supermarket\Controller\ProductListPageController;
+use Supermarket\Model\Cart;
 use Supermarket\Model\Config\ApplicationConfig;
 use Supermarket\Provider\UrlProvider;
 use Supermarket\Renderer\HTMLrenderer;
@@ -15,6 +17,7 @@ use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\DatabaseBasedProductRepository;
 use Supermarket\Repository\ProductRepository;
 use Supermarket\Transformer\ProductsToProductListViewTransformer;
+use Supermarket\Transformer\ProductToCartContentViewTransformer;
 use Supermarket\Transformer\ProductToProductDetailsViewTransformer;
 
 class DefaultServiceContainer implements ServiceContainer
@@ -40,6 +43,7 @@ class DefaultServiceContainer implements ServiceContainer
             [
                 $this->getProductListPageController(),
                 $this->getProductDetailsController(),
+                $this->getCartPageController(),
             ],
             $this->getPageNotFoundController()
         );
@@ -92,5 +96,21 @@ class DefaultServiceContainer implements ServiceContainer
     private function getUrlProvider(): UrlProvider
     {
         return new UrlProvider();
+    }
+
+    private function getCartPageController(): Controller
+    {
+        return new CartPageController($this->getCart(), $this->getRenderer(),
+            $this->getProductToCartContentViewTransformer());
+    }
+
+    private function getCart(): Cart
+    {
+        return new Cart();
+    }
+
+    private function getProductToCartContentViewTransformer()
+    {
+        return new ProductToCartContentViewTransformer($this->getUrlProvider());
     }
 }

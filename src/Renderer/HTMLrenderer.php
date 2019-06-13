@@ -3,6 +3,7 @@
 namespace Supermarket\Renderer;
 
 use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
+use Supermarket\Model\View\CartContentView;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
 
@@ -34,6 +35,26 @@ class HTMLrenderer implements Renderer
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
 
         return $this->renderTemplate(['content' => $content], $this->loadTemplate('index.html'));
+    }
+
+    public function renderCart(
+        CartContentView $cartContentView,
+        string $cartItemsTemplate,
+        string $cartItemsContainerTemplate
+    ): string {
+        $list = '';
+        foreach ($cartContentView->getCartContent() as $item) {
+            $list .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
+        }
+        $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
+        $list = $this->renderTemplate(['content' => $list], $this->loadTemplate('index.html'));
+
+        return $list;
+    }
+
+    public function renderEmptyCart(string $template)
+    {
+        return $this->loadTemplate($template);
     }
 
     private function loadTemplate(string $template): string

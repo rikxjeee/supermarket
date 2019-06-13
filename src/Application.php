@@ -4,6 +4,7 @@ namespace Supermarket;
 
 use Exception;
 use Supermarket\Application\ServiceContainer;
+use Supermarket\Model\Cart;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 
@@ -21,6 +22,10 @@ class Application
 
     public function run(): void
     {
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = new Cart();
+        }
+
         try {
             $request = new Request($_GET);
             $response = $this->serviceContainer
