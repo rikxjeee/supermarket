@@ -9,6 +9,4 @@ if (!file_exists('./config.php')) {
     throw new Exception('configuration missing');
 }
 
-session_start();
-
 (new DefaultServiceContainer(ApplicationConfig::createFromArray(require './config.php')))->getApplication()->run();

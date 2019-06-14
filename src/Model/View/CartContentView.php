@@ -12,7 +12,6 @@ class CartContentView
     private $items;
 
     /**
-     * CartContentView constructor.
      * @param CartItemView[] $items
      */
     public function __construct(array $items)
@@ -23,7 +22,7 @@ class CartContentView
     /**
      * @return CartItemView[]
      */
-    public function getCartContent(): array
+    public function getItems(): array
     {
         return $this->items;
     }

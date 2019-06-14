@@ -14,29 +14,23 @@ class CartItem
      */
     private $quantity;
 
-    public function __construct(Product $product, int $quantity)
+    public function __construct(Product $product, int $quantity = 1)
     {
         $this->product = $product;
         $this->quantity = $quantity;
     }
 
-    /**
-     * @return Product
-     */
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * @return int
-     */
     public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    public function increaseQuantity()
+    public function increaseQuantity(): void
     {
         $this->quantity++;
     }

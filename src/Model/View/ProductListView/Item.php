@@ -32,6 +32,16 @@ class Item
         $this->type = $type;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'url' => $this->getUrl(),
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'type' => $this->getType(),
+        ];
+    }
+
     public function getUrl(): string
     {
         return $this->url;
@@ -50,15 +60,5 @@ class Item
     public function getType(): string
     {
         return $this->type;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'url' => $this->getUrl(),
-            'name' => $this->getName(),
-            'price' => $this->getPrice(),
-            'type' => $this->getType(),
-        ];
     }
 }

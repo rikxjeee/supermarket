@@ -13,6 +13,7 @@ class ProductListView
 
     /**
      * ProductListView constructor.
+     *
      * @param Item[] $items
      */
     public function __construct(array $items)

@@ -9,18 +9,30 @@ class Cart
      */
     private $cartItems = [];
 
-    public function getCart()
+    /** @var */
+    private $cartId;
+
+    public function __construct(int $cartId)
+    {
+        $this->cartId = $cartId;
+    }
+
+    public function getItems()
     {
         return $this->cartItems;
     }
 
-    public function addToCart(Product $product)
+    public function addProduct(Product $product)
     {
-        if(isset($this->cartItems[$product->getName()])) {
-            $this->cartItems[$product->getName()]->increaseQuantity();
-        }else{
-            $this->cartItems[$product->getName()] = new CartItem($product, 1);
+        if (isset($this->cartItems[$product->getId()])) {
+            $this->cartItems[$product->getId()]->increaseQuantity();
+        } else {
+            $this->cartItems[$product->getId()] = new CartItem($product);
         }
+    }
 
+    public function setCartId(int $cartId): void
+    {
+        $this->cartId = $cartId;
     }
 }

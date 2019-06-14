@@ -40,6 +40,7 @@ class DatabaseBasedProductRepository implements ProductRepository
 
     /**
      * @param int $id
+     *
      * @return Product
      * @throws ProductNotFoundException
      * @throws InvalidArgumentException

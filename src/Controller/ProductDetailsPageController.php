@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Supermarket\Exception\ProductNotFoundException;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
+use Supermarket\Model\Session;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\ProductRepository;
 use Supermarket\Transformer\ProductToProductDetailsViewTransformer;
@@ -39,7 +40,7 @@ class ProductDetailsPageController implements Controller
         $this->productToProductDetailsViewTransformer = $productToProductDetailsViewTransformer;
     }
 
-    public function execute(Request $request): Response
+    public function execute(Request $request, Session $session): Response
     {
         try {
             $id = $request->getQueryParam('id');

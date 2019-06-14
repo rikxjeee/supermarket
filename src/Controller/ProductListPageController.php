@@ -4,6 +4,7 @@ namespace Supermarket\Controller;
 
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
+use Supermarket\Model\Session;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\ProductRepository;
 use Supermarket\Transformer\ProductsToProductListViewTransformer;
@@ -37,7 +38,7 @@ class ProductListPageController implements Controller
         $this->productsToProductListViewTransformer = $productsToProductListViewTransformer;
     }
 
-    public function execute(Request $request): Response
+    public function execute(Request $request, Session $session): Response
     {
         $productListTemplate = 'product_list/item.html';
         $tableTemplate = 'product_list.html';

@@ -19,11 +19,15 @@ class CartItemView
      */
     private $quantity;
 
-    public function __construct(string $name, string $price, string $quantity)
+    /** @var string */
+    private $productUrl;
+
+    public function __construct(string $name, string $price, string $quantity, string $productUrl)
     {
         $this->name = $name;
         $this->price = $price;
         $this->quantity = $quantity;
+        $this->productUrl = $productUrl;
     }
 
     public function toArray(): array
@@ -32,6 +36,7 @@ class CartItemView
             'name' => $this->getName(),
             'price' => $this->getPrice(),
             'quantity' => $this->getQuantity(),
+            'url' => $this->getProductUrl()
         ];
     }
 
@@ -48,5 +53,10 @@ class CartItemView
     public function getQuantity(): string
     {
         return $this->quantity;
+    }
+
+    public function getProductUrl(): string
+    {
+        return $this->productUrl;
     }
 }

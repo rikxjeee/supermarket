@@ -19,7 +19,8 @@ interface Renderer
     public function renderCart(
         CartContentView $cartItemsView,
         string $cartItemsTemplate,
-        string $cartItemsContainerTemplate
+        string $cartItemsContainerTemplate,
+        string $emptyCartTemplate
     ): string;
 
     public function renderEmptyCart(string $template);

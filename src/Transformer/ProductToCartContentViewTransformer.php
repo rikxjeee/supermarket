@@ -21,10 +21,19 @@ class ProductToCartContentViewTransformer
 
     public function transform(Cart $cart): CartContentView
     {
-        $cartItems = $cart->getCart();
+        if (empty($cart->getItems())) {
+            return new CartContentView([]);
+        }
+
+        $cartItems = $cart->getItems();
         $cartContentView = [];
         foreach ($cartItems as $key => $cartItem) {
-            $cartContentView[] = new CartItemView($cartItem->getProduct()->getName(), $cartItem->getProduct()->getPrice(), $cartItem->getQuantity());
+            $cartContentView[] = new CartItemView(
+                $cartItem->getProduct()->getName(),
+                $cartItem->getProduct()->getPrice(),
+                $cartItem->getQuantity(),
+                $this->urlProvider->getProductUrl($cartItem->getProduct()->getId())
+            );
         }
 
         return new CartContentView($cartContentView);

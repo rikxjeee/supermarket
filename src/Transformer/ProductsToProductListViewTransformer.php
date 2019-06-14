@@ -18,12 +18,13 @@ class ProductsToProductListViewTransformer
 
     /**
      * @param Product[] $products
+     *
      * @return ProductListView
      */
     public function transform(array $products): ProductListView
     {
         $productListViewData = [];
-        foreach ($products as $product){
+        foreach ($products as $product) {
             $productListViewData[] = new Item(
                 $this->urlProvider->getProductUrl($product->getId()),
                 $product->getName(),

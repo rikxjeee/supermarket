@@ -33,6 +33,17 @@ class ProductDetailsView
         $this->productListPageUrl = $productListPageUrl;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'type' => $this->getType(),
+            'description' => $this->getDescription(),
+            'url' => $this->getProductListPageUrl(),
+        ];
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -56,16 +67,5 @@ class ProductDetailsView
     public function getProductListPageUrl(): string
     {
         return $this->productListPageUrl;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'name' => $this->getName(),
-            'price' => $this->getPrice(),
-            'type' => $this->getType(),
-            'description' => $this->getDescription(),
-            'url' => $this->getProductListPageUrl(),
-        ];
     }
 }

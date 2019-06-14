@@ -4,6 +4,7 @@ namespace Supermarket\Application;
 
 use Supermarket\Application;
 use Supermarket\Controller\Controller;
+use Supermarket\Repository\DatabaseBasedCartRepository;
 
 interface ServiceContainer
 {
@@ -16,4 +17,6 @@ interface ServiceContainer
     public function getProductDetailsController(): Controller;
 
     public function getRouter(): Router;
+
+    public function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository;
 }

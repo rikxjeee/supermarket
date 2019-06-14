@@ -15,6 +15,7 @@ interface ProductRepository
 
     /**
      * @param int $id
+     *
      * @return Product
      * @throws Exception
      * @throws ProductNotFoundException

@@ -56,6 +56,7 @@ class Product
 
     /**
      * @param array $productData
+     *
      * @return Product
      * @throws InvalidArgumentException
      */
