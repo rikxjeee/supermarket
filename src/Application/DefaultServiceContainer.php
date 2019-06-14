@@ -100,7 +100,10 @@ class DefaultServiceContainer implements ServiceContainer
     {
         return new CartPageController(
             $this->getRenderer(),
-            $this->getProductToCartContentViewTransformer());
+            $this->getProductToCartContentViewTransformer(),
+            $this->getSessionManager(),
+            $this->getDataBaseBasedCartRepository()
+        );
     }
 
     private function getProductToCartContentViewTransformer(): ProductToCartContentViewTransformer
@@ -108,13 +111,18 @@ class DefaultServiceContainer implements ServiceContainer
         return new ProductToCartContentViewTransformer($this->getUrlProvider());
     }
 
-    public function getPageNotFoundController(): Controller
+    public function getSessionManager()
     {
-        return new PageNotFoundController();
+        return new SessionManager();
     }
 
     public function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository
     {
         return new DatabaseBasedCartRepository($this->getMySqlConnection());
+    }
+
+    public function getPageNotFoundController(): Controller
+    {
+        return new PageNotFoundController();
     }
 }

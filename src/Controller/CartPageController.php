@@ -2,12 +2,12 @@
 
 namespace Supermarket\Controller;
 
+use Supermarket\Application\SessionManager;
 use Supermarket\Model\Cart;
-use Supermarket\Model\Product;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
-use Supermarket\Model\Session;
 use Supermarket\Renderer\Renderer;
+use Supermarket\Repository\DatabaseBasedCartRepository;
 use supermarket\Transformer\ProductToCartContentViewTransformer;
 
 class CartPageController implements Controller
@@ -29,22 +29,37 @@ class CartPageController implements Controller
      */
     private $productToCartContentViewTransformer;
 
+    /** @var SessionManager */
+    private $sessionManager;
+
+    /** @var DatabaseBasedCartRepository */
+    private $databaseBasedCartRepository;
+
     public function __construct(
         Renderer $renderer,
-        ProductToCartContentViewTransformer $productToCartContentViewTransformer
+        ProductToCartContentViewTransformer $productToCartContentViewTransformer,
+        SessionManager $sessionManager,
+        DatabaseBasedCartRepository $databaseBasedCartRepository
     ) {
         $this->renderer = $renderer;
         $this->productToCartContentViewTransformer = $productToCartContentViewTransformer;
+        $this->sessionManager = $sessionManager;
+        $this->databaseBasedCartRepository = $databaseBasedCartRepository;
     }
 
-    public function execute(Request $request, Session $session): Response
+    public function execute(Request $request): Response
     {
-        $this->cart = $session->getField('cart');
+        $this->sessionManager::start();
+        $this->sessionManager->addField('user_id', 2);
+        $cartId = $this->sessionManager->getField('user_id');
+
+        $this->cart = $this->databaseBasedCartRepository->getCartById($cartId);
+        $this->sessionManager->addField('cart_id', $this->cart->getCartId());
 
         /**
          * one product is hardcoded until feature to add them manually is implemented
          */
-        $this->cart->addProduct(new Product(1, 'Coca Cola', 0.8, 'Soft Drink'));
+        //$this->cart->addProduct(new Product(1, 'Coca Cola', 0.8, 'Soft Drink'));
 
         $cartContent = $this->cart->getItems();
         if (empty($cartContent)) {

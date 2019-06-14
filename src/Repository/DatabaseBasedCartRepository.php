@@ -16,17 +16,18 @@ class DatabaseBasedCartRepository implements CartRepository
         $this->mySqlConnection = $mySqlConnection;
     }
 
-    public function getCartById(int $id): Cart
+    public function getCartById(?int $id): Cart
     {
+        if ($id === null) {
+            return new Cart(uniqid());
+        }
+
         $fetchCart = $this->mySqlConnection->prepare(
             'SELECT * FROM products_in_carts
         LEFT JOIN products 
         ON products_in_carts.products_id = products.id where cart_id=?'
         );
-        $userHasCart = $fetchCart->execute([$id]);
-        if (!$userHasCart) {
-            return new Cart($id);
-        }
+        $fetchCart->execute([$id]);
         $cartData = $fetchCart->fetchAll(PDO::FETCH_ASSOC);
         $cart = new Cart($id);
         foreach ($cartData as $product) {

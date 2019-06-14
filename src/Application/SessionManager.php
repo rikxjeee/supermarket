@@ -1,18 +1,9 @@
 <?php
 
-namespace Supermarket\Model;
+namespace Supermarket\Application;
 
-class Session
+class SessionManager
 {
-
-    /** @var array */
-    private $sessionParam;
-
-    public function __construct(array $queryParam)
-    {
-        $this->sessionParam = $queryParam;
-    }
-
     public static function start(): void
     {
         session_start();
@@ -25,11 +16,11 @@ class Session
 
     public function getField(string $param)
     {
-        return $this->sessionParam[$param];
+        return $_SESSION[$param];
     }
 
     public function addField(string $fieldKey, $fieldValue)
     {
-        $this->sessionParam[$fieldKey] = $fieldValue;
+        $_SESSION[$fieldKey] = $fieldValue;
     }
 }

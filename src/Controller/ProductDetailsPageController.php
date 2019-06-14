@@ -40,7 +40,7 @@ class ProductDetailsPageController implements Controller
         $this->productToProductDetailsViewTransformer = $productToProductDetailsViewTransformer;
     }
 
-    public function execute(Request $request, Session $session): Response
+    public function execute(Request $request): Response
     {
         try {
             $id = $request->getQueryParam('id');

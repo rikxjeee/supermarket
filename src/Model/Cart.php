@@ -9,7 +9,7 @@ class Cart
      */
     private $cartItems = [];
 
-    /** @var */
+    /** @var int */
     private $cartId;
 
     public function __construct(int $cartId)
@@ -31,8 +31,8 @@ class Cart
         }
     }
 
-    public function setCartId(int $cartId): void
+    public function getCartId(): int
     {
-        $this->cartId = $cartId;
+        return $this->cartId;
     }
 }

@@ -19,4 +19,6 @@ interface ServiceContainer
     public function getRouter(): Router;
 
     public function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository;
+
+    public function getSessionManager();
 }
