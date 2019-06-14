@@ -49,24 +49,18 @@ class CartPageController implements Controller
 
     public function execute(Request $request): Response
     {
-        $this->sessionManager::start();
-        $this->sessionManager->addField('user_id', 2);
-        $cartId = $this->sessionManager->getField('user_id');
-
-        $this->cart = $this->databaseBasedCartRepository->getCartById($cartId);
-        $this->sessionManager->addField('cart_id', $this->cart->getCartId());
+        $this->sessionManager->start();
+        $this->sessionManager->setValue('cart_id', 1);
+        $cartId = $this->sessionManager->getValue('cart_id');
 
         /**
-         * one product is hardcoded until feature to add them manually is implemented
+         * carts are statically stored in db until feature to add them manually is implemented
          */
+        $this->cart = $this->databaseBasedCartRepository->getCartById($cartId);
+        $this->sessionManager->setValue('cart_id', $this->cart->getCartId());
+
         //$this->cart->addProduct(new Product(1, 'Coca Cola', 0.8, 'Soft Drink'));
 
-        $cartContent = $this->cart->getItems();
-        if (empty($cartContent)) {
-            $content = $this->renderer->renderEmptyCart('/cart/empty_cart.html');
-
-            return new Response($content);
-        }
         $cartItemsView = $this->productToCartContentViewTransformer->transform($this->cart);
         $content = $this->renderer->renderCart(
             $cartItemsView,

@@ -58,6 +58,39 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
+    public function getProductDetailsController(): Controller
+    {
+        return new ProductDetailsPageController(
+            $this->getProductRepository(),
+            $this->getRenderer(),
+            $this->getProductToProductDetailsTransformer());
+    }
+
+    public function getCartPageController(): Controller
+    {
+        return new CartPageController(
+            $this->getRenderer(),
+            $this->getProductToCartContentViewTransformer(),
+            $this->getSessionManager(),
+            $this->getDataBaseBasedCartRepository()
+        );
+    }
+
+    public function getPageNotFoundController(): Controller
+    {
+        return new PageNotFoundController();
+    }
+
+    public function getSessionManager(): SessionManager
+    {
+        return new SessionManager();
+    }
+
+    private function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository
+    {
+        return new DatabaseBasedCartRepository($this->getMySqlConnection());
+    }
+
     private function getProductRepository(): ProductRepository
     {
         return new DatabaseBasedProductRepository($this->getMySqlConnection());
@@ -83,46 +116,13 @@ class DefaultServiceContainer implements ServiceContainer
         return new UrlProvider();
     }
 
-    public function getProductDetailsController(): Controller
-    {
-        return new ProductDetailsPageController(
-            $this->getProductRepository(),
-            $this->getRenderer(),
-            $this->getProductToProductDetailsTransformer());
-    }
-
     private function getProductToProductDetailsTransformer(): ProductToProductDetailsViewTransformer
     {
         return new ProductToProductDetailsViewTransformer($this->getUrlProvider());
     }
 
-    private function getCartPageController(): Controller
-    {
-        return new CartPageController(
-            $this->getRenderer(),
-            $this->getProductToCartContentViewTransformer(),
-            $this->getSessionManager(),
-            $this->getDataBaseBasedCartRepository()
-        );
-    }
-
     private function getProductToCartContentViewTransformer(): ProductToCartContentViewTransformer
     {
         return new ProductToCartContentViewTransformer($this->getUrlProvider());
-    }
-
-    public function getSessionManager()
-    {
-        return new SessionManager();
-    }
-
-    public function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository
-    {
-        return new DatabaseBasedCartRepository($this->getMySqlConnection());
-    }
-
-    public function getPageNotFoundController(): Controller
-    {
-        return new PageNotFoundController();
     }
 }

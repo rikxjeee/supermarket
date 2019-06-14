@@ -17,6 +17,11 @@ class Cart
         $this->cartId = $cartId;
     }
 
+    public function getCartId(): int
+    {
+        return $this->cartId;
+    }
+
     public function getItems()
     {
         return $this->cartItems;
@@ -29,10 +34,5 @@ class Cart
         } else {
             $this->cartItems[$product->getId()] = new CartItem($product);
         }
-    }
-
-    public function getCartId(): int
-    {
-        return $this->cartId;
     }
 }

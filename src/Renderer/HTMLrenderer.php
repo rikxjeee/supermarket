@@ -30,20 +30,6 @@ class HTMLrenderer implements Renderer
         return $this->renderTemplate(['content' => $list], $this->loadTemplate('index.html'));
     }
 
-    private function renderTemplate(array $data, string $content): string
-    {
-        foreach ($data as $key => $value) {
-            $content = str_replace(sprintf('{{%s}}', $key), $value, $content);
-        }
-
-        return $content;
-    }
-
-    private function loadTemplate(string $template): string
-    {
-        return file_get_contents($this->templateConfig->getBasePath() . $template);
-    }
-
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
@@ -77,5 +63,19 @@ class HTMLrenderer implements Renderer
     public function renderEmptyCart(string $template)
     {
         return $this->loadTemplate($template);
+    }
+
+    private function renderTemplate(array $data, string $content): string
+    {
+        foreach ($data as $key => $value) {
+            $content = str_replace(sprintf('{{%s}}', $key), $value, $content);
+        }
+
+        return $content;
+    }
+
+    private function loadTemplate(string $template): string
+    {
+        return file_get_contents($this->templateConfig->getBasePath() . $template);
     }
 }

@@ -4,22 +4,22 @@ namespace Supermarket\Application;
 
 class SessionManager
 {
-    public static function start(): void
+    public function start(): void
     {
         session_start();
     }
 
-    public static function destroy(): void
+    public function destroy(): void
     {
         session_destroy();
     }
 
-    public function getField(string $param)
+    public function getValue(string $param): ?string
     {
-        return $_SESSION[$param];
+        return $_SESSION[$param] ?? null;
     }
 
-    public function addField(string $fieldKey, $fieldValue)
+    public function setValue(string $fieldKey, $fieldValue): void
     {
         $_SESSION[$fieldKey] = $fieldValue;
     }

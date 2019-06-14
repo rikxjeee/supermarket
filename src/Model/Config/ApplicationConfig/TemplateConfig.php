@@ -9,9 +9,9 @@ class TemplateConfig
      */
     private $basePath;
 
-    private function __construct(string $basePath)
+    public function getBasePath(): string
     {
-        $this->basePath = $basePath;
+        return $this->basePath;
     }
 
     public static function createFromArray(array $data): TemplateConfig
@@ -19,8 +19,8 @@ class TemplateConfig
         return new self($data['basepath']);
     }
 
-    public function getBasePath(): string
+    private function __construct(string $basePath)
     {
-        return $this->basePath;
+        $this->basePath = $basePath;
     }
 }

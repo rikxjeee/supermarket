@@ -16,9 +16,9 @@ interface ServiceContainer
 
     public function getProductDetailsController(): Controller;
 
-    public function getRouter(): Router;
+    public function getCartPageController(): Controller;
 
-    public function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository;
+    public function getRouter(): Router;
 
     public function getSessionManager();
 }

@@ -21,12 +21,6 @@ class ApplicationConfig
      */
     private $templateConfig;
 
-    private function __construct(DatabaseConfig $databaseCredentials, TemplateConfig $templateConfig)
-    {
-        $this->databaseCredentials = $databaseCredentials;
-        $this->templateConfig = $templateConfig;
-    }
-
     public static function createFromArray(array $data): ApplicationConfig
     {
         if (!isset($data[self::DBCONFIG])) {
@@ -51,5 +45,11 @@ class ApplicationConfig
     public function getDataBaseCredentials(): DatabaseConfig
     {
         return $this->databaseCredentials;
+    }
+
+    private function __construct(DatabaseConfig $databaseCredentials, TemplateConfig $templateConfig)
+    {
+        $this->databaseCredentials = $databaseCredentials;
+        $this->templateConfig = $templateConfig;
     }
 }

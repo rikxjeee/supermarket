@@ -23,7 +23,7 @@ class DatabaseBasedCartRepository implements CartRepository
         }
 
         $fetchCart = $this->mySqlConnection->prepare(
-            'SELECT * FROM products_in_carts
+            'SELECT id, name, price FROM products_in_carts
         LEFT JOIN products 
         ON products_in_carts.products_id = products.id where cart_id=?'
         );
