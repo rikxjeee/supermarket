@@ -6,5 +6,5 @@ use Supermarket\Model\Cart;
 
 interface CartRepository
 {
-    public function getCartById(int $id): Cart;
+    public function getById(int $id): Cart;
 }

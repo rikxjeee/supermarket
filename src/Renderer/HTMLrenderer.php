@@ -10,11 +10,16 @@ use Supermarket\Provider\UrlProvider;
 
 class HTMLrenderer implements Renderer
 {
+    /** @var TemplateConfig */
     private $templateConfig;
 
-    public function __construct(TemplateConfig $templateConfig)
+    /** @var UrlProvider */
+    private $urlProvider;
+
+    public function __construct(TemplateConfig $templateConfig, UrlProvider $urlProvider)
     {
         $this->templateConfig = $templateConfig;
+        $this->urlProvider = $urlProvider;
     }
 
     public function renderProductListTable(
@@ -30,8 +35,8 @@ class HTMLrenderer implements Renderer
 
         $content = [
             'content' => $list,
-            'cartpage' => UrlProvider::getCartUrl(),
-            'productlistpage' => UrlProvider::getProductListUrl()
+            'cartpage' => $this->urlProvider->getCartUrl(),
+            'productlistpage' => $this->urlProvider->getProductListUrl()
 
         ];
 
@@ -44,8 +49,8 @@ class HTMLrenderer implements Renderer
 
         $content = [
             'content' => $content,
-            'cartpage' => UrlProvider::getCartUrl(),
-            'productlistpage' => UrlProvider::getProductListUrl()
+            'cartpage' => $this->urlProvider->getCartUrl(),
+            'productlistpage' => $this->urlProvider->getProductListUrl()
 
         ];
 
@@ -70,8 +75,8 @@ class HTMLrenderer implements Renderer
         $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
         $content = [
             'content' => $list,
-            'cartpage' => UrlProvider::getCartUrl(),
-            'productlistpage' => UrlProvider::getProductListUrl()
+            'cartpage' => $this->urlProvider->getCartUrl(),
+            'productlistpage' => $this->urlProvider->getProductListUrl()
         ];
         $list = $this->renderTemplate($content, $this->loadTemplate('index.html'));
 
@@ -83,8 +88,8 @@ class HTMLrenderer implements Renderer
         $data = $this->loadTemplate($template);
         $content = [
             'content' =>$data,
-            'productlistpage' => UrlProvider::getProductListUrl(),
-            'cartpage' => UrlProvider::getCartUrl()
+            'cartpage' => $this->urlProvider->getCartUrl(),
+            'productlistpage' => $this->urlProvider->getProductListUrl()
         ];
         $content = $this->renderTemplate($content, $this->loadTemplate('index.html'));
 

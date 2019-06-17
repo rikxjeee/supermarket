@@ -3,7 +3,6 @@
 namespace Supermarket\Controller;
 
 use Supermarket\Application\SessionManager;
-use Supermarket\Model\Cart;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 use Supermarket\Renderer\Renderer;
@@ -13,11 +12,6 @@ use supermarket\Transformer\ProductToCartContentViewTransformer;
 class CartPageController implements Controller
 {
     private const SUPPORTED_REQUEST = 'cart';
-
-    /**
-     * @var Cart
-     */
-    private $cart;
 
     /**
      * @var Renderer
@@ -52,14 +46,10 @@ class CartPageController implements Controller
         $this->sessionManager->start();
         $this->sessionManager->setValue('cart_id', 1);
         $cartId = $this->sessionManager->getValue('cart_id');
-
-        /**
-         * carts are statically stored in db until feature to add them manually is implemented
-         */
-        $this->cart = $this->databaseBasedCartRepository->getCartById($cartId);
-        $cartItemsView = $this->productToCartContentViewTransformer->transform($this->cart);
+        $cart = $this->databaseBasedCartRepository->getById($cartId);
+        $cartContentView = $this->productToCartContentViewTransformer->transform($cart);
         $content = $this->renderer->renderCart(
-            $cartItemsView,
+            $cartContentView,
             'cart/cartitem.html',
             'cart/cartitem_container.html',
             'cart/empty_cart.html'

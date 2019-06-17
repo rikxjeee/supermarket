@@ -34,10 +34,10 @@ class DefaultServiceContainer implements ServiceContainer
 
     public function getApplication(): Application
     {
-        return new Application($this);
+        return new Application($this->getRouter());
     }
 
-    public function getRouter(): Router
+    private function getRouter(): Router
     {
         return new Router(
             [
@@ -103,7 +103,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getRenderer(): Renderer
     {
-        return new HTMLrenderer($this->config->getTemplateConfig());
+        return new HTMLrenderer($this->config->getTemplateConfig(), $this->getUrlProvider());
     }
 
     private function getProductsToProductListViewTransformer(): ProductsToProductListViewTransformer

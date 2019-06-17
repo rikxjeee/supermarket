@@ -19,7 +19,7 @@ class DatabaseBasedCartRepository implements CartRepository
         $this->productRepository = $productRepository;
     }
 
-    public function getCartById(?int $id): Cart
+    public function getById(?int $id): Cart
     {
         if ($id === null) {
             return new Cart(uniqid());
