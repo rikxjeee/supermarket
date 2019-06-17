@@ -33,28 +33,14 @@ class HTMLrenderer implements Renderer
         }
         $list = $this->renderTemplate(['products' => $list], $this->loadTemplate($listContainerTemplate));
 
-        $content = [
-            'content' => $list,
-            'cartpage' => $this->urlProvider->getCartUrl(),
-            'productlistpage' => $this->urlProvider->getProductListUrl()
-
-        ];
-
-        return $this->renderTemplate($content, $this->loadTemplate('index.html'));
+        return $this->renderPage($list);
     }
 
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
 
-        $content = [
-            'content' => $content,
-            'cartpage' => $this->urlProvider->getCartUrl(),
-            'productlistpage' => $this->urlProvider->getProductListUrl()
-
-        ];
-
-        return $this->renderTemplate($content, $this->loadTemplate('index.html'));
+        return $this->renderPage($content);
     }
 
     public function renderCart(
@@ -73,27 +59,15 @@ class HTMLrenderer implements Renderer
             $list .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
         }
         $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
-        $content = [
-            'content' => $list,
-            'cartpage' => $this->urlProvider->getCartUrl(),
-            'productlistpage' => $this->urlProvider->getProductListUrl()
-        ];
-        $list = $this->renderTemplate($content, $this->loadTemplate('index.html'));
 
-        return $list;
+        return $this->renderPage($list);
     }
 
     public function renderEmptyCart(string $template): string
     {
         $data = $this->loadTemplate($template);
-        $content = [
-            'content' =>$data,
-            'cartpage' => $this->urlProvider->getCartUrl(),
-            'productlistpage' => $this->urlProvider->getProductListUrl()
-        ];
-        $content = $this->renderTemplate($content, $this->loadTemplate('index.html'));
 
-        return $content;
+        return $this->renderPage($data);
     }
 
     private function renderTemplate(array $data, string $content): string
@@ -108,5 +82,17 @@ class HTMLrenderer implements Renderer
     private function loadTemplate(string $template): string
     {
         return file_get_contents($this->templateConfig->getBasePath() . $template);
+    }
+
+    private function renderPage(string $content): string
+    {
+        $content = [
+            'content' => $content,
+            'cartpage' => $this->urlProvider->getCartUrl(),
+            'productlistpage' => $this->urlProvider->getProductListUrl()
+
+        ];
+
+        return $this->renderTemplate($content, $this->loadTemplate('index.html'));
     }
 }
