@@ -57,10 +57,6 @@ class CartPageController implements Controller
          * carts are statically stored in db until feature to add them manually is implemented
          */
         $this->cart = $this->databaseBasedCartRepository->getCartById($cartId);
-        $this->sessionManager->setValue('cart_id', $this->cart->getCartId());
-
-        //$this->cart->addProduct(new Product(1, 'Coca Cola', 0.8, 'Soft Drink'));
-
         $cartItemsView = $this->productToCartContentViewTransformer->transform($this->cart);
         $content = $this->renderer->renderCart(
             $cartItemsView,

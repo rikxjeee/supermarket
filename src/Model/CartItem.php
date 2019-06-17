@@ -30,8 +30,8 @@ class CartItem
         return $this->quantity;
     }
 
-    public function increaseQuantity(): void
+    public function increaseQuantity(int $quantity): void
     {
-        $this->quantity++;
+        $this->quantity += $quantity;
     }
 }

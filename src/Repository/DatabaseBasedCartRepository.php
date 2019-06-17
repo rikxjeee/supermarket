@@ -4,16 +4,19 @@ namespace Supermarket\Repository;
 
 use PDO;
 use Supermarket\Model\Cart;
-use Supermarket\Model\Product;
 
 class DatabaseBasedCartRepository implements CartRepository
 {
     /** @var PDO */
     private $mySqlConnection;
 
-    public function __construct(PDO $mySqlConnection)
+    /** @var ProductRepository */
+    private $productRepository;
+
+    public function __construct(PDO $mySqlConnection, ProductRepository $productRepository)
     {
         $this->mySqlConnection = $mySqlConnection;
+        $this->productRepository = $productRepository;
     }
 
     public function getCartById(?int $id): Cart
@@ -23,15 +26,13 @@ class DatabaseBasedCartRepository implements CartRepository
         }
 
         $fetchCart = $this->mySqlConnection->prepare(
-            'SELECT id, name, price FROM products_in_carts
-        LEFT JOIN products 
-        ON products_in_carts.products_id = products.id where cart_id=?'
+            'SELECT cart_id, product_id, quantity FROM products_in_cart where cart_id=?'
         );
         $fetchCart->execute([$id]);
         $cartData = $fetchCart->fetchAll(PDO::FETCH_ASSOC);
         $cart = new Cart($id);
         foreach ($cartData as $product) {
-            $cart->addProduct(Product::createFromArray($product));
+            $cart->addProduct($this->productRepository->getProductById($product['product_id']), (int)$product['quantity']);
         }
 
         return $cart;

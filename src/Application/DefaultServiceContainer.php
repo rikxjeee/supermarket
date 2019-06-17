@@ -49,7 +49,7 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
-    public function getProductListPageController(): Controller
+    private function getProductListPageController(): Controller
     {
         return new ProductListPageController(
             $this->getProductRepository(),
@@ -58,7 +58,7 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
-    public function getProductDetailsController(): Controller
+    private function getProductDetailsController(): Controller
     {
         return new ProductDetailsPageController(
             $this->getProductRepository(),
@@ -66,7 +66,7 @@ class DefaultServiceContainer implements ServiceContainer
             $this->getProductToProductDetailsTransformer());
     }
 
-    public function getCartPageController(): Controller
+    private function getCartPageController(): Controller
     {
         return new CartPageController(
             $this->getRenderer(),
@@ -76,19 +76,19 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
-    public function getPageNotFoundController(): Controller
+    private function getPageNotFoundController(): Controller
     {
         return new PageNotFoundController();
     }
 
-    public function getSessionManager(): SessionManager
+    private function getSessionManager(): SessionManager
     {
         return new SessionManager();
     }
 
     private function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository
     {
-        return new DatabaseBasedCartRepository($this->getMySqlConnection());
+        return new DatabaseBasedCartRepository($this->getMySqlConnection(), $this->getProductRepository());
     }
 
     private function getProductRepository(): ProductRepository

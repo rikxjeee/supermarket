@@ -6,6 +6,7 @@ use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 use Supermarket\Model\View\CartContentView;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
+use Supermarket\Provider\UrlProvider;
 
 class HTMLrenderer implements Renderer
 {
@@ -27,14 +28,28 @@ class HTMLrenderer implements Renderer
         }
         $list = $this->renderTemplate(['products' => $list], $this->loadTemplate($listContainerTemplate));
 
-        return $this->renderTemplate(['content' => $list], $this->loadTemplate('index.html'));
+        $content = [
+            'content' => $list,
+            'cartpage' => UrlProvider::getCartUrl(),
+            'productlistpage' => UrlProvider::getProductListUrl()
+
+        ];
+
+        return $this->renderTemplate($content, $this->loadTemplate('index.html'));
     }
 
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
 
-        return $this->renderTemplate(['content' => $content], $this->loadTemplate('index.html'));
+        $content = [
+            'content' => $content,
+            'cartpage' => UrlProvider::getCartUrl(),
+            'productlistpage' => UrlProvider::getProductListUrl()
+
+        ];
+
+        return $this->renderTemplate($content, $this->loadTemplate('index.html'));
     }
 
     public function renderCart(
@@ -45,9 +60,7 @@ class HTMLrenderer implements Renderer
     ): string {
 
         if (empty($cartContentView->getItems())) {
-            return $this->renderTemplate(
-                ['content' => $this->loadTemplate($emptyCartTemplate)],
-                $this->loadTemplate('index.html'));
+            return $this->renderEmptyCart($emptyCartTemplate);
         }
 
         $list = '';
@@ -55,14 +68,27 @@ class HTMLrenderer implements Renderer
             $list .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
         }
         $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
-        $list = $this->renderTemplate(['content' => $list], $this->loadTemplate('index.html'));
+        $content = [
+            'content' => $list,
+            'cartpage' => UrlProvider::getCartUrl(),
+            'productlistpage' => UrlProvider::getProductListUrl()
+        ];
+        $list = $this->renderTemplate($content, $this->loadTemplate('index.html'));
 
         return $list;
     }
 
-    public function renderEmptyCart(string $template)
+    public function renderEmptyCart(string $template): string
     {
-        return $this->loadTemplate($template);
+        $data = $this->loadTemplate($template);
+        $content = [
+            'content' =>$data,
+            'productlistpage' => UrlProvider::getProductListUrl(),
+            'cartpage' => UrlProvider::getCartUrl()
+        ];
+        $content = $this->renderTemplate($content, $this->loadTemplate('index.html'));
+
+        return $content;
     }
 
     private function renderTemplate(array $data, string $content): string

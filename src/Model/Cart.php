@@ -27,12 +27,12 @@ class Cart
         return $this->cartItems;
     }
 
-    public function addProduct(Product $product)
+    public function addProduct(Product $product, int $quantity): void
     {
         if (isset($this->cartItems[$product->getId()])) {
-            $this->cartItems[$product->getId()]->increaseQuantity();
+            $this->cartItems[$product->getId()]->increaseQuantity($quantity);
         } else {
-            $this->cartItems[$product->getId()] = new CartItem($product);
+            $this->cartItems[$product->getId()] = new CartItem($product, $quantity);
         }
     }
 }
