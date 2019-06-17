@@ -4,6 +4,7 @@ namespace Supermarket\Application;
 
 use PDO;
 use Supermarket\Application;
+use Supermarket\Controller\CartPageController;
 use Supermarket\Controller\Controller;
 use Supermarket\Controller\PageNotFoundController;
 use Supermarket\Controller\ProductDetailsPageController;
@@ -12,9 +13,11 @@ use Supermarket\Model\Config\ApplicationConfig;
 use Supermarket\Provider\UrlProvider;
 use Supermarket\Renderer\HTMLrenderer;
 use Supermarket\Renderer\Renderer;
+use Supermarket\Repository\DatabaseBasedCartRepository;
 use Supermarket\Repository\DatabaseBasedProductRepository;
 use Supermarket\Repository\ProductRepository;
 use Supermarket\Transformer\ProductsToProductListViewTransformer;
+use Supermarket\Transformer\ProductToCartContentViewTransformer;
 use Supermarket\Transformer\ProductToProductDetailsViewTransformer;
 
 class DefaultServiceContainer implements ServiceContainer
@@ -31,21 +34,22 @@ class DefaultServiceContainer implements ServiceContainer
 
     public function getApplication(): Application
     {
-        return new Application($this);
+        return new Application($this->getRouter());
     }
 
-    public function getRouter(): Router
+    private function getRouter(): Router
     {
         return new Router(
             [
                 $this->getProductListPageController(),
                 $this->getProductDetailsController(),
+                $this->getCartPageController(),
             ],
             $this->getPageNotFoundController()
         );
     }
 
-    public function getProductListPageController(): Controller
+    private function getProductListPageController(): Controller
     {
         return new ProductListPageController(
             $this->getProductRepository(),
@@ -54,14 +58,37 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
-    public function getPageNotFoundController(): Controller
+    private function getProductDetailsController(): Controller
+    {
+        return new ProductDetailsPageController(
+            $this->getProductRepository(),
+            $this->getRenderer(),
+            $this->getProductToProductDetailsTransformer());
+    }
+
+    private function getCartPageController(): Controller
+    {
+        return new CartPageController(
+            $this->getRenderer(),
+            $this->getProductToCartContentViewTransformer(),
+            $this->getSessionManager(),
+            $this->getDataBaseBasedCartRepository()
+        );
+    }
+
+    private function getPageNotFoundController(): Controller
     {
         return new PageNotFoundController();
     }
 
-    public function getProductDetailsController(): Controller
+    private function getSessionManager(): SessionManager
     {
-        return new ProductDetailsPageController($this->getProductRepository(), $this->getRenderer(), $this->getProductToProductDetailsTransformer());
+        return new SessionManager();
+    }
+
+    private function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository
+    {
+        return new DatabaseBasedCartRepository($this->getMySqlConnection(), $this->getProductRepository());
     }
 
     private function getProductRepository(): ProductRepository
@@ -76,7 +103,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getRenderer(): Renderer
     {
-        return new HTMLrenderer($this->config->getTemplateConfig());
+        return new HTMLrenderer($this->config->getTemplateConfig(), $this->getUrlProvider());
     }
 
     private function getProductsToProductListViewTransformer(): ProductsToProductListViewTransformer
@@ -84,13 +111,18 @@ class DefaultServiceContainer implements ServiceContainer
         return new ProductsToProductListViewTransformer($this->getUrlProvider());
     }
 
+    private function getUrlProvider(): UrlProvider
+    {
+        return new UrlProvider();
+    }
+
     private function getProductToProductDetailsTransformer(): ProductToProductDetailsViewTransformer
     {
         return new ProductToProductDetailsViewTransformer($this->getUrlProvider());
     }
 
-    private function getUrlProvider(): UrlProvider
+    private function getProductToCartContentViewTransformer(): ProductToCartContentViewTransformer
     {
-        return new UrlProvider();
+        return new ProductToCartContentViewTransformer($this->getUrlProvider());
     }
 }

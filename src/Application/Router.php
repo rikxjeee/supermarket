@@ -19,8 +19,9 @@ class Router
 
     /**
      * Router constructor.
+     *
      * @param Controller[] $controllers
-     * @param Controller $noRouteController
+     * @param Controller   $noRouteController
      */
     public function __construct(array $controllers, Controller $noRouteController)
     {
@@ -36,7 +37,7 @@ class Router
     public function match(Request $request): Controller
     {
         foreach ($this->controllers as $controller) {
-            if ($controller->supports($request)){
+            if ($controller->supports($request)) {
                 return $controller;
             }
         }

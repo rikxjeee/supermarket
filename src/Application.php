@@ -3,28 +3,27 @@
 namespace Supermarket;
 
 use Exception;
-use Supermarket\Application\ServiceContainer;
+use Supermarket\Application\Router;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 
 class Application
 {
     /**
-     * @var ServiceContainer
+     * @var Router
      */
-    private $serviceContainer;
+    private $router;
 
-    public function __construct(ServiceContainer $serviceContainer)
+    public function __construct(Router $router)
     {
-        $this->serviceContainer = $serviceContainer;
+        $this->router = $router;
     }
 
     public function run(): void
     {
         try {
             $request = new Request($_GET);
-            $response = $this->serviceContainer
-                ->getRouter()
+            $response = $this->router
                 ->match($request)
                 ->execute($request);
         } catch (Exception $e) {

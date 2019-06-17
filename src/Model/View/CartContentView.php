@@ -2,19 +2,17 @@
 
 namespace Supermarket\Model\View;
 
-use Supermarket\Model\View\ProductListView\Item;
+use Supermarket\Model\View\CartItemView\CartItemView;
 
-class ProductListView
+class CartContentView
 {
     /**
-     * @var Item[]
+     * @var CartItemView[]
      */
     private $items;
 
     /**
-     * ProductListView constructor.
-     *
-     * @param Item[] $items
+     * @param CartItemView[] $items
      */
     public function __construct(array $items)
     {
@@ -22,7 +20,7 @@ class ProductListView
     }
 
     /**
-     * @return Item[]
+     * @return CartItemView[]
      */
     public function getItems(): array
     {

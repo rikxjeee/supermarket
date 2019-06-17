@@ -4,38 +4,44 @@ namespace Supermarket\Model\View;
 
 class ProductDetailsView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $price;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $productListPageUrl;
 
-    public function __construct(string $name, string $price, string $type, string $description, string $productListPageUrl)
-    {
+    public function __construct(
+        string $name,
+        string $price,
+        string $type,
+        string $description,
+        string $productListPageUrl
+    ) {
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
         $this->description = $description;
         $this->productListPageUrl = $productListPageUrl;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'type' => $this->getType(),
+            'description' => $this->getDescription(),
+            'url' => $this->getProductListPageUrl(),
+        ];
     }
 
     public function getName(): string
@@ -61,16 +67,5 @@ class ProductDetailsView
     public function getProductListPageUrl(): string
     {
         return $this->productListPageUrl;
-    }
-
-    public function toArray()
-    {
-        return [
-            'name' => $this->getName(),
-            'price' => $this->getPrice(),
-            'type' => $this->getType(),
-            'description' => $this->getDescription(),
-            'url' => $this->getProductListPageUrl(),
-        ];
     }
 }

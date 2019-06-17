@@ -9,8 +9,13 @@ class UrlProvider
         return sprintf('index.php?page=details&id=%d', $id);
     }
 
-    public function getProductListUrl()
+    public function getProductListUrl(): string
     {
         return 'index.php?page=products';
+    }
+
+    public function getCartUrl(): string
+    {
+        return 'index.php?page=cart';
     }
 }
