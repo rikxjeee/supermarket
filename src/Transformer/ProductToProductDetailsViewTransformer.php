@@ -26,7 +26,8 @@ class ProductToProductDetailsViewTransformer
             $product->getPrice(),
             $product->getType(),
             $product->getDescription(),
-            $this->urlProvider->getProductListUrl()
+            $this->urlProvider->getProductListUrl(),
+            $this->urlProvider->getAddToCartUrl()
         );
     }
 }

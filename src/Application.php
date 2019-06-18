@@ -37,7 +37,7 @@ class Application
         }
         http_response_code($response->getStatusCode());
         if ($response->hasHeader()) {
-            header($response->getHeader());
+            header($response->getHeaders());
         }
         echo $response->getContent();
     }

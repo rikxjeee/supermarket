@@ -46,7 +46,7 @@ class DefaultServiceContainer implements ServiceContainer
                 $this->getProductListPageController(),
                 $this->getProductDetailsController(),
                 $this->getCartPageController(),
-                $this->getAddToCart()
+                $this->getAddToCartController()
             ],
             $this->getPageNotFoundController()
         );
@@ -129,7 +129,7 @@ class DefaultServiceContainer implements ServiceContainer
         return new ProductToCartContentViewTransformer($this->getUrlProvider());
     }
 
-    private function getAddToCart(): Controller
+    private function getAddToCartController(): Controller
     {
         return new AddToCartController($this->getSessionManager(), $this->getCartRepository(), $this->getProductRepository());
     }

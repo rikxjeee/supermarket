@@ -7,7 +7,9 @@ class Response
     public const STATUS_OK = 200;
     public const STATUS_NOT_FOUND = 404;
     public const STATUS_SERVER_ERROR = 500;
-    public const STATUS_REDIRECT = 302;
+    public const STATUS_PERMANENT_REDIRECT = 301;
+    public const STATUS_TEMPORARY_REDIRECT = 302;
+
 
     /**
      * @var string
@@ -19,14 +21,14 @@ class Response
      */
     private $statusCode;
 
-    /** @var string */
-    private $header;
+    /** @var array */
+    private $headers;
 
-    public function __construct(string $content, int $statusCode = self::STATUS_OK, string $header = null)
+    public function __construct(string $content, int $statusCode = self::STATUS_OK, array $headers = [])
     {
         $this->content = $content;
         $this->statusCode = $statusCode;
-        $this->header = $header;
+        $this->headers = $headers;
     }
 
     public function getStatusCode(): int
@@ -39,13 +41,18 @@ class Response
         return $this->content;
     }
 
-    public function getHeader(): string
-    {
-        return $this->header;
-    }
-
     public function hasHeader(): bool
     {
-        return $this->header !== null;
+        return empty($this->header);
+    }
+
+    public function getHeaders(): string
+    {
+       $headers = '';
+       foreach ($this->headers as $key => $header) {
+           $headers .= sprintf('%s: %s', $key, $header);
+       }
+
+       return $headers;
     }
 }

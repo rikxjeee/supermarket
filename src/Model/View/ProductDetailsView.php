@@ -22,13 +22,17 @@ class ProductDetailsView
     /** @var string */
     private $productListPageUrl;
 
+    /** @var string */
+    private $addToCartUrl;
+
     public function __construct(
         int $id,
         string $name,
         string $price,
         string $type,
         string $description,
-        string $productListPageUrl
+        string $productListPageUrl,
+        string $addToCartUrl
     ) {
         $this->name = $name;
         $this->price = $price;
@@ -36,6 +40,7 @@ class ProductDetailsView
         $this->description = $description;
         $this->productListPageUrl = $productListPageUrl;
         $this->id = $id;
+        $this->addToCartUrl = $addToCartUrl;
     }
 
     public function toArray(): array
@@ -46,7 +51,8 @@ class ProductDetailsView
             'price' => $this->getPrice(),
             'type' => $this->getType(),
             'description' => $this->getDescription(),
-            'url' => $this->getProductListPageUrl(),
+            'product_list_url' => $this->getProductListPageUrl(),
+            'add_to_cart_url' => $this->getAddToCartUrl()
         ];
     }
 
@@ -65,7 +71,7 @@ class ProductDetailsView
         return $this->type;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -78,5 +84,10 @@ class ProductDetailsView
     public function getProductListPageUrl(): string
     {
         return $this->productListPageUrl;
+    }
+
+    public function getAddToCartUrl(): string
+    {
+        return $this->addToCartUrl;
     }
 }

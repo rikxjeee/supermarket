@@ -39,7 +39,7 @@ class AddToCartController implements Controller
         $cart = $this->cartRepository->getById($cartId);
         $cart->addProduct($this->productRepository->getProductById($productId), $quantity);
         $this->cartRepository->save($cart);
-        return new Response('', 302, 'Location: index.php?page=cart');
+        return new Response('', Response::STATUS_TEMPORARY_REDIRECT, ['Location'=> 'index.php?page=cart']);
     }
 
     public function supports(Request $request): bool

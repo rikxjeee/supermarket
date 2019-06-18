@@ -32,19 +32,18 @@ class DatabaseBasedCartRepository implements CartRepository
         $cartData = $fetchCart->fetchAll(PDO::FETCH_ASSOC);
         $cart = new Cart($id);
         foreach ($cartData as $product) {
-            if ($product['quantity'] > 0) {
                 $cart->addProduct($this->productRepository->getProductById($product['products_id']),
                     $product['quantity']);
             }
-        }
 
         return $cart;
     }
 
     public function save(Cart $cart): void
     {
+        $this->mySqlConnection->beginTransaction();
         $this->mySqlConnection->query(
-            sprintf("delete from `supermarket`.`cartitems` WHERE (`cart_id` = '%s');", $cart->getId())
+            sprintf("delete from cartitems WHERE (cart_id = '%s');", $cart->getId())
         );
 
         foreach ($cart->getItems() as $item) {
@@ -58,5 +57,6 @@ class DatabaseBasedCartRepository implements CartRepository
                 $item->getQuantity()
             ]);
         }
+        $this->mySqlConnection->commit();
     }
 }
