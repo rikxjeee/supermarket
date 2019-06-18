@@ -2,7 +2,9 @@
 
 namespace Supermarket\Repository;
 
+use Exception;
 use PDO;
+use PDOException;
 use Supermarket\Model\Cart;
 
 class DatabaseBasedCartRepository implements CartRepository
@@ -39,24 +41,34 @@ class DatabaseBasedCartRepository implements CartRepository
         return $cart;
     }
 
+    /**
+     * @param Cart $cart
+     *
+     * @throws Exception
+     */
     public function save(Cart $cart): void
     {
-        $this->mySqlConnection->beginTransaction();
-        $this->mySqlConnection->query(
-            sprintf("delete from cartitems WHERE (cart_id = '%s');", $cart->getId())
-        );
-
-        foreach ($cart->getItems() as $item) {
-            $query = $this->mySqlConnection->prepare(
-                'insert into cartitems values (?, ?, ?) on duplicate key update quantity = ?'
+        try {
+            $this->mySqlConnection->beginTransaction();
+            $this->mySqlConnection->query(
+                sprintf("delete from cartitems WHERE (cart_id = '%s');", $cart->getId())
             );
-            $query->execute([
-                $item->getQuantity(),
-                $item->getProduct()->getId(),
-                $cart->getId(),
-                $item->getQuantity()
-            ]);
+
+            foreach ($cart->getItems() as $item) {
+                $query = $this->mySqlConnection->prepare(
+                    'insert into cartitems values (?, ?, ?) on duplicate key update quantity = ?'
+                );
+                $query->execute([
+                    $item->getQuantity(),
+                    $item->getProduct()->getId(),
+                    $cart->getId(),
+                    $item->getQuantity()
+                ]);
+            }
+            $this->mySqlConnection->commit();
+        } catch(PDOException $e) {
+            $this->mySqlConnection->rollBack();
+            throw new Exception('Something went wrong.');
         }
-        $this->mySqlConnection->commit();
     }
 }
