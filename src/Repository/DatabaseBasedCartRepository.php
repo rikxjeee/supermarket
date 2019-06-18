@@ -26,14 +26,14 @@ class DatabaseBasedCartRepository implements CartRepository
         }
 
         $fetchCart = $this->mySqlConnection->prepare(
-            'SELECT cart_id, product_id, quantity FROM cartitems where cart_id=?'
+            'SELECT * FROM cartitems where cart_id=?'
         );
         $fetchCart->execute([$id]);
         $cartData = $fetchCart->fetchAll(PDO::FETCH_ASSOC);
         $cart = new Cart($id);
         foreach ($cartData as $product) {
-            if ($product['quantity']>0) {
-                $cart->addProduct($this->productRepository->getProductById($product['product_id']),
+            if ($product['quantity'] > 0) {
+                $cart->addProduct($this->productRepository->getProductById($product['products_id']),
                     $product['quantity']);
             }
         }
@@ -41,23 +41,22 @@ class DatabaseBasedCartRepository implements CartRepository
         return $cart;
     }
 
-    public function saveCart(Cart $cart, string $productId, string $quantity): void
+    public function save(Cart $cart): void
     {
-        $query = $this->mySqlConnection->query(
-            sprintf('select * from cartitems where cart_id=%s and product_id=%s', $cart->getCartId(), $productId)
+        $this->mySqlConnection->query(
+            sprintf("delete from `supermarket`.`cartitems` WHERE (`cart_id` = '%s');", $cart->getId())
         );
-        $query = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!empty($query)) {
+        foreach ($cart->getItems() as $item) {
             $query = $this->mySqlConnection->prepare(
-                'update cartitems set quantity=quantity+? where cart_id=? and product_id=?'
+                'insert into cartitems values (?, ?, ?) on duplicate key update quantity = ?'
             );
-            $query->execute([$quantity, $cart->getCartId(), $productId]);
-        } else {
-            $query = $this->mySqlConnection->prepare(
-                'insert into cartitems values (?,?,?)'
-            );
-            $query->execute([$cart->getCartId(), $productId, $quantity]);
+            $query->execute([
+                $item->getQuantity(),
+                $item->getProduct()->getId(),
+                $cart->getId(),
+                $item->getQuantity()
+            ]);
         }
     }
 }

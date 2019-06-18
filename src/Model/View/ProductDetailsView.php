@@ -4,6 +4,9 @@ namespace Supermarket\Model\View;
 
 class ProductDetailsView
 {
+    /** @var int */
+    private $id;
+
     /** @var string */
     private $name;
 
@@ -19,11 +22,8 @@ class ProductDetailsView
     /** @var string */
     private $productListPageUrl;
 
-    /** @var string */
-    private $id;
-
     public function __construct(
-        string $id,
+        int $id,
         string $name,
         string $price,
         string $type,

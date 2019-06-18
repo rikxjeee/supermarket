@@ -6,7 +6,7 @@ use Supermarket\Application\SessionManager;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 use Supermarket\Renderer\Renderer;
-use Supermarket\Repository\DatabaseBasedCartRepository;
+use Supermarket\Repository\CartRepository;
 use supermarket\Transformer\ProductToCartContentViewTransformer;
 
 class CartPageController implements Controller
@@ -26,27 +26,26 @@ class CartPageController implements Controller
     /** @var SessionManager */
     private $sessionManager;
 
-    /** @var DatabaseBasedCartRepository */
-    private $databaseBasedCartRepository;
+    /** @var CartRepository */
+    private $cartRepository;
 
     public function __construct(
         Renderer $renderer,
         ProductToCartContentViewTransformer $productToCartContentViewTransformer,
         SessionManager $sessionManager,
-        DatabaseBasedCartRepository $databaseBasedCartRepository
+        CartRepository $cartRepository
     ) {
         $this->renderer = $renderer;
         $this->productToCartContentViewTransformer = $productToCartContentViewTransformer;
         $this->sessionManager = $sessionManager;
-        $this->databaseBasedCartRepository = $databaseBasedCartRepository;
+        $this->cartRepository = $cartRepository;
     }
 
     public function execute(Request $request): Response
     {
-        $this->sessionManager->start();
         $this->sessionManager->setValue('cart_id', 1);
         $cartId = $this->sessionManager->getValue('cart_id');
-        $cart = $this->databaseBasedCartRepository->getById($cartId);
+        $cart = $this->cartRepository->getById($cartId);
         $cartContentView = $this->productToCartContentViewTransformer->transform($cart);
         $content = $this->renderer->renderCart(
             $cartContentView,

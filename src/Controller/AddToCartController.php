@@ -5,41 +5,41 @@ namespace Supermarket\Controller;
 use Supermarket\Application\SessionManager;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
-use Supermarket\Repository\DatabaseBasedCartRepository;
+use Supermarket\Repository\CartRepository;
 use Supermarket\Repository\ProductRepository;
 
-class AddToCart implements Controller
+class AddToCartController implements Controller
 {
     private const SUPPORTED_REQUEST = 'addtocart';
 
     /** @var SessionManager */
     private $sessionManager;
 
-    /** @var DatabaseBasedCartRepository */
-    private $databaseBasedCartRepository;
+    /** @var CartRepository */
+    private $cartRepository;
 
     /** @var ProductRepository */
-    private $databaseBasedProductRepository;
+    private $productRepository;
 
     public function __construct(
         SessionManager $sessionManager,
-        DatabaseBasedCartRepository $databaseBasedCartRepository,
-        ProductRepository $databaseBasedProductRepository
+        CartRepository $cartRepository,
+        ProductRepository $productRepository
     ) {
         $this->sessionManager = $sessionManager;
-        $this->databaseBasedCartRepository = $databaseBasedCartRepository;
-        $this->databaseBasedProductRepository = $databaseBasedProductRepository;
+        $this->cartRepository = $cartRepository;
+        $this->productRepository = $productRepository;
     }
 
     public function execute(Request $request): Response
     {
-        $this->sessionManager->start();
         $cartId = $this->sessionManager->getValue('cart_id');
-        $productId = $request->getPostParam('productid');
+        $productId = $request->getPostParam('product_id');
         $quantity = $request->getPostParam('quantity');
-        $cart = $this->databaseBasedCartRepository->getById($cartId);
-        $this->databaseBasedCartRepository->saveCart($cart, $productId, $quantity);
-        return new Response(header('Location: index.php?page=cart'), 302);
+        $cart = $this->cartRepository->getById($cartId);
+        $cart->addProduct($this->productRepository->getProductById($productId), $quantity);
+        $this->cartRepository->save($cart);
+        return new Response('', 302, 'Location: index.php?page=cart');
     }
 
     public function supports(Request $request): bool

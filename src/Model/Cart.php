@@ -17,17 +17,20 @@ class Cart
         $this->cartId = $cartId;
     }
 
-    public function getCartId(): int
+    public function getId(): int
     {
         return $this->cartId;
     }
 
-    public function getItems()
+    /**
+     * @return CartItem[]
+     */
+    public function getItems(): array
     {
         return $this->cartItems;
     }
 
-    public function addProduct(Product $product, ?int $quantity=1): void
+    public function addProduct(Product $product, int $quantity=1): void
     {
         if (isset($this->cartItems[$product->getId()])) {
             $this->cartItems[$product->getId()]->increaseQuantity($quantity);
