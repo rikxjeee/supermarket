@@ -46,13 +46,8 @@ class Response
         return empty($this->header);
     }
 
-    public function getHeaders(): string
+    public function getHeaders(): array
     {
-       $headers = '';
-       foreach ($this->headers as $key => $header) {
-           $headers .= sprintf('%s: %s', $key, $header);
-       }
-
-       return $headers;
+       return $this->headers;
     }
 }

@@ -5,6 +5,7 @@ namespace Supermarket\Repository;
 use Exception;
 use PDO;
 use PDOException;
+use Supermarket\Exception\CouldNotSaveException;
 use Supermarket\Model\Cart;
 
 class DatabaseBasedCartRepository implements CartRepository
@@ -44,7 +45,7 @@ class DatabaseBasedCartRepository implements CartRepository
     /**
      * @param Cart $cart
      *
-     * @throws Exception
+     * @throws CouldNotSaveException
      */
     public function save(Cart $cart): void
     {
@@ -66,9 +67,9 @@ class DatabaseBasedCartRepository implements CartRepository
                 ]);
             }
             $this->mySqlConnection->commit();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->mySqlConnection->rollBack();
-            throw new Exception('Something went wrong.');
+            throw new CouldNotSaveException('Could not save the cart.');
         }
     }
 }

@@ -131,6 +131,11 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getAddToCartController(): Controller
     {
-        return new AddToCartController($this->getSessionManager(), $this->getCartRepository(), $this->getProductRepository());
+        return new AddToCartController(
+            $this->getSessionManager(),
+            $this->getCartRepository(),
+            $this->getProductRepository(),
+            $this->getUrlProvider()
+        );
     }
 }

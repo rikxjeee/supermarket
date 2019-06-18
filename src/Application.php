@@ -37,7 +37,9 @@ class Application
         }
         http_response_code($response->getStatusCode());
         if ($response->hasHeader()) {
-            header($response->getHeaders());
+            foreach ($response->getHeaders() as $key => $header) {
+                header(sprintf('%s: %s', $key, $header));
+            }
         }
         echo $response->getContent();
     }
