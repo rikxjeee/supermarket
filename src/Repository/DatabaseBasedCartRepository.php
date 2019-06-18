@@ -26,15 +26,38 @@ class DatabaseBasedCartRepository implements CartRepository
         }
 
         $fetchCart = $this->mySqlConnection->prepare(
-            'SELECT cart_id, product_id, quantity FROM products_in_cart where cart_id=?'
+            'SELECT cart_id, product_id, quantity FROM cartitems where cart_id=?'
         );
         $fetchCart->execute([$id]);
         $cartData = $fetchCart->fetchAll(PDO::FETCH_ASSOC);
         $cart = new Cart($id);
         foreach ($cartData as $product) {
-            $cart->addProduct($this->productRepository->getProductById($product['product_id']), (int)$product['quantity']);
+            if ($product['quantity']>0) {
+                $cart->addProduct($this->productRepository->getProductById($product['product_id']),
+                    $product['quantity']);
+            }
         }
 
         return $cart;
+    }
+
+    public function saveCart(Cart $cart, string $productId, string $quantity): void
+    {
+        $query = $this->mySqlConnection->query(
+            sprintf('select * from cartitems where cart_id=%s and product_id=%s', $cart->getCartId(), $productId)
+        );
+        $query = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($query)) {
+            $query = $this->mySqlConnection->prepare(
+                'update cartitems set quantity=quantity+? where cart_id=? and product_id=?'
+            );
+            $query->execute([$quantity, $cart->getCartId(), $productId]);
+        } else {
+            $query = $this->mySqlConnection->prepare(
+                'insert into cartitems values (?,?,?)'
+            );
+            $query->execute([$cart->getCartId(), $productId, $quantity]);
+        }
     }
 }

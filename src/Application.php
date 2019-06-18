@@ -22,7 +22,7 @@ class Application
     public function run(): void
     {
         try {
-            $request = new Request($_GET);
+            $request = new Request($_GET, $_POST);
             $response = $this->router
                 ->match($request)
                 ->execute($request);

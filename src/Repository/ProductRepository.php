@@ -14,11 +14,11 @@ interface ProductRepository
     public function getAllProducts(): array;
 
     /**
-     * @param int $id
+     * @param string $id
      *
      * @return Product
      * @throws Exception
      * @throws ProductNotFoundException
      */
-    public function getProductById(int $id): Product;
+    public function getProductById(string $id): Product;
 }

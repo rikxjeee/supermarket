@@ -50,8 +50,8 @@ class CartPageController implements Controller
         $cartContentView = $this->productToCartContentViewTransformer->transform($cart);
         $content = $this->renderer->renderCart(
             $cartContentView,
-            'cart/cartitem.html',
-            'cart/cartitem_container.html',
+            'cart/item/item.html',
+            'cart/cart.html',
             'cart/empty_cart.html'
         );
 

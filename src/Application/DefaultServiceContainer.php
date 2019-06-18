@@ -4,6 +4,7 @@ namespace Supermarket\Application;
 
 use PDO;
 use Supermarket\Application;
+use Supermarket\Controller\AddToCart;
 use Supermarket\Controller\CartPageController;
 use Supermarket\Controller\Controller;
 use Supermarket\Controller\PageNotFoundController;
@@ -44,6 +45,7 @@ class DefaultServiceContainer implements ServiceContainer
                 $this->getProductListPageController(),
                 $this->getProductDetailsController(),
                 $this->getCartPageController(),
+                $this->getAddToCart()
             ],
             $this->getPageNotFoundController()
         );
@@ -124,5 +126,10 @@ class DefaultServiceContainer implements ServiceContainer
     private function getProductToCartContentViewTransformer(): ProductToCartContentViewTransformer
     {
         return new ProductToCartContentViewTransformer($this->getUrlProvider());
+    }
+
+    private function getAddToCart(): AddToCart
+    {
+        return new AddToCart($this->getSessionManager(), $this->getDataBaseBasedCartRepository(), $this->getProductRepository());
     }
 }

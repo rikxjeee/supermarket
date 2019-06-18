@@ -27,7 +27,7 @@ class Cart
         return $this->cartItems;
     }
 
-    public function addProduct(Product $product, int $quantity): void
+    public function addProduct(Product $product, ?int $quantity=1): void
     {
         if (isset($this->cartItems[$product->getId()])) {
             $this->cartItems[$product->getId()]->increaseQuantity($quantity);

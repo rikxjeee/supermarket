@@ -19,7 +19,11 @@ class ProductDetailsView
     /** @var string */
     private $productListPageUrl;
 
+    /** @var string */
+    private $id;
+
     public function __construct(
+        string $id,
         string $name,
         string $price,
         string $type,
@@ -31,11 +35,13 @@ class ProductDetailsView
         $this->type = $type;
         $this->description = $description;
         $this->productListPageUrl = $productListPageUrl;
+        $this->id = $id;
     }
 
     public function toArray(): array
     {
         return [
+            'product_id' => $this->getId(),
             'name' => $this->getName(),
             'price' => $this->getPrice(),
             'type' => $this->getType(),
@@ -57,6 +63,11 @@ class ProductDetailsView
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getDescription(): string

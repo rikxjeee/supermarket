@@ -46,7 +46,7 @@ class DatabaseBasedProductRepository implements ProductRepository
      * @throws InvalidArgumentException
      * @throws PDOException
      */
-    public function getProductById(int $id): Product
+    public function getProductById(string $id): Product
     {
         $fetchProduct = $this->mySqlConnection->prepare('select * from products where id=?');
         $fetchProduct->execute([$id]);

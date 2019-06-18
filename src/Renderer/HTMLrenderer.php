@@ -39,7 +39,6 @@ class HTMLrenderer implements Renderer
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
-
         return $this->renderPage($content);
     }
 
@@ -90,7 +89,6 @@ class HTMLrenderer implements Renderer
             'content' => $content,
             'cartpage' => $this->urlProvider->getCartUrl(),
             'productlistpage' => $this->urlProvider->getProductListUrl()
-
         ];
 
         return $this->renderTemplate($content, $this->loadTemplate('index.html'));
