@@ -90,10 +90,10 @@ class HTMLrenderer implements Renderer
 
     private function renderPage(string $content): string
     {
-        $error_message = $this->sessionManager->getValue('error_message');
+        $errorMessage = $this->sessionManager->getValue('error_message');
         $this->sessionManager->setValue('error_message', '');
         $content = [
-            'error_message' => $error_message,
+            'error_message' => $errorMessage,
             'content' => $content,
             'cartpage' => $this->urlProvider->getCartUrl(),
             'productlistpage' => $this->urlProvider->getProductListUrl()
