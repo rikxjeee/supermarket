@@ -12,6 +12,15 @@
         <td>{{description}}</td>
     </tr>
     <tr>
-        <td><a href="{{url}}">Back</a></td>
+        <td><a href="{{product_list_url}}">Back</a></td>
+    </tr>
+    <tr>
+        <form action="{{add_to_cart_url}}" method="post">
+            <input type="hidden" value="{{product_id}}" name="product_id">
+            <label>Quantity
+                <input type="number" name="quantity" min="1" value="1">
+            </label>
+            <input type="submit" value="Add to cart">
+        </form>
     </tr>
 </table>

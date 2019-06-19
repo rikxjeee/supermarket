@@ -18,4 +18,9 @@ class UrlProvider
     {
         return 'index.php?page=cart';
     }
+
+    public function getAddToCartUrl(): string
+    {
+        return 'index.php?page=addtocart';
+    }
 }

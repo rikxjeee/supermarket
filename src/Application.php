@@ -4,6 +4,7 @@ namespace Supermarket;
 
 use Exception;
 use Supermarket\Application\Router;
+use Supermarket\Application\SessionManager;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 
@@ -14,15 +15,20 @@ class Application
      */
     private $router;
 
-    public function __construct(Router $router)
+    /** @var SessionManager */
+    private $sessionManager;
+
+    public function __construct(Router $router, SessionManager $sessionManager)
     {
         $this->router = $router;
+        $this->sessionManager = $sessionManager;
     }
 
     public function run(): void
     {
+        $this->sessionManager->start();
         try {
-            $request = new Request($_GET);
+            $request = new Request($_GET, $_POST);
             $response = $this->router
                 ->match($request)
                 ->execute($request);
@@ -30,6 +36,11 @@ class Application
             $response = new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
         }
         http_response_code($response->getStatusCode());
+        if ($response->hasHeader()) {
+            foreach ($response->getHeaders() as $key => $header) {
+                header(sprintf('%s: %s', $key, $header));
+            }
+        }
         echo $response->getContent();
     }
 }

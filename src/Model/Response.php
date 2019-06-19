@@ -7,6 +7,8 @@ class Response
     public const STATUS_OK = 200;
     public const STATUS_NOT_FOUND = 404;
     public const STATUS_SERVER_ERROR = 500;
+    public const STATUS_PERMANENT_REDIRECT = 301;
+    public const STATUS_TEMPORARY_REDIRECT = 302;
 
     /**
      * @var string
@@ -18,10 +20,14 @@ class Response
      */
     private $statusCode;
 
-    public function __construct(string $content, int $statusCode = self::STATUS_OK)
+    /** @var array */
+    private $headers;
+
+    public function __construct(string $content, int $statusCode = self::STATUS_OK, array $headers = [])
     {
         $this->content = $content;
         $this->statusCode = $statusCode;
+        $this->headers = $headers;
     }
 
     public function getStatusCode(): int
@@ -32,5 +38,15 @@ class Response
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function hasHeader(): bool
+    {
+        return empty($this->header);
+    }
+
+    public function getHeaders(): array
+    {
+       return $this->headers;
     }
 }

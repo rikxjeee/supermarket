@@ -4,6 +4,7 @@ namespace Supermarket\Application;
 
 use PDO;
 use Supermarket\Application;
+use Supermarket\Controller\AddToCartController;
 use Supermarket\Controller\CartPageController;
 use Supermarket\Controller\Controller;
 use Supermarket\Controller\PageNotFoundController;
@@ -13,6 +14,7 @@ use Supermarket\Model\Config\ApplicationConfig;
 use Supermarket\Provider\UrlProvider;
 use Supermarket\Renderer\HTMLrenderer;
 use Supermarket\Renderer\Renderer;
+use Supermarket\Repository\CartRepository;
 use Supermarket\Repository\DatabaseBasedCartRepository;
 use Supermarket\Repository\DatabaseBasedProductRepository;
 use Supermarket\Repository\ProductRepository;
@@ -34,7 +36,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     public function getApplication(): Application
     {
-        return new Application($this->getRouter());
+        return new Application($this->getRouter(), $this->getSessionManager());
     }
 
     private function getRouter(): Router
@@ -44,6 +46,7 @@ class DefaultServiceContainer implements ServiceContainer
                 $this->getProductListPageController(),
                 $this->getProductDetailsController(),
                 $this->getCartPageController(),
+                $this->getAddToCartController()
             ],
             $this->getPageNotFoundController()
         );
@@ -72,7 +75,7 @@ class DefaultServiceContainer implements ServiceContainer
             $this->getRenderer(),
             $this->getProductToCartContentViewTransformer(),
             $this->getSessionManager(),
-            $this->getDataBaseBasedCartRepository()
+            $this->getCartRepository()
         );
     }
 
@@ -86,7 +89,7 @@ class DefaultServiceContainer implements ServiceContainer
         return new SessionManager();
     }
 
-    private function getDataBaseBasedCartRepository(): DatabaseBasedCartRepository
+    private function getCartRepository(): CartRepository
     {
         return new DatabaseBasedCartRepository($this->getMySqlConnection(), $this->getProductRepository());
     }
@@ -103,7 +106,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getRenderer(): Renderer
     {
-        return new HTMLrenderer($this->config->getTemplateConfig(), $this->getUrlProvider());
+        return new HTMLrenderer($this->config->getTemplateConfig(), $this->getUrlProvider(), $this->getSessionManager());
     }
 
     private function getProductsToProductListViewTransformer(): ProductsToProductListViewTransformer
@@ -124,5 +127,15 @@ class DefaultServiceContainer implements ServiceContainer
     private function getProductToCartContentViewTransformer(): ProductToCartContentViewTransformer
     {
         return new ProductToCartContentViewTransformer($this->getUrlProvider());
+    }
+
+    private function getAddToCartController(): Controller
+    {
+        return new AddToCartController(
+            $this->getSessionManager(),
+            $this->getCartRepository(),
+            $this->getProductRepository(),
+            $this->getUrlProvider()
+        );
     }
 }

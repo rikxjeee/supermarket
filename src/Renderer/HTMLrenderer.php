@@ -2,6 +2,7 @@
 
 namespace Supermarket\Renderer;
 
+use Supermarket\Application\SessionManager;
 use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 use Supermarket\Model\View\CartContentView;
 use Supermarket\Model\View\ProductDetailsView;
@@ -16,10 +17,14 @@ class HTMLrenderer implements Renderer
     /** @var UrlProvider */
     private $urlProvider;
 
-    public function __construct(TemplateConfig $templateConfig, UrlProvider $urlProvider)
+    /** @var SessionManager */
+    private $sessionManager;
+
+    public function __construct(TemplateConfig $templateConfig, UrlProvider $urlProvider, SessionManager $sessionManager)
     {
         $this->templateConfig = $templateConfig;
         $this->urlProvider = $urlProvider;
+        $this->sessionManager = $sessionManager;
     }
 
     public function renderProductListTable(
@@ -39,7 +44,6 @@ class HTMLrenderer implements Renderer
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
-
         return $this->renderPage($content);
     }
 
@@ -86,11 +90,13 @@ class HTMLrenderer implements Renderer
 
     private function renderPage(string $content): string
     {
+        $errorMessage = $this->sessionManager->getValue('error_message');
+        $this->sessionManager->setValue('error_message', '');
         $content = [
+            'error_message' => $errorMessage,
             'content' => $content,
             'cartpage' => $this->urlProvider->getCartUrl(),
             'productlistpage' => $this->urlProvider->getProductListUrl()
-
         ];
 
         return $this->renderTemplate($content, $this->loadTemplate('index.html'));

@@ -21,11 +21,13 @@ class ProductToProductDetailsViewTransformer
     public function transform(Product $product): ProductDetailsView
     {
         return new ProductDetailsView(
+            $product->getId(),
             $product->getName(),
             $product->getPrice(),
             $product->getType(),
             $product->getDescription(),
-            $this->urlProvider->getProductListUrl()
+            $this->urlProvider->getProductListUrl(),
+            $this->urlProvider->getAddToCartUrl()
         );
     }
 }

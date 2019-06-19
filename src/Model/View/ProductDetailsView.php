@@ -4,6 +4,9 @@ namespace Supermarket\Model\View;
 
 class ProductDetailsView
 {
+    /** @var int */
+    private $id;
+
     /** @var string */
     private $name;
 
@@ -19,28 +22,37 @@ class ProductDetailsView
     /** @var string */
     private $productListPageUrl;
 
+    /** @var string */
+    private $addToCartUrl;
+
     public function __construct(
+        int $id,
         string $name,
         string $price,
         string $type,
         string $description,
-        string $productListPageUrl
+        string $productListPageUrl,
+        string $addToCartUrl
     ) {
         $this->name = $name;
         $this->price = $price;
         $this->type = $type;
         $this->description = $description;
         $this->productListPageUrl = $productListPageUrl;
+        $this->id = $id;
+        $this->addToCartUrl = $addToCartUrl;
     }
 
     public function toArray(): array
     {
         return [
+            'product_id' => $this->getId(),
             'name' => $this->getName(),
             'price' => $this->getPrice(),
             'type' => $this->getType(),
             'description' => $this->getDescription(),
-            'url' => $this->getProductListPageUrl(),
+            'product_list_url' => $this->getProductListPageUrl(),
+            'add_to_cart_url' => $this->getAddToCartUrl()
         ];
     }
 
@@ -59,6 +71,11 @@ class ProductDetailsView
         return $this->type;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function getDescription(): string
     {
         return $this->description;
@@ -67,5 +84,10 @@ class ProductDetailsView
     public function getProductListPageUrl(): string
     {
         return $this->productListPageUrl;
+    }
+
+    public function getAddToCartUrl(): string
+    {
+        return $this->addToCartUrl;
     }
 }
