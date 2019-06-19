@@ -12,9 +12,8 @@ class AddToCartRequest
     /** @var int */
     private $quantity;
 
-    public function __construct(int $productId, int$quantity)
+    public function __construct(int $productId, int $quantity)
     {
-
         $this->productId = $productId;
         $this->quantity = $quantity;
     }
@@ -33,8 +32,7 @@ class AddToCartRequest
             throw new InvalidArgumentException (sprintf('Bad argument "product_id: %s".', $id));
         }
 
-        if ($quantity <= 0)
-        {
+        if ($quantity <= 0) {
             throw new InvalidArgumentException(sprintf('Invalid quantity "%s".', $quantity));
         }
 

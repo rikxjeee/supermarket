@@ -10,7 +10,6 @@ class Response
     public const STATUS_PERMANENT_REDIRECT = 301;
     public const STATUS_TEMPORARY_REDIRECT = 302;
 
-
     /**
      * @var string
      */

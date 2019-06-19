@@ -28,7 +28,7 @@ class Request
         return $this->postParams[$string] ?? null;
     }
 
-    public function isPost()
+    public function isPost(): bool
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
