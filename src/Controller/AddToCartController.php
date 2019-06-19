@@ -5,7 +5,9 @@ namespace Supermarket\Controller;
 use InvalidArgumentException;
 use Supermarket\Application\SessionManager;
 use Supermarket\Exception\CouldNotSaveException;
+use Supermarket\Exception\PageNotFoundException;
 use Supermarket\Exception\ProductNotFoundException;
+use Supermarket\Model\AddToCartRequest;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 use Supermarket\Provider\UrlProvider;
@@ -44,12 +46,13 @@ class AddToCartController implements Controller
     {
         try {
             $cartId = $this->sessionManager->getValue('cart_id');
-            $productId = $request->getPostParam('product_id');
-            $quantity = $request->getPostParam('quantity');
+            $addToCartRequest = AddToCartRequest::createFromRequest($request);
+            $productId = $addToCartRequest->getProductId();
+            $quantity = $addToCartRequest->getQuantity();
             $cart = $this->cartRepository->getById($cartId);
             $cart->addProduct($this->productRepository->getProductById($productId), $quantity);
             $this->cartRepository->save($cart);
-
+            $this->sessionManager->setValue('cart_id', $cart->getId());
             return new Response(
                 '',
                 Response::STATUS_TEMPORARY_REDIRECT,
@@ -59,7 +62,7 @@ class AddToCartController implements Controller
             $this->sessionManager->setValue('error_message', $e->getMessage());
             return new Response(
                 '',
-                Response::STATUS_SERVER_ERROR,
+                Response::STATUS_TEMPORARY_REDIRECT,
                 ['Location' => $this->urlProvider->getProductUrl($request->getPostParam('product_id'))]
             );
         } catch (InvalidArgumentException | ProductNotFoundException $e) {
@@ -74,6 +77,6 @@ class AddToCartController implements Controller
 
     public function supports(Request $request): bool
     {
-        return self::SUPPORTED_REQUEST == $request->getQueryParam('page');
+        return self::SUPPORTED_REQUEST == $request->getQueryParam('page') && $request->isPost();
     }
 }

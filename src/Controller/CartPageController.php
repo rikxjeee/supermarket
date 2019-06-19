@@ -43,7 +43,6 @@ class CartPageController implements Controller
 
     public function execute(Request $request): Response
     {
-        $this->sessionManager->setValue('cart_id', 1);
         $cartId = $this->sessionManager->getValue('cart_id');
         $cart = $this->cartRepository->getById($cartId);
         $cartContentView = $this->productToCartContentViewTransformer->transform($cart);

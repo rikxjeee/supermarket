@@ -91,6 +91,7 @@ class HTMLrenderer implements Renderer
     private function renderPage(string $content): string
     {
         $error_message = $this->sessionManager->getValue('error_message');
+        $this->sessionManager->setValue('error_message', '');
         $content = [
             'error_message' => $error_message,
             'content' => $content,
