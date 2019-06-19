@@ -106,7 +106,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getRenderer(): Renderer
     {
-        return new HTMLrenderer($this->config->getTemplateConfig(), $this->getUrlProvider());
+        return new HTMLrenderer($this->config->getTemplateConfig(), $this->getUrlProvider(), $this->getSessionManager());
     }
 
     private function getProductsToProductListViewTransformer(): ProductsToProductListViewTransformer

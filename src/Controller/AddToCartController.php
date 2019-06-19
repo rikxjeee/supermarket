@@ -2,6 +2,7 @@
 
 namespace Supermarket\Controller;
 
+use InvalidArgumentException;
 use Supermarket\Application\SessionManager;
 use Supermarket\Exception\CouldNotSaveException;
 use Supermarket\Exception\ProductNotFoundException;
@@ -52,12 +53,22 @@ class AddToCartController implements Controller
             return new Response(
                 '',
                 Response::STATUS_TEMPORARY_REDIRECT,
-                ['Location' => $this->urlProvider->getAddToCartUrl()]
+                ['Location' => $this->urlProvider->getCartUrl()]
             );
         } catch (CouldNotSaveException $e) {
-            return new Response($e->getMessage(), Response::STATUS_SERVER_ERROR);
-        } catch (ProductNotFoundException $e) {
-            return new Response($e->getMessage(), Response::STATUS_NOT_FOUND);
+            $this->sessionManager->setValue('error_message', $e->getMessage());
+            return new Response(
+                '',
+                Response::STATUS_SERVER_ERROR,
+                ['Location' => $this->urlProvider->getProductUrl($request->getPostParam('product_id'))]
+            );
+        } catch (InvalidArgumentException | ProductNotFoundException $e) {
+            $this->sessionManager->setValue('error_message', $e->getMessage());
+            return new Response(
+                '',
+                Response::STATUS_NOT_FOUND,
+                ['Location' => $this->urlProvider->getProductListUrl()]
+            );
         }
     }
 

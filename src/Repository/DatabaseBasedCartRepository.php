@@ -2,7 +2,6 @@
 
 namespace Supermarket\Repository;
 
-use Exception;
 use PDO;
 use PDOException;
 use Supermarket\Exception\CouldNotSaveException;
@@ -25,7 +24,7 @@ class DatabaseBasedCartRepository implements CartRepository
     public function getById(?int $id): Cart
     {
         if ($id === null) {
-            return new Cart(uniqid());
+            return new Cart(random_int(1,9999));
         }
 
         $fetchCart = $this->mySqlConnection->prepare(
