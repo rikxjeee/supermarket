@@ -125,7 +125,7 @@ class Product
         return $this->getType() === self::TYPE_SOFT_DRINK;
     }
 
-    public function isCrisp()
+    public function isCrisp(): bool
     {
         return $this->getType() === self::TYPE_CRISP;
     }
