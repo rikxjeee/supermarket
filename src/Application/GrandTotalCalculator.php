@@ -19,7 +19,7 @@ class GrandTotalCalculator implements Calculator
     {
         $sum = 0;
         foreach ($this->calculators as $calculator) {
-            $sum = $sum + $calculator->getTotal($cart);
+            $sum += $calculator->getTotal($cart)->getSum();
         }
 
         return new Total('grandtotal', $sum);
