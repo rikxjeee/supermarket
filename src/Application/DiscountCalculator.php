@@ -23,12 +23,7 @@ class DiscountCalculator implements Calculator
         return new Total('discount', $sum);
     }
 
-    /**
-     * @param $cartItems
-     *
-     * @return array
-     */
-    public function getDiscountedItems($cartItems)
+    public function getDiscountedItems($cartItems): array
     {
         return $this->calculateDiscount($cartItems);
     }

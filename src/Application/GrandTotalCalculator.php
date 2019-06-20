@@ -13,10 +13,6 @@ class GrandTotalCalculator
     /** @var Calculator */
     private $discountCalculator;
 
-    /**
-     * @param Calculator $fullPriceCalculator
-     * @param Calculator $discountCalculator
-     */
     public function __construct(Calculator $fullPriceCalculator, Calculator $discountCalculator)
     {
         $this->fullPriceCalculator = $fullPriceCalculator;

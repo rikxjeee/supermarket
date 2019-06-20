@@ -38,14 +38,6 @@ class CartPageController implements Controller
     /** @var TotalToPriceViewTransformer */
     private $totalToPriceViewTransformer;
 
-    /**
-     * @param Renderer                            $renderer
-     * @param ProductToCartContentViewTransformer $productToCartContentViewTransformer
-     * @param TotalToPriceViewTransformer         $totalToPriceViewTransformer
-     * @param SessionManager                      $sessionManager
-     * @param CartRepository                      $cartRepository
-     * @param GrandTotalCalculator                $calculator
-     */
     public function __construct(
         Renderer $renderer,
         ProductToCartContentViewTransformer $productToCartContentViewTransformer,
