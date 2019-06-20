@@ -5,6 +5,7 @@ namespace Supermarket\Renderer;
 use Supermarket\Application\SessionManager;
 use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 use Supermarket\Model\View\CartContentView;
+use Supermarket\Model\View\PriceListView;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
 use Supermarket\Provider\UrlProvider;
@@ -20,8 +21,11 @@ class HTMLrenderer implements Renderer
     /** @var SessionManager */
     private $sessionManager;
 
-    public function __construct(TemplateConfig $templateConfig, UrlProvider $urlProvider, SessionManager $sessionManager)
-    {
+    public function __construct(
+        TemplateConfig $templateConfig,
+        UrlProvider $urlProvider,
+        SessionManager $sessionManager
+    ) {
         $this->templateConfig = $templateConfig;
         $this->urlProvider = $urlProvider;
         $this->sessionManager = $sessionManager;
@@ -44,25 +48,26 @@ class HTMLrenderer implements Renderer
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
+
         return $this->renderPage($content);
     }
 
     public function renderCart(
         CartContentView $cartContentView,
+        PriceListView $priceView,
         string $cartItemsTemplate,
-        string $cartItemsContainerTemplate,
-        string $emptyCartTemplate
+        string $cartItemsContainerTemplate
     ): string {
-
-        if (empty($cartContentView->getItems())) {
-            return $this->renderEmptyCart($emptyCartTemplate);
-        }
 
         $list = '';
         foreach ($cartContentView->getItems() as $item) {
             $list .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
         }
         $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
+
+        foreach ($priceView->getPriceList() as $price) {
+            $list = $this->renderTemplate($price->toArray(), $list);
+        }
 
         return $this->renderPage($list);
     }

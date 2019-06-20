@@ -34,4 +34,9 @@ class CartItem
     {
         $this->quantity += $quantity;
     }
+
+    public function getPrice(): float
+    {
+        return $this->product->getPrice();
+    }
 }

@@ -21,6 +21,7 @@ use Supermarket\Repository\ProductRepository;
 use Supermarket\Transformer\ProductsToProductListViewTransformer;
 use Supermarket\Transformer\ProductToCartContentViewTransformer;
 use Supermarket\Transformer\ProductToProductDetailsViewTransformer;
+use Supermarket\Transformer\TotalToPriceViewTransformer;
 
 class DefaultServiceContainer implements ServiceContainer
 {
@@ -74,8 +75,10 @@ class DefaultServiceContainer implements ServiceContainer
         return new CartPageController(
             $this->getRenderer(),
             $this->getProductToCartContentViewTransformer(),
+            $this->getTotalToPriceViewTransformer(),
             $this->getSessionManager(),
-            $this->getCartRepository()
+            $this->getCartRepository(),
+            $this->getGrandTotalCalculator()
         );
     }
 
@@ -137,5 +140,25 @@ class DefaultServiceContainer implements ServiceContainer
             $this->getProductRepository(),
             $this->getUrlProvider()
         );
+    }
+
+    private function getFullPriceCalculator(): Calculator
+    {
+        return new FullPriceCalculator();
+    }
+
+    private function getDiscountCalculator(): Calculator
+    {
+        return new DiscountCalculator();
+    }
+
+    private function getGrandTotalCalculator(): GrandTotalCalculator
+    {
+        return new GrandTotalCalculator($this->getFullPriceCalculator(), $this->getDiscountCalculator());
+    }
+
+    private function getTotalToPriceViewTransformer()
+    {
+        return new TotalToPriceViewTransformer();
     }
 }
