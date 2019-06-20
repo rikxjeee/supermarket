@@ -5,7 +5,7 @@ namespace Supermarket\Renderer;
 use Supermarket\Application\SessionManager;
 use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 use Supermarket\Model\View\CartContentView;
-use Supermarket\Model\View\PriceListView;
+use Supermarket\Model\View\TotalListView;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
 use Supermarket\Provider\UrlProvider;
@@ -54,22 +54,28 @@ class HTMLrenderer implements Renderer
 
     public function renderCart(
         CartContentView $cartContentView,
-        PriceListView $priceView,
+        TotalListView $totalListView,
         string $cartItemsTemplate,
+        string $totalsTemplate,
         string $cartItemsContainerTemplate
     ): string {
 
-        $list = '';
+        $cartItemList = '';
+        $totalList = '';
         foreach ($cartContentView->getItems() as $item) {
-            $list .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
-        }
-        $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
-
-        foreach ($priceView->getPriceList() as $price) {
-            $list = $this->renderTemplate($price->toArray(), $list);
+            $cartItemList .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
         }
 
-        return $this->renderPage($list);
+        foreach ($totalListView->getPriceList() as $total) {
+            $totalList .= $this->renderTemplate([
+                'type' => $total->getType(),
+                'amount' => $total->getPrice()
+                ], $this->loadTemplate($totalsTemplate)
+            );
+        }
+        $cartItemList = $this->renderTemplate(['cartitems' => $cartItemList, 'totals' => $totalList], $this->loadTemplate($cartItemsContainerTemplate));
+
+        return $this->renderPage($cartItemList);
     }
 
     public function renderEmptyCart(string $template): string

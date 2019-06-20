@@ -1,8 +1,8 @@
 <?php
 
-namespace Supermarket\Model\View\Price;
+namespace Supermarket\Model\View\TotalView;
 
-class Price
+class TotalView
 {
     /** @var string */
     private $type;

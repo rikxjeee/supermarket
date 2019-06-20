@@ -9,7 +9,7 @@ use Supermarket\Model\Request;
 use Supermarket\Model\Response;
 use Supermarket\Renderer\Renderer;
 use Supermarket\Repository\CartRepository;
-use Supermarket\Transformer\TotalToPriceViewTransformer;
+use Supermarket\Transformer\TotalToTotalListViewTransformer;
 use supermarket\Transformer\ProductToCartContentViewTransformer;
 
 class CartPageController implements Controller
@@ -35,13 +35,13 @@ class CartPageController implements Controller
     /** @var Calculator */
     private $calculator;
 
-    /** @var TotalToPriceViewTransformer */
+    /** @var TotalToTotalListViewTransformer */
     private $totalToPriceViewTransformer;
 
     public function __construct(
         Renderer $renderer,
         ProductToCartContentViewTransformer $productToCartContentViewTransformer,
-        TotalToPriceViewTransformer $totalToPriceViewTransformer,
+        TotalToTotalListViewTransformer $totalToPriceViewTransformer,
         SessionManager $sessionManager,
         CartRepository $cartRepository,
         GrandTotalCalculator $calculator
@@ -60,7 +60,7 @@ class CartPageController implements Controller
         $cart = $this->cartRepository->getById($cartId);
         if (empty($cart->getItems())) {
             $content = $this->renderer->renderEmptyCart('cart/empty_cart.html');
-            return  new Response($content);
+            return new Response($content);
         }
 
         $totals[] = $this->calculator->getTotal($cart);
@@ -71,7 +71,8 @@ class CartPageController implements Controller
             $cartContentView,
             $pricesView,
             'cart/item/item.html',
-            'cart/cart.html',
+            'cart/item/total.html',
+            'cart/cart.html'
         );
 
         return new Response($content);

@@ -5,7 +5,7 @@ namespace Supermarket\Application;
 use Supermarket\Model\Cart;
 use Supermarket\Model\Total;
 
-class FullPriceCalculator implements Calculator
+class SubTotalCalculator implements Calculator
 {
     public function getTotal(Cart $cart): Total
     {
@@ -14,6 +14,6 @@ class FullPriceCalculator implements Calculator
             $sum += $item->getProduct()->getPrice() * $item->getQuantity();
         }
 
-        return new Total('fullprice', $sum);
+        return new Total('Subtotal:', $sum);
     }
 }

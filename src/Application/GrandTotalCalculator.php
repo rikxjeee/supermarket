@@ -22,7 +22,7 @@ class GrandTotalCalculator implements Calculator
             $sum += $calculator->getTotal($cart)->getSum();
         }
 
-        return new Total('grandtotal', $sum);
+        return new Total('Grand Total', $sum);
     }
 
     /**

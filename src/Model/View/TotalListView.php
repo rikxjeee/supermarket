@@ -2,15 +2,15 @@
 
 namespace Supermarket\Model\View;
 
-use Supermarket\Model\View\Price\Price;
+use Supermarket\Model\View\TotalView\TotalView;
 
-class PriceListView
+class TotalListView
 {
-    /** @var Price[] */
+    /** @var TotalView[] */
     private $priceList;
 
     /**
-     * @param Price[] $priceList
+     * @param TotalView[] $priceList
      */
     public function __construct(array $priceList)
     {
@@ -18,7 +18,7 @@ class PriceListView
     }
 
     /**
-     * @return Price[]
+     * @return TotalView[]
      */
     public function getPriceList(): array
     {

@@ -3,7 +3,7 @@
 namespace Supermarket\Renderer;
 
 use Supermarket\Model\View\CartContentView;
-use Supermarket\Model\View\PriceListView;
+use Supermarket\Model\View\TotalListView;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
 
@@ -19,8 +19,9 @@ interface Renderer
 
     public function renderCart(
         CartContentView $cartItemsView,
-        PriceListView $priceView,
+        TotalListView $totalListView,
         string $cartItemsTemplate,
+        string $totalsTemplate,
         string $cartItemsContainerTemplate
     ): string;
 

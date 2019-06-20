@@ -21,7 +21,7 @@ use Supermarket\Repository\ProductRepository;
 use Supermarket\Transformer\ProductsToProductListViewTransformer;
 use Supermarket\Transformer\ProductToCartContentViewTransformer;
 use Supermarket\Transformer\ProductToProductDetailsViewTransformer;
-use Supermarket\Transformer\TotalToPriceViewTransformer;
+use Supermarket\Transformer\TotalToTotalListViewTransformer;
 
 class DefaultServiceContainer implements ServiceContainer
 {
@@ -142,9 +142,9 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
-    private function getFullPriceCalculator(): Calculator
+    private function getSubTotalCalculator(): Calculator
     {
-        return new FullPriceCalculator();
+        return new SubTotalCalculator();
     }
 
     private function getDiscountCalculator(): Calculator
@@ -154,24 +154,16 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getGrandTotalCalculator(): GrandTotalCalculator
     {
-        return new GrandTotalCalculator($this->getCalculatorArray());
+        return new GrandTotalCalculator(
+            [
+                $this->getSubTotalCalculator(),
+                $this->getDiscountCalculator(),
+            ]
+        );
     }
 
-    private function getTotalToPriceViewTransformer(): TotalToPriceViewTransformer
+    private function getTotalToPriceViewTransformer(): TotalToTotalListViewTransformer
     {
-        return new TotalToPriceViewTransformer();
-    }
-
-    /**
-     * @return Calculator[]
-     */
-    private function getCalculatorArray(): array
-    {
-        $calculators = [
-            $this->getFullPriceCalculator(),
-            $this->getDiscountCalculator(),
-        ];
-
-        return $calculators;
+        return new TotalToTotalListViewTransformer();
     }
 }

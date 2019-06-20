@@ -13,19 +13,12 @@ class DiscountCalculator implements Calculator
 
     public function getTotal(Cart $cart): Total
     {
-        $cartItems = $cart->getItems();
         $sum = 0;
-        $items = $this->calculateDiscount($cartItems);
-        foreach ($items as $item) {
+        foreach ($this->calculateDiscount($cart->getItems()) as $item) {
             $sum -= $item->getSum();
         }
 
-        return new Total('discount', $sum);
-    }
-
-    public function getDiscountedItems($cartItems): array
-    {
-        return $this->calculateDiscount($cartItems);
+        return new Total('Discount', $sum);
     }
 
     /**
@@ -112,24 +105,22 @@ class DiscountCalculator implements Calculator
      */
     private function getGeneralDiscount($cartItems): array
     {
-        $discount = [];
+        $discounts = [];
         foreach ($cartItems as $cartItem) {
             $price = $cartItem->getPrice();
             $quantity = $cartItem->getQuantity();
 
             if ((date('l') == 'Monday') && ($cartItem->getProduct()->isSoftDrink())) {
-                $discount[] =
-                    new Total($cartItem->getProduct()->getName(), $quantity * ($price / 2));
+                $discounts[] = new Total($cartItem->getProduct()->getName(), $quantity * ($price / 2));
             }
             if ($cartItem->getProduct()->isCrisp()) {
                 $amount = ((int)($quantity / 2)) * 0.5;
                 if ($amount > 0) {
-                    $discount[] =
-                        new Total(Product::TYPE_CRISP, ((int)($quantity / 2)) * 0.5);
+                    $discounts[] = new Total(Product::TYPE_CRISP, ((int)($quantity / 2)) * 0.5);
                 }
             }
         }
 
-        return $discount;
+        return $discounts;
     }
 }
