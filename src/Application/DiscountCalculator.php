@@ -71,7 +71,7 @@ class DiscountCalculator implements Calculator
     }
 
     /**
-     * @param array $cartItems
+     * @param CartItem[] $cartItems
      *
      * @return Total|null
      */
@@ -80,10 +80,12 @@ class DiscountCalculator implements Calculator
         $menuItemTotal = 0;
         $menus = $this->getNumberOfMenus($cartItems);
         $remainingCartItems = [];
+        $menuItems = self::MENU_ITEMS;
         foreach ($cartItems as $cartItem) {
             $remainingQuantity = $cartItem->getQuantity();
-            if (in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
+            if (in_array($cartItem->getProduct()->getType(), $menuItems)) {
                 $menuItemTotal += $cartItem->getPrice() * $menus;
+                $menuItems = array_diff($menuItems, [$cartItem->getProduct()->getType()]);
                 $remainingQuantity -= $menus;
             }
             if ($remainingQuantity > 0) {
