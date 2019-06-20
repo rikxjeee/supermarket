@@ -6,6 +6,10 @@ use InvalidArgumentException;
 
 class Product
 {
+    public const TYPE_SANDWICH = 'Sandwich';
+    public const TYPE_SOFT_DRINK = 'Soft Drink';
+    public const TYPE_CRISP = 'Crisps';
+
     private const KEY_ID = 'id';
     private const KEY_NAME = 'name';
     private const KEY_PRICE = 'price';
@@ -114,5 +118,15 @@ class Product
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function isSoftDrink(): bool
+    {
+        return $this->getType() === self::TYPE_SOFT_DRINK;
+    }
+
+    public function isCrisp(): bool
+    {
+        return $this->getType() === self::TYPE_CRISP;
     }
 }

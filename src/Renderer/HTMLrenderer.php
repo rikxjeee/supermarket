@@ -5,6 +5,7 @@ namespace Supermarket\Renderer;
 use Supermarket\Application\SessionManager;
 use Supermarket\Model\Config\ApplicationConfig\TemplateConfig;
 use Supermarket\Model\View\CartContentView;
+use Supermarket\Model\View\TotalListView;
 use Supermarket\Model\View\ProductDetailsView;
 use Supermarket\Model\View\ProductListView;
 use Supermarket\Provider\UrlProvider;
@@ -20,8 +21,11 @@ class HTMLrenderer implements Renderer
     /** @var SessionManager */
     private $sessionManager;
 
-    public function __construct(TemplateConfig $templateConfig, UrlProvider $urlProvider, SessionManager $sessionManager)
-    {
+    public function __construct(
+        TemplateConfig $templateConfig,
+        UrlProvider $urlProvider,
+        SessionManager $sessionManager
+    ) {
         $this->templateConfig = $templateConfig;
         $this->urlProvider = $urlProvider;
         $this->sessionManager = $sessionManager;
@@ -44,27 +48,37 @@ class HTMLrenderer implements Renderer
     public function renderProductDetails(ProductDetailsView $product, string $productDetailsTemplate): string
     {
         $content = $this->renderTemplate($product->toArray(), $this->loadTemplate($productDetailsTemplate));
+
         return $this->renderPage($content);
     }
 
     public function renderCart(
         CartContentView $cartContentView,
+        TotalListView $totalListView,
         string $cartItemsTemplate,
-        string $cartItemsContainerTemplate,
-        string $emptyCartTemplate
+        string $totalsTemplate,
+        string $cartItemsContainerTemplate
     ): string {
 
-        if (empty($cartContentView->getItems())) {
-            return $this->renderEmptyCart($emptyCartTemplate);
-        }
-
-        $list = '';
+        $cartItemList = '';
+        $totalList = '';
         foreach ($cartContentView->getItems() as $item) {
-            $list .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
+            $cartItemList .= $this->renderTemplate($item->toArray(), $this->loadTemplate($cartItemsTemplate));
         }
-        $list = $this->renderTemplate(['cartitems' => $list], $this->loadTemplate($cartItemsContainerTemplate));
 
-        return $this->renderPage($list);
+        foreach ($totalListView->getPriceList() as $total) {
+            $totalList .= $this->renderTemplate([
+                'type' => $total->getType(),
+                'amount' => $total->getPrice()
+                ], $this->loadTemplate($totalsTemplate)
+            );
+        }
+        $cart = $this->renderTemplate(
+                 ['cartitems' => $cartItemList, 'totals' => $totalList],
+                 $this->loadTemplate($cartItemsContainerTemplate)
+                );
+
+        return $this->renderPage($cart);
     }
 
     public function renderEmptyCart(string $template): string
