@@ -75,7 +75,7 @@ class DefaultServiceContainer implements ServiceContainer
         return new CartPageController(
             $this->getRenderer(),
             $this->getProductToCartContentViewTransformer(),
-            $this->getTotalToPriceViewTransformer(),
+            $this->getTotalToTotalListViewTransformer(),
             $this->getSessionManager(),
             $this->getCartRepository(),
             $this->getGrandTotalCalculator()
@@ -162,7 +162,7 @@ class DefaultServiceContainer implements ServiceContainer
         );
     }
 
-    private function getTotalToPriceViewTransformer(): TotalToTotalListViewTransformer
+    private function getTotalToTotalListViewTransformer(): TotalToTotalListViewTransformer
     {
         return new TotalToTotalListViewTransformer();
     }

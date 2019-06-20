@@ -73,9 +73,12 @@ class HTMLrenderer implements Renderer
                 ], $this->loadTemplate($totalsTemplate)
             );
         }
-        $cartItemList = $this->renderTemplate(['cartitems' => $cartItemList, 'totals' => $totalList], $this->loadTemplate($cartItemsContainerTemplate));
+        $cart = $this->renderTemplate(
+                 ['cartitems' => $cartItemList, 'totals' => $totalList],
+                 $this->loadTemplate($cartItemsContainerTemplate)
+                );
 
-        return $this->renderPage($cartItemList);
+        return $this->renderPage($cart);
     }
 
     public function renderEmptyCart(string $template): string
