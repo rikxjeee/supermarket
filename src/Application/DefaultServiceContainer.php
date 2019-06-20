@@ -154,11 +154,24 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getGrandTotalCalculator(): GrandTotalCalculator
     {
-        return new GrandTotalCalculator($this->getFullPriceCalculator(), $this->getDiscountCalculator());
+        return new GrandTotalCalculator($this->getCalculatorArray());
     }
 
     private function getTotalToPriceViewTransformer(): TotalToPriceViewTransformer
     {
         return new TotalToPriceViewTransformer();
+    }
+
+    /**
+     * @return Calculator[]
+     */
+    private function getCalculatorArray(): array
+    {
+        $calculators = [
+            $this->getFullPriceCalculator(),
+            $this->getDiscountCalculator(),
+        ];
+
+        return $calculators;
     }
 }

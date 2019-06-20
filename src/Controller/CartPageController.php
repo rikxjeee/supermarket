@@ -63,9 +63,8 @@ class CartPageController implements Controller
             return  new Response($content);
         }
 
-        $totals[] = $this->calculator->getFullPrice($cart);
-        $totals[] = $this->calculator->getDiscount($cart);
         $totals[] = $this->calculator->getTotal($cart);
+        $totals = array_merge($totals, $this->calculator->getIndividualTotals($cart));
         $pricesView = $this->totalToPriceViewTransformer->transform($totals);
         $cartContentView = $this->productToCartContentViewTransformer->transform($cart);
         $content = $this->renderer->renderCart(

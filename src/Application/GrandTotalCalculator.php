@@ -5,36 +5,38 @@ namespace Supermarket\Application;
 use Supermarket\Model\Cart;
 use Supermarket\Model\Total;
 
-class GrandTotalCalculator
+class GrandTotalCalculator implements Calculator
 {
-    /** @var Calculator */
-    private $fullPriceCalculator;
+    /** @var Calculator[] */
+    private $calculators;
 
-    /** @var Calculator */
-    private $discountCalculator;
-
-    public function __construct(Calculator $fullPriceCalculator, Calculator $discountCalculator)
+    public function __construct(array $calculators)
     {
-        $this->fullPriceCalculator = $fullPriceCalculator;
-        $this->discountCalculator = $discountCalculator;
+        $this->calculators = $calculators;
     }
 
     public function getTotal(Cart $cart): Total
     {
-        $fullPrice = $this->getFullPrice($cart)->getSum();
-        $discount = $this->getDiscount($cart)->getSum();
-        $sum = $fullPrice + $discount;
+        $sum = 0;
+        foreach ($this->calculators as $calculator) {
+            $sum = $sum + $calculator->getTotal($cart);
+        }
 
         return new Total('grandtotal', $sum);
     }
 
-    public function getFullPrice(Cart $cart): Total
+    /**
+     * @param Cart $cart
+     *
+     * @return Total[]
+     */
+    public function getIndividualTotals(Cart $cart): array
     {
-        return $this->fullPriceCalculator->getTotal($cart);
-    }
+        $totals = [];
+        foreach ($this->calculators as $calculator) {
+            $totals[] = $calculator->getTotal($cart);
+        }
 
-    public function getDiscount(Cart $cart): Total
-    {
-        return $this->discountCalculator->getTotal($cart);
+        return $totals;
     }
 }
