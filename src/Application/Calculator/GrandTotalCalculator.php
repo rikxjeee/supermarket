@@ -1,40 +1,37 @@
 <?php
 
-namespace Supermarket\Application;
+namespace Supermarket\Application\Calculator;
 
 use Supermarket\Model\Cart;
+use Supermarket\Model\CartItem;
 use Supermarket\Model\Total;
 
-class GrandTotalCalculator implements Calculator
+class SandwichMenuDiscountCalculator
 {
     /** @var Calculator[] */
     private $calculators;
+
+    /** @var CartItem[] */
+    private $remainingItems;
 
     public function __construct(array $calculators)
     {
         $this->calculators = $calculators;
     }
 
-    public function getTotal(Cart $cart): Total
+    public function getTotal(Cart $cart): array
     {
+        $this->remainingItems = $cart->getItems();
+
         $sum = 0;
         foreach ($this->calculators as $calculator) {
             $sum += $calculator->getTotal($cart)->getSum();
         }
+        $totals[] = new Total('Grand total', $sum);
 
-        return new Total('Grand Total', $sum);
-    }
-
-    /**
-     * @param Cart $cart
-     *
-     * @return Total[]
-     */
-    public function getIndividualTotals(Cart $cart): array
-    {
-        $totals = [];
         foreach ($this->calculators as $calculator) {
             $totals[] = $calculator->getTotal($cart);
+            $this->remainingItems = $calculator->getTotal($cart);
         }
 
         return $totals;
