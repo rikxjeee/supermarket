@@ -4,6 +4,12 @@ namespace Supermarket\Application;
 
 use PDO;
 use Supermarket\Application;
+use Supermarket\Application\Calculator\Calculator;
+use Supermarket\Application\Calculator\CrispsDiscountCalculator;
+use Supermarket\Application\Calculator\SandwichMenuDiscountCalculator;
+use Supermarket\Application\Calculator\GrandTotalCalculator;
+use Supermarket\Application\Calculator\SoftDrinkDiscountCalculator;
+use Supermarket\Application\Calculator\SubTotalCalculator;
 use Supermarket\Controller\AddToCartController;
 use Supermarket\Controller\CartPageController;
 use Supermarket\Controller\Controller;
@@ -147,9 +153,9 @@ class DefaultServiceContainer implements ServiceContainer
         return new SubTotalCalculator();
     }
 
-    private function getDiscountCalculator(): Calculator
+    private function getSandwichMenuDiscountCalculator(): Calculator
     {
-        return new DiscountCalculator();
+        return new SandwichMenuDiscountCalculator();
     }
 
     private function getGrandTotalCalculator(): GrandTotalCalculator
@@ -157,7 +163,9 @@ class DefaultServiceContainer implements ServiceContainer
         return new GrandTotalCalculator(
             [
                 $this->getSubTotalCalculator(),
-                $this->getDiscountCalculator(),
+                $this->getSandwichMenuDiscountCalculator(),
+                $this->getSoftDrinkDiscountCalculator(),
+                $this->getCrispsDiscountCalculator()
             ]
         );
     }
@@ -165,5 +173,15 @@ class DefaultServiceContainer implements ServiceContainer
     private function getTotalToTotalListViewTransformer(): TotalToTotalListViewTransformer
     {
         return new TotalToTotalListViewTransformer();
+    }
+
+    private function getSoftDrinkDiscountCalculator(): Calculator
+    {
+        return new SoftDrinkDiscountCalculator();
+    }
+
+    private function getCrispsDiscountCalculator(): Calculator
+    {
+        return new CrispsDiscountCalculator();
     }
 }

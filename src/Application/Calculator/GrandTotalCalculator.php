@@ -6,7 +6,7 @@ use Supermarket\Model\Cart;
 use Supermarket\Model\CartItem;
 use Supermarket\Model\Total;
 
-class SandwichMenuDiscountCalculator
+class GrandTotalCalculator
 {
     /** @var Calculator[] */
     private $calculators;
@@ -25,13 +25,16 @@ class SandwichMenuDiscountCalculator
 
         $sum = 0;
         foreach ($this->calculators as $calculator) {
-            $sum += $calculator->getTotal($cart)->getSum();
+            $sum += $calculator->getTotal($cart->getItems())->getSum();
         }
         $totals[] = new Total('Grand total', $sum);
 
         foreach ($this->calculators as $calculator) {
-            $totals[] = $calculator->getTotal($cart);
-            $this->remainingItems = $calculator->getTotal($cart);
+            $currentTotal = $calculator->getTotal($this->remainingItems);
+            if ($currentTotal->getSum() != 0) {
+                $totals[] = $currentTotal;
+            }
+            $this->remainingItems = $currentTotal->getRemainingItems();
         }
 
         return $totals;

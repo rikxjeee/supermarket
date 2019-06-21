@@ -2,8 +2,8 @@
 
 namespace Supermarket\Controller;
 
-use Supermarket\Application\Calculator;
-use Supermarket\Application\GrandTotalCalculator;
+use Supermarket\Application\Calculator\Calculator;
+use Supermarket\Application\Calculator\GrandTotalCalculator;
 use Supermarket\Application\SessionManager;
 use Supermarket\Model\Request;
 use Supermarket\Model\Response;
@@ -63,8 +63,7 @@ class CartPageController implements Controller
             return new Response($content);
         }
 
-        $totals[] = $this->calculator->getTotal($cart);
-        $totals = array_merge($totals, $this->calculator->getIndividualTotals($cart));
+        $totals = $this->calculator->getTotal($cart);
         $pricesView = $this->totalToPriceViewTransformer->transform($totals);
         $cartContentView = $this->productToCartContentViewTransformer->transform($cart);
         $content = $this->renderer->renderCart(

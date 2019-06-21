@@ -1,11 +1,17 @@
 <?php
 
-namespace Supermarket\Application;
+namespace Supermarket\Application\Calculator;
 
 use Supermarket\Model\Cart;
+use Supermarket\Model\CartItem;
 use Supermarket\Model\Total;
 
 interface Calculator
 {
-    public function getTotal(Cart $cart): Total;
+    /**
+     * @param array $cartItem
+     *
+     * @return Total
+     */
+    public function getTotal(array $cartItem): Total;
 }
