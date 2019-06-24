@@ -8,19 +8,19 @@ use Supermarket\Model\Total;
 class CrispsDiscountCalculator implements Calculator
 {
     /**
-     * @param CartItem[] $cartItems
+     * @param CartItem[] $cartCartItems
      *
      * @return Total
      */
-    public function getTotal(array $cartItems): Total
+    public function getTotal(array $cartCartItems): Total
     {
-        foreach ($cartItems as $item) {
+        foreach ($cartCartItems as $item) {
             $quantity = $item->getQuantity();
 
             if ($item->getProduct()->isCrisp()) {
 
-                $currentItems[] = new CartItem($item->getProduct(), $item->getQuantity());
-                $remainingItems = array_udiff($cartItems, $currentItems, function (CartItem $first, CartItem $second) {
+                $currentItems[] = new CartItem($item->getProduct(), $quantity);
+                $remainingItems = array_udiff($cartCartItems, $currentItems, function (CartItem $first, CartItem $second) {
                     if ($first->getProduct()->getId() === $second->getProduct()->getId()) {
                         return 1;
                     }
@@ -34,5 +34,6 @@ class CrispsDiscountCalculator implements Calculator
                 }
             }
         }
+        return new Total('Crisps discount', 0, $cartCartItems);
     }
 }

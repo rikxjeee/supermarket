@@ -8,20 +8,20 @@ use Supermarket\Model\Total;
 class SoftDrinkDiscountCalculator implements Calculator
 {
     /**
-     * @param CartItem[] $items
+     * @param CartItem[] $cartItems
      *
      * @return Total
      */
-    public function getTotal(array $items): Total
+    public function getTotal(array $cartItems): Total
     {
         $sum = 0;
-        foreach ($items as $item) {
+        foreach ($cartItems as $item) {
             $price = $item->getPrice();
             $quantity = $item->getQuantity();
 
-            if ((date('l') == 'Friday') && ($item->getProduct()->isSoftDrink()) && $item->getQuantity() > 1) {
+            if ((date('l') == 'Monday') && ($item->getProduct()->isSoftDrink()) && $item->getQuantity() > 1) {
                 $currentItems[] = new CartItem($item->getProduct(), $item->getQuantity());
-                $remainingItems = array_udiff($items, $currentItems, function (CartItem $first, CartItem $second) {
+                $remainingItems = array_udiff($cartItems, $currentItems, function (CartItem $first, CartItem $second) {
                     if ($first->getProduct()->getId() === $second->getProduct()->getId()) {
 
                         return 1;
@@ -34,6 +34,6 @@ class SoftDrinkDiscountCalculator implements Calculator
             }
         }
 
-        return new Total('Soft Drink discount', $sum);
+        return new Total('Soft Drink discount', $sum, $cartItems);
     }
 }

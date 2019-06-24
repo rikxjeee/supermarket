@@ -8,13 +8,13 @@ use Supermarket\Model\Total;
 
 class SubTotalCalculator implements Calculator
 {
-    public function getTotal(array $items): Total
+    public function getTotal(array $cartItems): Total
     {
         $sum = 0;
-        foreach ($items as $item) {
+        foreach ($cartItems as $item) {
             $sum += $item->getProduct()->getPrice() * $item->getQuantity();
         }
 
-        return new Total('Subtotal:', $sum, $items);
+        return new Total('Subtotal:', $sum, $cartItems);
     }
 }
