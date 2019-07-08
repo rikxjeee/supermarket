@@ -10,7 +10,7 @@ class Total
     /** @var float */
     private $sum;
 
-    /** @var array */
+    /** @var CartItem[] */
     private $remainingItems;
 
     public function __construct(string $type, float $sum, array $remainingItems = [])
@@ -30,6 +30,9 @@ class Total
         return $this->sum;
     }
 
+    /**
+     * @return CartItem[]
+     */
     public function getRemainingItems(): array
     {
         return $this->remainingItems;

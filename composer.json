@@ -7,6 +7,8 @@
     }
   },
   "require": {
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "behat/behat": "^3.5",
+    "phpspec/phpspec": "^5.1"
   }
 }
