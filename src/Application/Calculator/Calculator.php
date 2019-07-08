@@ -2,14 +2,13 @@
 
 namespace Supermarket\Application\Calculator;
 
-use Supermarket\Model\Cart;
 use Supermarket\Model\CartItem;
 use Supermarket\Model\Total;
 
 interface Calculator
 {
     /**
-     * @param array $item
+     * @param CartItem[] $item
      *
      * @return Total
      */
