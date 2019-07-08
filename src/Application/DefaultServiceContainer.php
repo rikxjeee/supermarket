@@ -17,6 +17,7 @@ use Supermarket\Controller\PageNotFoundController;
 use Supermarket\Controller\ProductDetailsPageController;
 use Supermarket\Controller\ProductListPageController;
 use Supermarket\Model\Config\ApplicationConfig;
+use Supermarket\Provider\DiscountProvider;
 use Supermarket\Provider\UrlProvider;
 use Supermarket\Renderer\HTMLrenderer;
 use Supermarket\Renderer\Renderer;
@@ -155,7 +156,7 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getSandwichMenuDiscountCalculator(): Calculator
     {
-        return new SandwichMenuDiscountCalculator();
+        return new SandwichMenuDiscountCalculator($this->getDiscountProvider());
     }
 
     private function getGrandTotalCalculator(): GrandTotalCalculator
@@ -177,11 +178,16 @@ class DefaultServiceContainer implements ServiceContainer
 
     private function getSoftDrinkDiscountCalculator(): Calculator
     {
-        return new SoftDrinkDiscountCalculator();
+        return new SoftDrinkDiscountCalculator($this->getDiscountProvider());
     }
 
     private function getCrispsDiscountCalculator(): Calculator
     {
         return new CrispsDiscountCalculator();
+    }
+
+    private function getDiscountProvider()
+    {
+        return new DiscountProvider();
     }
 }

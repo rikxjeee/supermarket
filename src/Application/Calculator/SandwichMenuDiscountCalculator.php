@@ -3,12 +3,18 @@
 namespace Supermarket\Application\Calculator;
 
 use Supermarket\Model\CartItem;
-use Supermarket\Model\Product;
 use Supermarket\Model\Total;
+use Supermarket\Provider\DiscountProvider;
 
 class SandwichMenuDiscountCalculator implements Calculator
 {
-    const MENU_ITEMS = [Product::TYPE_SANDWICH, Product::TYPE_SOFT_DRINK, Product::TYPE_CRISP];
+    /** @var DiscountProvider */
+    private $discountProvider;
+
+    public function __construct(DiscountProvider $discountProvider)
+    {
+        $this->discountProvider = $discountProvider;
+    }
 
     /**
      * @param CartItem[] $cartItems
@@ -20,18 +26,21 @@ class SandwichMenuDiscountCalculator implements Calculator
         $menuItemTotal = 0;
         $menus = $this->getNumberOfMenus($cartItems);
         $remainingCartItems = [];
+        $menu = [];
         foreach ($cartItems as $cartItem) {
             $remainingQuantity = $cartItem->getQuantity();
-            if (in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
-                $menuItemTotal += $cartItem->getPrice() * $menus;
-                $remainingQuantity -= $menus;
+            if (in_array($cartItem->getProduct()->getType(), $this->discountProvider->getMenuItems())) {
+                if (!isset($menu[$cartItem->getProduct()->getType()])){
+                    $remainingQuantity -= $menus;
+                    $menuItemTotal += $cartItem->getPrice() * $menus;
+                    $menu[$cartItem->getProduct()->getType()] = true;
+                }
             }
             if ($remainingQuantity > 0) {
                 $remainingCartItems[] = new CartItem($cartItem->getProduct(), $remainingQuantity);
             }
         }
-        $amount = $menuItemTotal - $menus * 3;
-
+        $amount = $menuItemTotal - $menus * $this->discountProvider->getMenuPrice();
         return new Total('Sandwich menu', -$amount, $remainingCartItems);
     }
 
@@ -45,7 +54,7 @@ class SandwichMenuDiscountCalculator implements Calculator
         $minimum = null;
         $menu = [];
         foreach ($cartItems as $cartItem) {
-            if (!in_array($cartItem->getProduct()->getType(), self::MENU_ITEMS)) {
+            if (!in_array($cartItem->getProduct()->getType(), $this->discountProvider->getMenuItems())) {
                 continue;
             }
             $menu[$cartItem->getProduct()->getType()] = true;
@@ -53,7 +62,7 @@ class SandwichMenuDiscountCalculator implements Calculator
                 $minimum = $cartItem->getQuantity();
             }
         }
-        foreach (self::MENU_ITEMS as $MENU_ITEM) {
+        foreach ($this->discountProvider->getMenuItems() as $MENU_ITEM) {
             if (!isset($menu[$MENU_ITEM])) {
                 return 0;
             }

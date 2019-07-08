@@ -11,9 +11,6 @@ class GrandTotalCalculator
     /** @var Calculator[] */
     private $calculators;
 
-    /** @var CartItem[] */
-    private $remainingItems;
-
     public function __construct(array $calculators)
     {
         $this->calculators = $calculators;
@@ -21,21 +18,17 @@ class GrandTotalCalculator
 
     public function getTotal(Cart $cart): array
     {
-        $this->remainingItems = $cart->getItems();
-
+        $currentRemainingItems = $cart->getItems();
         $sum = 0;
         foreach ($this->calculators as $calculator) {
-            $sum += $calculator->getTotal($cart->getItems())->getSum();
-        }
-        $totals[] = new Total('Grand total', $sum);
-
-        foreach ($this->calculators as $calculator) {
-            $currentTotal = $calculator->getTotal($this->remainingItems);
+            $sum += $calculator->getTotal($currentRemainingItems)->getSum();
+            $currentTotal = $calculator->getTotal($currentRemainingItems);
+            $currentRemainingItems = $currentTotal->getRemainingItems();
             if ($currentTotal->getSum() != 0) {
-                $totals[] = $currentTotal;
+                $totals[$currentTotal->getType()] = $currentTotal;
             }
-            $this->remainingItems = $currentTotal->getRemainingItems();
         }
+        $totals['Grand Total'] = new Total('Grand total', $sum);
 
         return $totals;
     }

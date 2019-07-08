@@ -9,9 +9,9 @@ use Supermarket\Model\Total;
 interface Calculator
 {
     /**
-     * @param array $cartItem
+     * @param array $item
      *
      * @return Total
      */
-    public function getTotal(array $cartItem): Total;
+    public function getTotal(array $item): Total;
 }
