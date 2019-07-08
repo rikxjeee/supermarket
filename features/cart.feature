@@ -1,7 +1,7 @@
 Feature: Cart functionality
   As a customer
   I want to add items to my cart
-  So i can buy stuff
+  So i can buy various products
 
   Background:
     Given the following products exists:
