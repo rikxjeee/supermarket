@@ -1,5 +1,0 @@
-suites:
-  test_suite:
-    namespace:  Supermarket
-    psr4_prefix:  Supermarket
-    src_path:  src/

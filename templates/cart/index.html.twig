@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-sm table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>
+                    <a href="{{ path('product.details', { id: item.product.id }) }}">{{ item.product.name }}</a>
+                </td>
+                <td>
+                    {{ item.quantity }}
+                </td>
+                <td>
+                    {{ item.product.price }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+        <table class="table table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                </tr>
+            </thead>
+            {% for total in totals %}
+                <tr>
+                    <td>
+                        {{ total.type }}
+                    </td>
+                    <td>
+                        {{ total.sum }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}

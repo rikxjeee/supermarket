@@ -1,18 +1,15 @@
 <?php
 
-namespace Supermarket\Repository;
+namespace App\Repository;
 
-use Supermarket\Exception\CouldNotSaveException;
-use Supermarket\Model\Cart;
+use App\Entity\Cart;
 
 interface CartRepository
 {
-    public function getById(int $id): Cart;
+    public function getCart(int $id): Cart;
 
     /**
      * @param Cart $cart
-     *
-     * @throws CouldNotSaveException
-     */
+     **/
     public function save(Cart $cart): void;
 }

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    New product
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_widget(form.name, {'attr': { 'placeholder': 'Product name' }}) }}
+        {{ form_widget(form.type, {'attr': { 'placeholder' : 'Product type'}}) }}
+        {{ form_widget(form.description, {'attr': { 'placeholder' : 'Product description'}}) }}
+        {{ form_widget(form.price, {'attr': { 'placeholder' : 'Product price', 'min' : '0', 'step' : '0.01'}}) }}
+        <input type="submit" class="btn btn-primary">
+    {{ form_end(form) }}
+{% endblock %}
+

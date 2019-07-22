@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block body %}
+    <table class="table table-sm">
+        <thead class="thead-dark">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                   {{ product.name }}
+                </td>
+                <td>
+                    {{ product.type }}
+                </td>
+                <td>
+                    {{ product.description }}
+                </td>
+                <td>
+                    {{ product.price }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+            <tr>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('products') }}">Back</a>
+                </td>
+                <td>
+                    <form name="add" action="{{ path('cart.add') }}" method="post">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="submit" class="btn btn-primary" value="Add to cart">
+                    </form>
+                </td>
+            </tr>
+        </table>
+{% endblock %}
