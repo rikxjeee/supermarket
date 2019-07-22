@@ -5,10 +5,10 @@ Feature: Cart functionality
 
   Background:
     Given the following products exists:
-      | product_id | product_name | product_price | product_type |
-      | 1          | Coke         | 0.8           | Soft Drink   |
-      | 2          | Sandwich     | 2             | Sandwich     |
-      | 3          | Crisps       | 0.75          | Crisps       |
+      | product_name | product_desc     | product_price | product_type | product_id |
+      | Coke         | A bottle of coke | 0.8           | Soft Drink   | 1          |
+      | Sandwich     | A sandwich       | 2             | Sandwich     | 2          |
+      | Crisps       | Some crisps      | 0.75          | Crisps       | 3          |
     Then I should have "3" product in my repository
 
   @Monday_drink_discount

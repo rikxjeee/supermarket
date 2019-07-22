@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\Tests\Behat\:
+    resource: '../tests/Behat/*'
+
+  App\Repository\ProductRepository: '@App\Tests\Behat\Repository\MemoryBasedProductRepository'
+  App\Repository\CartRepository: '@App\Tests\Behat\Repository\MemoryBasedCartRepository'

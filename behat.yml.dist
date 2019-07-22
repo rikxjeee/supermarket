@@ -1,0 +1,14 @@
+default:
+    suites:
+        default:
+            contexts:
+                - CartContext:
+                    productRepository: '@App\Tests\Behat\Repository\MemoryBasedProductRepository'
+                    cartRepository: '@App\Tests\Behat\Repository\MemoryBasedCartRepository'
+                    calculator: '@App\Service\Calculator\GrandTotalCalculator'
+
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
