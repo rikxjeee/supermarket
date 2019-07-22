@@ -32,3 +32,14 @@ https://github.com/rikxjeee/supermarket/tree/Database
 ```
 #
 
+##### Fifth version, added phpspec and behat tests
+```
+https://github.com/rikxjeee/supermarket/tree/behat-testing
+```
+#
+
+##### Sixth version, integrated symfony framework
+```
+https://github.com/rikxjeee/supermarket/tree/symfony
+```
+#
