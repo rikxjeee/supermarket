@@ -1,3 +1,6 @@
+/bin/
+/config/
+
 
 ###> symfony/framework-bundle ###
 /.env.local
