@@ -18,7 +18,6 @@ class CrispsDiscountCalculatorSpec extends ObjectBehavior
 
     function it_could_calculate_discounts()
     {
-
         $items = [
             $item1 = new CartItem(new Product('french fries', Product::TYPE_CRISP, 'Crisps', 1, 1), 2),
             $item2 = new CartItem(new Product('chips', Product::TYPE_CRISP, 'Crisps', 2, 2), 1),

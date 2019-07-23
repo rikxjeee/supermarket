@@ -16,8 +16,8 @@ class CartController extends AbstractController
 {
     /**
      * @Route("/cart", name="cart.content")
-     * @param SessionInterface     $session
      *
+     * @param SessionInterface     $session
      * @param CartRepository       $cartRepository
      * @param GrandTotalCalculator $calculator
      *
@@ -43,11 +43,10 @@ class CartController extends AbstractController
 
     /**
      * @Route("/cart/add", name="cart.add")
-     * @param Request           $request
      *
+     * @param Request           $request
      * @param CartRepository    $cartRepository
      * @param SessionInterface  $session
-     *
      * @param ProductRepository $productRepository
      *
      * @return Response

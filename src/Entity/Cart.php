@@ -4,6 +4,7 @@ namespace App\Entity;
 
 class Cart
 {
+    /** @var int */
     private $id;
 
     /** @var CartItem[] */

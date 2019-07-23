@@ -79,7 +79,6 @@ class ProductsListController extends AbstractController
      */
     public function newProduct()
     {
-
         $form = $this->createFormBuilder(null,[
             'action' => '/new/persist',
             'method' => 'post'
@@ -97,8 +96,8 @@ class ProductsListController extends AbstractController
 
     /**
      * @Route("/new/persist", name="product.persist")
-     * @param Request           $request
      *
+     * @param Request           $request
      * @param ProductRepository $productRepository
      *
      * @return RedirectResponse
@@ -109,6 +108,6 @@ class ProductsListController extends AbstractController
         $product = Product::createFromArray($data['form']);
         $productRepository->save($product);
 
-        return $this->redirect('product.new');
+        return $this->redirectToRoute('product.new');
     }
 }

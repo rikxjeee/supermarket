@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class CalculatorPass implements CompilerPassInterface
 {
-
     /**
      * @param ContainerBuilder $container
      */

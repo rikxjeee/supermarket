@@ -35,6 +35,7 @@ class DatabaseBasedProductRepository implements ProductRepository
      * @param int $id
      *
      * @return Product
+     *
      * @throws ProductNotFoundException
      * @throws DBALException
      */
@@ -45,7 +46,7 @@ class DatabaseBasedProductRepository implements ProductRepository
         $productData = $query->fetch();
 
         if (!$productData) {
-            throw new ProductNotFoundException(sprintf('Product id="%s" not found.', $id));
+            throw ProductNotFoundException::createFromId($id);
         }
 
         return Product::createFromArray($productData);

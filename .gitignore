@@ -1,5 +1,4 @@
 /bin
-/config
 /translations
 /src/Migrations
 .env
