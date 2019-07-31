@@ -13,6 +13,7 @@ docker exec docker_php-fpm_1 php /site/bin/setup.php
 exitcode=$?
 
 if [ $exitcode == 0 ]; then
+  composer install -a
     # rm ../bin/setup.php
     # rm ../bin/setup.php
     echo 'Operation succesful.'
