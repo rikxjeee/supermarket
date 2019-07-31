@@ -7,6 +7,7 @@ use App\Exception\ProductNotFoundException;
 use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
 use App\Service\Calculator\GrandTotalCalculator;
+use App\Service\Provider\Date\DateProvider;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 
@@ -24,17 +25,19 @@ class CartContext implements Context
     /** @var GrandTotalCalculator */
     private $calculator;
 
+    /** @var DateProvider */
+    private $dateProvider;
+
     public function __construct(
         CartRepository $cartRepository,
         ProductRepository $productRepository,
-        GrandTotalCalculator $calculator
-
+        GrandTotalCalculator $calculator,
+        DateProvider $dateProvider
     ) {
         $this->cart = $cartRepository->getCart(null);
-
         $this->productRepository = $productRepository;
-
         $this->calculator = $calculator;
+        $this->dateProvider = $dateProvider;
     }
 
     /**
@@ -56,7 +59,6 @@ class CartContext implements Context
      *
      * @param $quantity
      *
-     * @return bool
      * @throws Exception
      */
     public function iShouldHaveProductInMyRepository($quantity)
@@ -64,45 +66,18 @@ class CartContext implements Context
         if ($quantity != count($this->productRepository->getAllProducts())) {
             throw new Exception ('Wrong number of product in the repository');
         }
-
-        return true;
     }
 
     /**
-     * @Given It is :dayOfWeek
+     * @Given It is Monday
      *
-     * @param $dayOfWeek
-     *
-     * @return bool
      * @throws Exception
      */
-    public function itIsMonday($dayOfWeek)
+    public function itIsMonday()
     {
-        $success = date('l') === $dayOfWeek;
-
-        if ($success) {
-            return true;
-        } else {
-            throw new Exception(sprintf('It is not %s', $dayOfWeek));
-        }
-    }
-
-    /**
-     * @Given It is not :dayOfWeek
-     *
-     * @param $dayOfWeek
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function itIsNot($dayOfWeek)
-    {
-        $success = !date('l') !== $dayOfWeek;
-
-        if ($success) {
-            return true;
-        } else {
-            throw new Exception(sprintf('It is %s', $dayOfWeek));
+        $today = $this->dateProvider->isToday('Monday');
+        if (!$today) {
+            throw new Exception('It is not monday.');
         }
     }
 
@@ -111,9 +86,7 @@ class CartContext implements Context
      */
     public function iHaveNoItemsInMyCart()
     {
-        if (empty($this->cart->getItems())) {
-            return true;
-        } else {
+        if (!empty($this->cart->getItems())) {
             throw new Exception('I already have items in my cart.');
         }
     }
@@ -157,7 +130,6 @@ class CartContext implements Context
      *
      * @param $items
      *
-     * @return bool
      * @throws Exception
      */
     public function iShouldHaveItemsInMyCart($items)
@@ -166,9 +138,7 @@ class CartContext implements Context
         foreach ($this->cart->getItems() as $item) {
             $cartItems += $item->getQuantity();
         }
-        if ($cartItems == $items) {
-            return true;
-        } else {
+        if ($cartItems != $items) {
             throw new Exception(sprintf('I have %s item(s) in my cart.', $cartItems));
         }
     }
@@ -178,18 +148,14 @@ class CartContext implements Context
      *
      * @param $expectedCost
      *
-     * @return bool
      * @throws Exception
      */
-    public function theTotalCostOfMyCartWillBe($expectedCost)
+    public function theTotalCostOfMyCartWillBe(float $expectedCost)
     {
         /** @var Total[] $cost */
         $cost = $this->calculator->getTotal($this->cart);
-
         $cost = $cost['Grand Total']->getSum();
-        if ($cost == $expectedCost) {
-            return true;
-        } else {
+        if (round($cost, 2) !== round($expectedCost, 2)) {
             throw new Exception(sprintf('Grand total should be "%s", not "%s"', $expectedCost, $cost));
         }
     }
@@ -197,35 +163,32 @@ class CartContext implements Context
     /**
      * @When I try add a non-existent item to my cart
      *
-     * @return bool
      * @throws Exception
      */
     public function iAddANonExistentItemToMyCart()
     {
-        $success = false;
+        $exception = null;
 
         $nonExistentId = count($this->productRepository->getAllProducts()) + 1;
         try {
             $this->productRepository->getProductById($nonExistentId);
-        } catch (ProductNotFoundException $exception) {
-            $success = true;
+        } catch (ProductNotFoundException $e) {
+            $exception = $e;
         }
 
-        return $success;
+        return $exception;
     }
 
     /**
      * @Then I should get Product not found error.
      *
-     * @return bool
      * @throws Exception
      */
     public function iShouldGetProductNotFoundError()
     {
         $error = $this->iAddANonExistentItemToMyCart();
-        if ($error) {
-            return true;
+        if (!$error) {
+            throw new Exception('Test failed, product exists');
         }
-        throw new Exception('Test failed, product exists');
     }
 }

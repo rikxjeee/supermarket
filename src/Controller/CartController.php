@@ -6,6 +6,7 @@ use App\Exception\ProductNotFoundException;
 use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
 use App\Service\Calculator\GrandTotalCalculator;
+use App\Service\Handler\CartHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,21 +19,16 @@ class CartController extends AbstractController
      * @Route("/cart", name="cart.content")
      *
      * @param SessionInterface     $session
-     * @param CartRepository       $cartRepository
+     * @param CartHandler          $cartHandler
      * @param GrandTotalCalculator $calculator
      *
      * @return Response
      */
-    public function cart(SessionInterface $session, CartRepository $cartRepository, GrandTotalCalculator $calculator)
+    public function cart(SessionInterface $session, CartHandler $cartHandler, GrandTotalCalculator $calculator)
     {
         $id = $session->get('cart_id');
-        $cart = $cartRepository->getCart($id);
+        $cart = $cartHandler->get($id);
         $session->set('cart_id', $cart->getId());
-
-        if (empty($cart->getItems()))
-        {
-            return $this->render('cart/empty.html.twig');
-        }
 
         $totals = $calculator->getTotal($cart);
         return $this->render('cart/index.html.twig', [
@@ -44,30 +40,25 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/add", name="cart.add")
      *
-     * @param Request           $request
-     * @param CartRepository    $cartRepository
-     * @param SessionInterface  $session
-     * @param ProductRepository $productRepository
+     * @param Request          $request
+     * @param CartHandler      $cartHandler
+     * @param SessionInterface $session
      *
      * @return Response
-     * @throws ProductNotFoundException
      */
     public function add(
         Request $request,
-        CartRepository $cartRepository,
-        SessionInterface $session,
-        ProductRepository $productRepository
+        CartHandler $cartHandler,
+        SessionInterface $session
     ) {
         $productId = $request->get('product_id');
-        $product = $productRepository->getProductById($productId);
         $cartId = $session->get('cart_id');
-
-        $cart = $cartRepository->getCart($cartId);
-
-        $cart->addProduct($product);
-        $cartRepository->save($cart);
-
-        $this->addFlash('notice', sprintf('%s has been added to the cart.', $product->getName()));
+        try{
+            $cartHandler->add($cartId, $productId);
+            $this->addFlash('notice', 'Product has been added to the cart.');
+        } catch (ProductNotFoundException $exception) {
+            $this->addFlash('warning', 'Product not found.');
+        }
 
         return $this->redirectToRoute('cart.content');
     }

@@ -32,3 +32,4 @@ services:
 
     App\Repository\ProductRepository: '@App\Repository\DatabaseBasedProductRepository'
     App\Repository\CartRepository: '@App\Repository\DatabaseBasedCartRepository'
+    App\Service\Provider\Date\DateProvider: '@App\Service\Provider\Date\Calendar'

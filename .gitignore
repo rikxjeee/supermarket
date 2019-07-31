@@ -1,9 +1,5 @@
-/bin
 /translations
 /src/Migrations
-.env
-.env.test
-behat.yml.dist
 phpunit.xml.dist
 symfony.lock
 ###> symfony/framework-bundle ###

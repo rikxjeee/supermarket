@@ -6,7 +6,7 @@ use App\Service\Calculator\Calculator;
 
 class Sorter
 {
-    private const CALCULATOR_PRIORITY = ['SubTotal', 'SandwichMenu', 'Crisps', 'SoftDrink'];
+    private const CALCULATOR_PRIORITY = ['SubTotal', 'SandwichMenu', 'SoftDrink', 'Crisps'];
 
     /**
      * @param Calculator[] $calculators

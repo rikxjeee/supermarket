@@ -12,18 +12,17 @@ Feature: Cart functionality
     Then I should have "3" product in my repository
 
   @Monday_drink_discount
-    # only passes on monday
   Scenario Outline: I want to add coke(s) to my cart
-    Given It is "<day_of_week>"
+    Given It is Monday
     When I add "<quantity>" "Coke" to my cart
     Then I should have "<quantity>" items in my cart
     And The total cost of my cart will be "<expected_cost>"
 
     Examples:
-      | day_of_week | quantity | expected_cost |
-      | Monday      | 1        | 0.8           |
-      | Monday      | 2        | 0.8           |
-      | Monday      | 3        | 1.6           |
+      | quantity | expected_cost |
+      | 1        | 0.8           |
+      | 2        | 0.8           |
+      | 3        | 1.6           |
 
   @Crisps_discount
   Scenario: I want to add crisps to my cart
@@ -39,7 +38,7 @@ Feature: Cart functionality
     Then I should have "1" items in my cart
     And The total cost of my cart will be "0.75"
 
-  @common
+  @Common
   Scenario: I add a non-existent product to my cart
     Given I have no items in my cart
     When I try add a non-existent item to my cart

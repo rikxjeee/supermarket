@@ -28,7 +28,6 @@ class GrandTotalCalculator
                 $totals[$currentTotal->getType()] = $currentTotal;
             }
         }
-
         $totals['Grand Total'] = new Total('Grand total:', $sum);
         return $totals;
     }

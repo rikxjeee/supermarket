@@ -40,6 +40,7 @@ class CrispsDiscountCalculator implements Calculator
         } else {
             $amount = floor($quantity / 2) + ($quantity % 2)*0.75;
         }
+
         return new Total('Crisps discount', -($sum - $amount), $remainingItems);
     }
 

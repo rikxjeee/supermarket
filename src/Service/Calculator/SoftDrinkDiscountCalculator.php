@@ -27,9 +27,8 @@ class SoftDrinkDiscountCalculator implements Calculator
         $sum = 0;
         foreach ($cartItems as $item) {
             $quantity = $item->getQuantity();
-            $price = $item->getProduct()->getPrice()*$quantity;
-
-            if ($this->discountProvider->isSoftDrinkDiscountApplies() && ($item->getProduct()->isSoftDrink()) && $item->getQuantity() > 1) {
+            $price = $item->getProduct()->getPrice();
+            if ($this->discountProvider->isSoftDrinkDiscountApplies() && $item->getProduct()->isSoftDrink() && $item->getQuantity()>1) {
                 $currentItems[] = new CartItem($item->getProduct(), $item->getQuantity());
                 $remainingItems = array_udiff($cartItems, $currentItems, function (CartItem $first, CartItem $second) {
                     if ($first->getProduct()->getId() === $second->getProduct()->getId()) {
@@ -39,8 +38,11 @@ class SoftDrinkDiscountCalculator implements Calculator
 
                     return 0;
                 });
+                if ($quantity % 2 == 1) {
+                    return new Total('Soft Drink discount:', (-($quantity-1)*($price/2)), $remainingItems);
+                }
+                return new Total('Soft Drink discount:', -$quantity*($price/2), $remainingItems);
 
-                return new Total('Soft Drink discount:', -($price/2), $remainingItems);
             }
         }
 

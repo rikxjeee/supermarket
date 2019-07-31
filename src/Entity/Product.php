@@ -105,6 +105,6 @@ class Product
 
     public function isSoftDrink()
     {
-        return $this->getType() === self::TYPE_SOFT_DRINK;
+        return $this->type === self::TYPE_SOFT_DRINK;
     }
 }

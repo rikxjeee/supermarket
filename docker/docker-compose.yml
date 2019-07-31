@@ -1,0 +1,52 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ../:/site
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+    restart: always
+    links:
+      - mysql
+    depends_on:
+      - php-fpm
+    ports:
+      - "8080:80"
+      - "443:443"
+    networks:
+      - proxy
+
+  php-fpm:
+    build:
+      context: ./php
+    restart: always
+    volumes:
+      - ../:/site
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    networks:
+      - proxy
+      - db
+
+  mysql:
+    container_name: smarket-mysql
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: supermarket
+      MYSQL_ROOT_PASSWORD: simple
+    ports:
+      - "9999:3306"
+    networks:
+      db:
+        aliases:
+            - database
+
+networks:
+  db:
+  proxy:

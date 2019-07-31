@@ -8,7 +8,12 @@
             {{ message }}
         </div>
     {% endfor %}
-
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% if items %}
     <table class="table table-sm table-hover">
         <thead class="thead-dark">
         <tr>
@@ -24,41 +29,45 @@
         </tr>
         </thead>
         <tbody>
-        {% for item in items %}
-            <tr>
-                <td>
-                    <a href="{{ path('product.details', { id: item.product.id }) }}">{{ item.product.name }}</a>
-                </td>
-                <td>
-                    {{ item.quantity }}
-                </td>
-                <td>
-                    {{ item.product.price }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-        <table class="table table-sm">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        Type
-                    </th>
-                    <th>
-                        Value
-                    </th>
-                </tr>
-            </thead>
-            {% for total in totals %}
+            {% for item in items %}
                 <tr>
                     <td>
-                        {{ total.type }}
+                        <a href="{{ path('product.details', { id: item.product.id }) }}">{{ item.product.name }}</a>
                     </td>
                     <td>
-                        {{ total.sum }}
+                        {{ item.quantity }}
+                    </td>
+                    <td>
+                        {{ item.product.price }}
                     </td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
+            <table class="table table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Value
+                        </th>
+                    </tr>
+                </thead>
+                {% for total in totals %}
+                    <tr>
+                        <td>
+                            {{ total.type }}
+                        </td>
+                        <td>
+                            {{ total.sum }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+    {% else %}
+    Your cart is empty. <br>
+    <a class="btn btn-primary" href="{{ path('products') }}">Back</a>
+    {% endif %}
 {% endblock %}
