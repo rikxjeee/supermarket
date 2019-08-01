@@ -1,6 +1,7 @@
 version: "3"
 services:
   nginx:
+    container_name: smarket-web
     build:
       context: ./nginx
     volumes:
@@ -20,6 +21,7 @@ services:
       - proxy
 
   php-fpm:
+    container_name: smarket-php
     build:
       context: ./php
     restart: always
