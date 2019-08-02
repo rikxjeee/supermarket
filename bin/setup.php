@@ -1,5 +1,5 @@
 <?php
- $connection = new PDO('mysql:host=smarket-mysql:3306', 'root', 'simple', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+ $connection = new PDO('mysql:host=supermarket_mysql_1:3306;', 'root', 'simple', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
     $query =<<<'EOD'
 DROP DATABASE IF EXISTS supermarket;
 CREATE DATABASE supermarket;
