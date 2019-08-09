@@ -7,7 +7,7 @@ use App\Exception\ProductNotFoundException;
 use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
 use App\Service\Calculator\GrandTotalCalculator;
-use App\Service\Provider\Date\DateProvider;
+use App\Tests\Behat\Provider\TestDateProvider;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 
@@ -25,14 +25,16 @@ class CartContext implements Context
     /** @var GrandTotalCalculator */
     private $calculator;
 
-    /** @var DateProvider */
+    /** @var TestDateProvider */
     private $dateProvider;
+
+    private $lastException = null;
 
     public function __construct(
         CartRepository $cartRepository,
         ProductRepository $productRepository,
         GrandTotalCalculator $calculator,
-        DateProvider $dateProvider
+        TestDateProvider $dateProvider
     ) {
         $this->cart = $cartRepository->getCart(null);
         $this->productRepository = $productRepository;
@@ -69,17 +71,15 @@ class CartContext implements Context
     }
 
     /**
-     * @Given It is Monday
+     * @Given It is :day
      *
      * @throws Exception
      */
-    public function itIsMonday()
+    public function itIsMonday($day)
     {
-        $today = $this->dateProvider->isToday('Monday');
-        if (!$today) {
-            throw new Exception('It is not monday.');
-        }
+        $this->dateProvider->setCurrentDay($day);
     }
+
 
     /**
      * @Given I have no items in my cart
@@ -167,16 +167,14 @@ class CartContext implements Context
      */
     public function iAddANonExistentItemToMyCart()
     {
-        $exception = null;
+        $this->lastException = null;
 
         $nonExistentId = count($this->productRepository->getAllProducts()) + 1;
         try {
             $this->productRepository->getProductById($nonExistentId);
         } catch (ProductNotFoundException $e) {
-            $exception = $e;
+            $this->lastException = $e;
         }
-
-        return $exception;
     }
 
     /**
@@ -186,8 +184,7 @@ class CartContext implements Context
      */
     public function iShouldGetProductNotFoundError()
     {
-        $error = $this->iAddANonExistentItemToMyCart();
-        if (!$error) {
+        if ($this->lastException === null) {
             throw new Exception('Test failed, product exists');
         }
     }

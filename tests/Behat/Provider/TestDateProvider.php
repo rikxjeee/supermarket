@@ -6,8 +6,15 @@ use App\Service\Provider\Date\DateProvider;
 
 class TestDateProvider implements DateProvider
 {
+    private $currentDay;
+    
     public function isToday(string $day): bool
     {
-        return true;
+        return $day === $this->currentDay;
+    }
+
+    public function setCurrentDay($day)
+    {
+        $this->currentDay = $day;
     }
 }

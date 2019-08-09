@@ -13,16 +13,19 @@ Feature: Cart functionality
 
   @Monday_drink_discount
   Scenario Outline: I want to add coke(s) to my cart
-    Given It is Monday
+    Given It is "<day>"
     When I add "<quantity>" "Coke" to my cart
     Then I should have "<quantity>" items in my cart
     And The total cost of my cart will be "<expected_cost>"
 
     Examples:
-      | quantity | expected_cost |
-      | 1        | 0.8           |
-      | 2        | 0.8           |
-      | 3        | 1.6           |
+      | day    | quantity | expected_cost |
+      | Monday | 1        | 0.8           |
+      | Monday | 2        | 0.8           |
+      | Monday | 3        | 1.6           |
+      | Tuesday | 1        | 0.8           |
+      | Tuesday | 2        | 1.6           |
+      | Tuesday | 3        | 2.4           |
 
   @Crisps_discount
   Scenario: I want to add crisps to my cart
