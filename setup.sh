@@ -1,12 +1,12 @@
 #!/bin/bash
 
 docker-compose stop && docker-compose up -d
-while ! docker exec supermarket_mysql_1 mysqladmin --user=root --password=simple --host "127.0.0.1" ping --silent &> /dev/null ; do
+while ! docker-compose exec mysql mysqladmin --user=root --password=simple --host "127.0.0.1" ping --silent &> /dev/null ; do
     echo "Waiting for database connection..."
     sleep 5
 done
 echo 'Populating database with development data.'
-docker exec supermarket_php-fpm_1 php /var/www/supermarket/bin/setup.php
+docker-compose exec php-fpm php bin/setup.php
 exitcode=$?
 
 if [ $exitcode == 0 ]; then
