@@ -50,7 +50,7 @@ class CartController extends AbstractController
         SessionInterface $session
     ) {
         $productId = $request->get('product_id');
-        $cartId = $session->get('cart_id');
+        $cartId = $cartHandler->get($session->get('cart_id'))->getId();
         try{
             $cartHandler->add($cartId, $productId);
             $this->addFlash('notice', 'Product has been added to the cart.');
