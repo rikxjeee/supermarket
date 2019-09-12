@@ -8,14 +8,14 @@ class Product
     const TYPE_SOFT_DRINK = 'Soft Drink';
     const TYPE_CRISP = 'Crisps';
 
-    private const KEY_ID = 'id';
-    private const KEY_NAME = 'name';
-    private const KEY_PRICE = 'price';
-    private const KEY_TYPE = 'type';
-    private const KEY_DESCRIPTION = 'description';
-    private const DEFAULT_TYPE = '';
-    private const DEFAULT_ID = null;
-    private const DEFAULT_DESC = '';
+    const KEY_ID = 'id';
+    const KEY_NAME = 'name';
+    const KEY_PRICE = 'price';
+    const KEY_TYPE = 'type';
+    const KEY_DESCRIPTION = 'description';
+    const DEFAULT_TYPE = '';
+    const DEFAULT_ID = null;
+    const DEFAULT_DESC = '';
 
     /** @var int|null */
     private $id;

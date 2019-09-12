@@ -6,7 +6,6 @@ use App\Entity\Product;
 use App\Exception\ProductNotFoundException;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use PDO;
 
 class DatabaseBasedProductRepository implements ProductRepository
 {

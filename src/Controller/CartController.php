@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Exception\ProductNotFoundException;
-use App\Repository\CartRepository;
-use App\Repository\ProductRepository;
 use App\Service\Calculator\GrandTotalCalculator;
 use App\Service\Handler\CartHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
