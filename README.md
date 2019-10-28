@@ -1,5 +1,7 @@
 #The supermarket challenge
 
+php => 7.1 required
+
 Starting the project:
 
 Set up a mysql server in docker:
