@@ -1,6 +1,6 @@
 <?php
 
-namespace Supermarket\Exception;
+namespace App\Exception;
 
 use Exception;
 
@@ -10,4 +10,5 @@ class ProductNotFoundException extends Exception
     {
         return new self(sprintf('Product with id "%d" does not exists.', $id));
     }
+
 }

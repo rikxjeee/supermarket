@@ -1,10 +1,9 @@
 <?php
 
-namespace Supermarket\Repository;
+namespace App\Repository;
 
-use Exception;
-use Supermarket\Exception\ProductNotFoundException;
-use Supermarket\Model\Product;
+use App\Entity\Product;
+use App\Exception\ProductNotFoundException;
 
 interface ProductRepository
 {
@@ -17,8 +16,9 @@ interface ProductRepository
      * @param int $id
      *
      * @return Product
-     * @throws Exception
-     * @throws ProductNotFoundException
+     *@throws ProductNotFoundException
      */
     public function getProductById(int $id): Product;
+
+    public function save(Product $product): void;
 }

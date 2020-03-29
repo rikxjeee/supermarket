@@ -1,36 +1,29 @@
 <?php
 
-namespace Supermarket\Repository;
+namespace App\Repository;
 
-use InvalidArgumentException;
-use PDO;
-use PDOException;
-use Supermarket\Exception\ProductNotFoundException;
-use Supermarket\Model\Product;
+use App\Entity\Product;
+use App\Exception\ProductNotFoundException;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 
 class DatabaseBasedProductRepository implements ProductRepository
 {
-    /**
-     * @var PDO
-     */
-    private $mySqlConnection;
+    /** @var Connection */
+    private $dbConnection;
 
-    public function __construct(PDO $mySqlConnection)
+    public function __construct(Connection $databaseConnection)
     {
-        $this->mySqlConnection = $mySqlConnection;
+        $this->dbConnection = $databaseConnection;
     }
 
     /**
      * @return Product[]
-     * @throws InvalidArgumentException
-     * @throws PDOException
      */
     public function getAllProducts(): array
     {
+        $products = $this->dbConnection->fetchAll('select * from product');
         $productList = [];
-        $fetchProducts = $this->mySqlConnection->prepare('select * from products');
-        $fetchProducts->execute();
-        $products = $fetchProducts->fetchAll(PDO::FETCH_ASSOC);
         foreach ($products as $product) {
             $productList[] = Product::createFromArray($product);
         }
@@ -42,20 +35,38 @@ class DatabaseBasedProductRepository implements ProductRepository
      * @param int $id
      *
      * @return Product
+     *
      * @throws ProductNotFoundException
-     * @throws InvalidArgumentException
-     * @throws PDOException
+     * @throws DBALException
      */
     public function getProductById(int $id): Product
     {
-        $fetchProduct = $this->mySqlConnection->prepare('select * from products where id=?');
-        $fetchProduct->execute([$id]);
-        $productData = $fetchProduct->fetch();
+        $query = $this->dbConnection->prepare('select * from product where id=?');
+        $query->execute([$id]);
+        $productData = $query->fetch();
+
         if (!$productData) {
             throw ProductNotFoundException::createFromId($id);
         }
 
         return Product::createFromArray($productData);
     }
-}
 
+    /**
+     * @param Product $product
+     *
+     * @throws DBALException
+     */
+    public function save(Product $product): void
+    {
+        $query = $this->dbConnection->prepare(
+            'insert into product(name, type, description, price) values (?,?,?,?)'
+        );
+        $query->execute([
+            $product->getName(),
+            $product->getType(),
+            $product->getDescription(),
+            $product->getPrice()
+        ]);
+    }
+}

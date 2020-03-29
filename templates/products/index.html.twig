@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
+    <table class="table table-sm table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>
+                        <a href="{{ path('product.details', { id: product.id }) }}">{{ product.name }}</a>
+                    </td>
+                    <td>
+                        {{ product.type }}
+                    </td>
+                    <td>
+                        {{ product.description }}
+                    </td>
+                    <td>
+                        {{ product.price }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
